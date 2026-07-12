@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getEntitlement } from "@/lib/entitlements.server";
 import { createClient } from "@/lib/supabase/server";
@@ -65,12 +66,25 @@ export default async function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   {pkg === "will" ? (
-                    <form action={startMatterAction}>
-                      <input type="hidden" name="doc_type" value={pkg} />
-                      <Button type="submit" className="w-full">
-                        {existing ? "Resume interview" : "Start interview"}
-                      </Button>
-                    </form>
+                    <div className="space-y-2">
+                      <form action={startMatterAction}>
+                        <input type="hidden" name="doc_type" value={pkg} />
+                        <Button type="submit" className="w-full">
+                          {existing ? "Resume interview" : "Start interview"}
+                        </Button>
+                      </form>
+                      {existing &&
+                        (existing.status === "ready_to_sign" ||
+                          existing.status === "signed") && (
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            render={<Link href={`/interview/${existing.id}/documents`} />}
+                          >
+                            View documents
+                          </Button>
+                        )}
+                    </div>
                   ) : (
                     <>
                       <Button disabled className="w-full">

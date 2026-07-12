@@ -98,7 +98,18 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
   (`matters.current_step`). Steps: state (LA notice), document, about, family,
   fiduciaries, assets, distributions (100% share validation, per stirpes/capita),
   special provisions, ancillary, review → generate handoff. Trust flow = Phase 5.
-- Live-service acceptance for Phases 0–2 (auth / migrations / seed / Stripe /
-  full interview run) pending the hosted Supabase + Stripe accounts. See
-  `docs/SUPABASE_SETUP.md` and `docs/STRIPE_SETUP.md`.
-- Phases 3–7: not started. Next: Phase 3 — Document Generation.
+- **Phase 3 — Document Generation: code-complete.** Data-driven clause library +
+  will assembler (conditionals keyed to `state_rules`, all `[ATTORNEY REVIEW
+  REQUIRED]`), DOCX via `docx` lib, PDF via Gotenberg/LibreOffice adapter
+  (best-effort), execution-instructions builder + page, private Storage bucket
+  (migration 0008) with owner-only signed-URL downloads, documents dashboard,
+  Resend email delivery, `template_versions` provenance. 16 rendering/rules unit
+  tests + guarded document-access RLS integration test.
+  - **Deviation:** templates are code-based generators (programmatic `docx`),
+    not binary docxtemplater merge files — chosen for testability + data-driven
+    conditionals. All clause text centralized in `src/lib/documents/*` for review.
+- Live-service acceptance for Phases 0–3 (auth / migrations / seed / Stripe /
+  interview / real Storage upload + PDF + email) pending hosted Supabase +
+  Stripe (+ optional Gotenberg for PDF). See `docs/SUPABASE_SETUP.md`,
+  `docs/STRIPE_SETUP.md`.
+- Phases 4–7: not started. Next: Phase 4 — Compliance Layer & Membership.
