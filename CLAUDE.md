@@ -126,6 +126,13 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
   POA+HC+HIPAA). Trust funding tracker + retitling guide (owner-scoped).
   - **Open decision (deferred):** couples/mirror documents — currently single-
     person docs only (party type still captured for pricing).
-- Live-service acceptance for Phases 0–5 pending hosted Supabase + Stripe (+
+- **Phase 6 — 50-State Rollout: code-complete.** All 51 jurisdictions seeded in
+  `state_rules` (execution formalities researched against current statutes with
+  citations; `scripts/gen-state-seed.mjs` generates `supabase/seed.sql`). Every
+  row `needs_review=true`; `state_availability.qa_approved` added (migration 0011)
+  for per-state counsel sign-off. Availability: all live except **LA/TX/NC/MO/OH**
+  (owner decision; config-toggleable). `/states` page is now DB-driven. See
+  `docs/STATE_RULES_QA.md` for notable per-state findings.
+- Live-service acceptance for Phases 0–6 pending hosted Supabase + Stripe (+
   optional Gotenberg for PDF). See `docs/SUPABASE_SETUP.md`, `docs/STRIPE_SETUP.md`.
-- Phases 6–7: not started. Next: Phase 6 — 50-State Rollout.
+- Phase 7: not started. Next: Phase 7 — Admin, Partner Reporting & Polish.
