@@ -107,20 +107,22 @@ function DocTypeStep({
     stepKey: "doctype",
     initial: { doc_type: str(initial.doc_type) || docType || "will" },
   });
+  // The document type is fixed by the package purchased; the other option is
+  // shown for context but disabled.
   const options = [
     {
       value: "will",
       label: "Last Will & Testament",
-      description: "Directs who receives your property and names guardians for minor children. Goes through probate.",
-      disabled: false,
+      description:
+        "Directs who receives your property and names guardians for minor children. Goes through probate.",
     },
     {
       value: "trust",
       label: "Revocable Living Trust",
-      description: "Avoids probate and adds privacy. The Trust flow launches in a later release.",
-      disabled: true,
+      description:
+        "Avoids probate and adds privacy; assets are retitled into a trust you control.",
     },
-  ];
+  ].map((o) => ({ ...o, disabled: o.value !== docType }));
   return (
     <div className="space-y-6">
       <Field
@@ -280,12 +282,16 @@ function FiduciariesStep({
   matterId,
   initial,
   context,
+  docType,
 }: {
   matterId: string;
   initial: Record<string, unknown>;
   context: Answers;
+  docType: string;
 }) {
+  const isTrust = docType === "trust";
   const hasMinor = arr<Child>(context.family?.children).some((c) => c.isMinor);
+  const selfName = str(context.about?.fullName);
   const f = useStepForm({
     matterId,
     stepKey: "fiduciaries",
@@ -294,14 +300,43 @@ function FiduciariesStep({
       executorAlt: str(initial.executorAlt),
       guardianName: str(initial.guardianName),
       guardianAlt: str(initial.guardianAlt),
+      trusteeName: str(initial.trusteeName) || (isTrust ? selfName : ""),
+      successorTrusteeName: str(initial.successorTrusteeName),
+      successorTrusteeAlt: str(initial.successorTrusteeAlt),
     },
   });
   return (
     <div className="space-y-6">
+      {isTrust && (
+        <div className="space-y-4 rounded-md border border-input p-4">
+          <p className="text-sm font-medium">Trustees</p>
+          <TextField
+            label="Initial trustee"
+            hint="Usually yourself while you're able to manage the trust."
+            value={f.values.trusteeName}
+            onChange={(v) => f.setField("trusteeName", v)}
+          />
+          <TextField
+            label="Successor trustee"
+            hint="Who takes over the trust if you can't serve."
+            value={f.values.successorTrusteeName}
+            onChange={(v) => f.setField("successorTrusteeName", v)}
+          />
+          <TextField
+            label="Alternate successor trustee (optional)"
+            value={f.values.successorTrusteeAlt}
+            onChange={(v) => f.setField("successorTrusteeAlt", v)}
+          />
+        </div>
+      )}
       <div className="space-y-4">
         <TextField
           label="Executor (personal representative)"
-          hint="The person who will carry out your will's instructions."
+          hint={
+            isTrust
+              ? "Handles your pour-over will alongside the trust."
+              : "The person who will carry out your will's instructions."
+          }
           value={f.values.executorName}
           onChange={(v) => f.setField("executorName", v)}
         />
@@ -330,7 +365,15 @@ function FiduciariesStep({
 type RealEstate = { description: string; value: string };
 type Account = { institution: string; kind: string };
 
-function AssetsStep({ matterId, initial }: { matterId: string; initial: Record<string, unknown> }) {
+function AssetsStep({
+  matterId,
+  initial,
+  docType,
+}: {
+  matterId: string;
+  initial: Record<string, unknown>;
+  docType: string;
+}) {
   const f = useStepForm({
     matterId,
     stepKey: "assets",
@@ -344,8 +387,9 @@ function AssetsStep({ matterId, initial }: { matterId: string; initial: Record<s
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
-        List assets of significance. You don&apos;t need to be exhaustive — this
-        helps us tailor your documents.
+        {docType === "trust"
+          ? "List the assets you'll transfer into your trust. We'll build your funding checklist from these — a trust only works when it's funded."
+          : "List assets of significance. You don't need to be exhaustive — this helps us tailor your documents."}
       </p>
       <Field label="Real estate">
         <Repeatable<RealEstate>
@@ -554,9 +598,16 @@ export function StepRenderer({
     case "family":
       return <FamilyStep matterId={matterId} initial={initial} context={answers} />;
     case "fiduciaries":
-      return <FiduciariesStep matterId={matterId} initial={initial} context={answers} />;
+      return (
+        <FiduciariesStep
+          matterId={matterId}
+          initial={initial}
+          context={answers}
+          docType={docType}
+        />
+      );
     case "assets":
-      return <AssetsStep matterId={matterId} initial={initial} />;
+      return <AssetsStep matterId={matterId} initial={initial} docType={docType} />;
     case "distributions":
       return <DistributionsStep matterId={matterId} initial={initial} />;
     case "special":

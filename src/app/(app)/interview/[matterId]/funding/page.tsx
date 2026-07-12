@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getEntitlement } from "@/lib/entitlements.server";
 import { getMatter } from "@/lib/interview/data";
 import { createClient } from "@/lib/supabase/server";
-import { MembershipUpsell } from "@/components/membership-upsell";
 import { FundingList, type FundingItem } from "@/components/funding/funding-list";
 import { AddFundingForm } from "@/components/funding/add-funding-form";
 import { prefillFundingFromAssetsAction } from "@/lib/funding/actions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
 
 export const metadata: Metadata = { title: "Trust funding tracker" };
+
+// Retitling guidance (build plan §5 — funding guide). Placeholder content.
+const RETITLING_GUIDE: { category: string; how: string }[] = [
+  { category: "Real estate", how: "Record a new deed transferring the property from you to the trust (e.g. a grant or quitclaim deed) with your county recorder." },
+  { category: "Bank & brokerage accounts", how: "Ask the institution to retitle the account in the name of the trust, or update the account's ownership paperwork." },
+  { category: "Vehicles", how: "Retitle with your state DMV, or use a transfer-on-death (TOD) designation where available." },
+  { category: "Business interests", how: "Assign your membership/partnership interest to the trust per the entity's operating/partnership agreement." },
+  { category: "Beneficiary designations", how: "For retirement accounts and life insurance, review beneficiaries — often kept outside the trust. Consult an attorney." },
+];
 
 export default async function FundingPage({
   params,
@@ -18,12 +26,6 @@ export default async function FundingPage({
   params: Promise<{ matterId: string }>;
 }) {
   const { matterId } = await params;
-
-  const entitlement = await getEntitlement();
-  if (!entitlement.membership) {
-    return <MembershipUpsell feature="The trust funding tracker" />;
-  }
-
   const matter = await getMatter(matterId);
   if (!matter) redirect("/dashboard");
 
@@ -68,6 +70,26 @@ export default async function FundingPage({
         </CardHeader>
         <CardContent>
           <AddFundingForm matterId={matterId} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <h2 className="font-serif text-lg font-semibold">How to retitle each asset</h2>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-xs text-muted-foreground">
+            {ATTORNEY_REVIEW_REQUIRED} General guidance — confirm the exact steps
+            for your state and institution.
+          </p>
+          <dl className="space-y-3 text-sm">
+            {RETITLING_GUIDE.map((g) => (
+              <div key={g.category}>
+                <dt className="font-medium">{g.category}</dt>
+                <dd className="text-muted-foreground">{g.how}</dd>
+              </div>
+            ))}
+          </dl>
         </CardContent>
       </Card>
     </div>

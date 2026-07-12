@@ -52,6 +52,10 @@ export const fiduciariesStepSchema = z.object({
   executorAlt: z.string().trim().optional(),
   guardianName: z.string().trim().optional(),
   guardianAlt: z.string().trim().optional(),
+  // Trust flow only (optional so the schema stays doc-type-agnostic).
+  trusteeName: z.string().trim().optional(),
+  successorTrusteeName: z.string().trim().optional(),
+  successorTrusteeAlt: z.string().trim().optional(),
 });
 
 export const assetsStepSchema = z.object({

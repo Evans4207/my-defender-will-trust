@@ -117,8 +117,15 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
   annual estate checkup + reminder scaffold (`vault_items`, `funding_items`,
   profile checkup fields — migration 0010). Membership renew/cancel via Stripe
   portal (Phase 1).
-- Live-service acceptance for Phases 0–4 (auth / migrations / seed / Stripe /
-  interview / Storage + PDF + email / vault + funding) pending hosted Supabase +
-  Stripe (+ optional Gotenberg for PDF). See `docs/SUPABASE_SETUP.md`,
-  `docs/STRIPE_SETUP.md`.
-- Phases 5–7: not started. Next: Phase 5 — Trust Flow + Ancillary Documents.
+- **Phase 5 — Trust Flow + Ancillary Documents: code-complete.** Data-driven
+  assemblers for RLT (trustee/successor, funding, community property), pour-over
+  will, and POA/healthcare/HIPAA (statutory-form-aware placeholders). Trust
+  interview branch: doc-type-aware doctype/fiduciaries (trustee+successor)/assets
+  steps; dashboard trust start enabled. `generateDocumentsAction` now produces
+  the full package per doc_type (will→will+POA+HC+HIPAA; trust→trust+pourover+
+  POA+HC+HIPAA). Trust funding tracker + retitling guide (owner-scoped).
+  - **Open decision (deferred):** couples/mirror documents — currently single-
+    person docs only (party type still captured for pricing).
+- Live-service acceptance for Phases 0–5 pending hosted Supabase + Stripe (+
+  optional Gotenberg for PDF). See `docs/SUPABASE_SETUP.md`, `docs/STRIPE_SETUP.md`.
+- Phases 6–7: not started. Next: Phase 6 — 50-State Rollout.

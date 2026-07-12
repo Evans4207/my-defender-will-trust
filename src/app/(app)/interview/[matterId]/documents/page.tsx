@@ -16,6 +16,8 @@ type DocRow = {
 
 const KIND_LABEL: Record<string, string> = {
   will: "Last Will & Testament",
+  trust: "Revocable Living Trust",
+  pourover: "Pour-Over Will",
   poa: "Durable Financial Power of Attorney",
   healthcare: "Healthcare Directive",
   hipaa: "HIPAA Authorization",
@@ -96,6 +98,11 @@ export default async function DocumentsPage({
         <Button variant="outline" render={<Link href={`/interview/${matterId}/instructions`} />}>
           Execution instructions
         </Button>
+        {matter.doc_type === "trust" && (
+          <Button variant="outline" render={<Link href={`/interview/${matterId}/funding`} />}>
+            Trust funding tracker
+          </Button>
+        )}
         <Button variant="ghost" render={<Link href="/dashboard" />}>
           Back to dashboard
         </Button>

@@ -65,36 +65,25 @@ export default async function DashboardPage() {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  {pkg === "will" ? (
-                    <div className="space-y-2">
-                      <form action={startMatterAction}>
-                        <input type="hidden" name="doc_type" value={pkg} />
-                        <Button type="submit" className="w-full">
-                          {existing ? "Resume interview" : "Start interview"}
-                        </Button>
-                      </form>
-                      {existing &&
-                        (existing.status === "ready_to_sign" ||
-                          existing.status === "signed") && (
-                          <Button
-                            variant="outline"
-                            className="w-full"
-                            render={<Link href={`/interview/${existing.id}/documents`} />}
-                          >
-                            View documents
-                          </Button>
-                        )}
-                    </div>
-                  ) : (
-                    <>
-                      <Button disabled className="w-full">
-                        Start interview
+                  <div className="space-y-2">
+                    <form action={startMatterAction}>
+                      <input type="hidden" name="doc_type" value={pkg} />
+                      <Button type="submit" className="w-full">
+                        {existing ? "Resume interview" : "Start interview"}
                       </Button>
-                      <p className="mt-2 text-center text-xs text-muted-foreground">
-                        Trust interview launches in a later release.
-                      </p>
-                    </>
-                  )}
+                    </form>
+                    {existing &&
+                      (existing.status === "ready_to_sign" ||
+                        existing.status === "signed") && (
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          render={<Link href={`/interview/${existing.id}/documents`} />}
+                        >
+                          View documents
+                        </Button>
+                      )}
+                  </div>
                 </CardContent>
               </Card>
             );

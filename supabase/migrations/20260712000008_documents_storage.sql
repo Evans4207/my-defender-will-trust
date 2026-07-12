@@ -39,9 +39,11 @@ create policy "documents_owner_delete" on storage.objects
 -- -----------------------------------------------------------------------------
 insert into public.template_versions (kind, version, name, active, notes)
 values
-  ('will',       1, 'Will (code template v1)',                 false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
-  ('poa',        1, 'Durable Financial POA (code template v1)', false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
-  ('healthcare', 1, 'Healthcare Directive (code template v1)',  false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
-  ('hipaa',      1, 'HIPAA Authorization (code template v1)',   false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
+  ('will',       1, 'Will (code template v1)',                  false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
+  ('trust',      1, 'Revocable Living Trust (code template v1)', false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
+  ('pourover',   1, 'Pour-Over Will (code template v1)',         false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
+  ('poa',        1, 'Durable Financial POA (code template v1)',  false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
+  ('healthcare', 1, 'Healthcare Directive (code template v1)',   false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
+  ('hipaa',      1, 'HIPAA Authorization (code template v1)',    false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval'),
   ('affidavit',  1, 'Self-Proving Affidavit (code template v1)', false, '[ATTORNEY REVIEW REQUIRED] pending counsel approval')
 on conflict (kind, version) do nothing;
