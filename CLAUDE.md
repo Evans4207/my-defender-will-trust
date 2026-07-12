@@ -133,6 +133,18 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
   for per-state counsel sign-off. Availability: all live except **LA/TX/NC/MO/OH**
   (owner decision; config-toggleable). `/states` page is now DB-driven. See
   `docs/STATE_RULES_QA.md` for notable per-state findings.
-- Live-service acceptance for Phases 0–6 pending hosted Supabase + Stripe (+
-  optional Gotenberg for PDF). See `docs/SUPABASE_SETUP.md`, `docs/STRIPE_SETUP.md`.
-- Phase 7: not started. Next: Phase 7 — Admin, Partner Reporting & Polish.
+- **Phase 7 — Admin, Partner Reporting & Polish: code-complete.** Admin portal
+  (role-gated): metrics + interview funnel + docs-by-state; partner & code
+  management with batch code generation + CSV export + reporting; template
+  approval workflow; state-rules editor (availability/QA toggles + per-rule
+  edit); user/subscription lookup + Stripe refund links. Reminders cron
+  (`/api/cron/reminders`, secret-gated + `vercel.json`); update/regenerate entry
+  point; SEO (`sitemap.ts`, `robots.ts`, OG metadata); a11y (skip-link, labels,
+  aria); `docs/LAUNCH_CHECKLIST.md` (security/pentest/load).
+
+**All 8 phases (0–7) are code-complete.** Remaining work to launch is the
+`docs/LAUNCH_CHECKLIST.md`: counsel review of all `[ATTORNEY REVIEW REQUIRED]`
+text + per-state QA, and standing up the hosted accounts (Supabase, Stripe,
+Resend, optional Gotenberg). See `docs/SUPABASE_SETUP.md`, `docs/STRIPE_SETUP.md`.
+Not-yet-implemented items flagged in the checklist: rate limiting on auth/redeem,
+account-deletion/data-retention flow.

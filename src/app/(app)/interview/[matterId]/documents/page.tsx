@@ -98,6 +98,9 @@ export default async function DocumentsPage({
         <Button variant="outline" render={<Link href={`/interview/${matterId}/instructions`} />}>
           Execution instructions
         </Button>
+        <Button variant="outline" render={<Link href={`/interview/${matterId}/review`} />}>
+          Update &amp; regenerate
+        </Button>
         {matter.doc_type === "trust" && (
           <Button variant="outline" render={<Link href={`/interview/${matterId}/funding`} />}>
             Trust funding tracker
