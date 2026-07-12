@@ -1,9 +1,11 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { clientEnv } from "@/lib/env";
+import { DISCLAIMER_VERSION } from "@/lib/legal";
 import { getMatter, getAnswers } from "@/lib/interview/data";
 import { getStateRuleset, isStateAvailable } from "./state-rules.server";
 import { assembleWill } from "./will";
@@ -22,12 +24,21 @@ const DOCX_MIME =
  */
 export async function generateDocumentsAction(
   matterId: string,
+  acknowledged: boolean,
 ): Promise<{ error: string } | void> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  // Affirmative self-help disclaimer acknowledgment is REQUIRED before
+  // generation (build plan §8). No ack → no documents.
+  if (!acknowledged) {
+    return {
+      error: "Please acknowledge the self-help disclaimer to continue.",
+    };
+  }
 
   const matter = await getMatter(matterId);
   if (!matter) redirect("/dashboard");
@@ -52,6 +63,17 @@ export async function generateDocumentsAction(
   const pdf = await convertDocxToPdf(docx);
 
   const admin = createAdminClient();
+
+  // Log the affirmative disclaimer acknowledgment for this generation (§8).
+  const h = await headers();
+  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  await admin.from("disclaimer_acknowledgments").insert({
+    user_id: user.id,
+    matter_id: matterId,
+    disclaimer_version: DISCLAIMER_VERSION,
+    context: "generation",
+    ip,
+  });
 
   // Latest template version for this kind (records provenance).
   const { data: tv } = await admin

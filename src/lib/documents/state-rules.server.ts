@@ -30,3 +30,13 @@ export async function isStateAvailable(state: string): Promise<boolean> {
     .maybeSingle();
   return (data as { available: boolean } | null)?.available === true;
 }
+
+/** Set of state codes currently available (available = true). */
+export async function getAvailableStateCodes(): Promise<string[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("state_availability")
+    .select("state_code")
+    .eq("available", true);
+  return ((data as { state_code: string }[] | null) ?? []).map((r) => r.state_code);
+}

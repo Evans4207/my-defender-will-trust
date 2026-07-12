@@ -22,6 +22,9 @@ export function SiteFooter() {
             <Link className="hover:text-white" href="/states">
               State Availability
             </Link>
+            <Link className="hover:text-white" href="/find-an-attorney">
+              Find an Attorney
+            </Link>
             <Link className="hover:text-white" href="/terms">
               Terms of Service
             </Link>

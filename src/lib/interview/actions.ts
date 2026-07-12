@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getEntitlement } from "@/lib/entitlements.server";
+import { isStateAvailable } from "@/lib/documents/state-rules.server";
 import { isStepKey, nextStepKey, type StepKey } from "./steps";
 import { validateStep } from "./schema";
 
@@ -116,6 +117,17 @@ export async function completeStepAction(
 
   const result = validateStep(stepKey, data);
   if (!result.ok) return { error: result.error };
+
+  // Excluded-state enforcement (§5.4): cannot advance past state selection in an
+  // unavailable state. Defense-in-depth beyond the client-side gate.
+  if (stepKey === "state") {
+    const st = typeof data.state === "string" ? data.state : "";
+    if (!st || !(await isStateAvailable(st))) {
+      return {
+        error: "This state isn't available yet. Join the waitlist to be notified.",
+      };
+    }
+  }
 
   const supabase = await createClient();
   const { error } = await supabase

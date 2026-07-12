@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useStepForm } from "@/lib/interview/use-step-form";
 import { prevStepKey, type StepKey } from "@/lib/interview/steps";
-import { US_STATES } from "@/lib/interview/states";
+import { US_STATES, STATE_NAMES } from "@/lib/interview/states";
+import { Button } from "@/components/ui/button";
+import { WaitlistForm } from "@/components/waitlist-form";
 import {
   Field,
   TextField,
@@ -37,25 +40,52 @@ const STATE_OPTIONS = US_STATES.map((s) => ({ value: s.code, label: s.name }));
 // =============================================================================
 // State
 // =============================================================================
-function StateStep({ matterId, initial }: { matterId: string; initial: Record<string, unknown> }) {
+function StateStep({
+  matterId,
+  initial,
+  availableStates,
+  userEmail,
+}: {
+  matterId: string;
+  initial: Record<string, unknown>;
+  availableStates: string[];
+  userEmail: string;
+}) {
   const f = useStepForm({ matterId, stepKey: "state", initial: { state: str(initial.state) } });
+  const chosen = f.values.state;
+  const unavailable = Boolean(chosen) && !availableStates.includes(chosen);
+
   return (
     <div className="space-y-6">
       <SelectField
         label="In which state do you live?"
         hint="This determines the legal rules that apply to your documents."
-        value={f.values.state}
+        value={chosen}
         onChange={(v) => f.setField("state", v)}
         options={STATE_OPTIONS}
       />
-      {f.values.state === "LA" && (
-        <p className="rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
-          Louisiana is a civil-law jurisdiction with distinct will forms and
-          forced-heirship rules. Availability may be limited — you can continue,
-          but your state must be enabled before documents can be generated.
-        </p>
+
+      {unavailable ? (
+        <div className="space-y-4 rounded-md border border-amber-500/40 bg-amber-500/10 p-4">
+          <div>
+            <h3 className="font-serif text-lg font-semibold">
+              Not yet available in {STATE_NAMES[chosen] ?? "your state"}
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {chosen === "LA"
+                ? "Louisiana is a civil-law jurisdiction with distinct will forms and forced-heirship rules, so it needs its own template set."
+                : "We're finalizing legal review before offering documents in your state."}{" "}
+              Join the waitlist and we&apos;ll email you the moment it opens.
+            </p>
+          </div>
+          <WaitlistForm state={chosen} defaultEmail={userEmail} />
+          <Button variant="ghost" render={<Link href="/dashboard" />}>
+            Back to dashboard
+          </Button>
+        </div>
+      ) : (
+        <StepNav prevHref={prevHref(matterId, "state")} error={f.error} saving={f.saving} pending={f.pending} onContinue={f.submit} />
       )}
-      <StepNav prevHref={prevHref(matterId, "state")} error={f.error} saving={f.saving} pending={f.pending} onContinue={f.submit} />
     </div>
   );
 }
@@ -496,16 +526,27 @@ export function StepRenderer({
   stepKey,
   answers,
   docType,
+  availableStates,
+  userEmail,
 }: {
   matterId: string;
   stepKey: StepKey;
   answers: Answers;
   docType: string;
+  availableStates: string[];
+  userEmail: string;
 }) {
   const initial = answers[stepKey] ?? {};
   switch (stepKey) {
     case "state":
-      return <StateStep matterId={matterId} initial={initial} />;
+      return (
+        <StateStep
+          matterId={matterId}
+          initial={initial}
+          availableStates={availableStates}
+          userEmail={userEmail}
+        />
+      );
     case "doctype":
       return <DocTypeStep matterId={matterId} initial={initial} docType={docType} />;
     case "about":

@@ -31,3 +31,10 @@ export const ATTORNEY_REVIEW_RECOMMENDATION =
 
 /** Marker used throughout the codebase for content awaiting counsel sign-off. */
 export const ATTORNEY_REVIEW_REQUIRED = "[ATTORNEY REVIEW REQUIRED]" as const;
+
+/**
+ * Version stamp for the self-help disclaimer text. Bump when counsel updates the
+ * wording so acknowledgments record which version the user agreed to.
+ * ⚠️ [ATTORNEY REVIEW REQUIRED] — placeholder version.
+ */
+export const DISCLAIMER_VERSION = "2026-07-placeholder" as const;

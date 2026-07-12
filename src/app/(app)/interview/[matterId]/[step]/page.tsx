@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getMatter, getAnswers, resumeStep } from "@/lib/interview/data";
 import { isStepKey, stepDef } from "@/lib/interview/steps";
 import { logInterviewEvent } from "@/lib/interview/actions";
+import { getAvailableStateCodes } from "@/lib/documents/state-rules.server";
+import { getUser } from "@/lib/auth/user";
 import { WizardProgress } from "@/components/interview/wizard-progress";
 import { StepRenderer } from "@/components/interview/step-forms";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -20,6 +22,12 @@ export default async function InterviewStepPage({
   const answers = await getAnswers(matterId);
   await logInterviewEvent(matterId, "step_viewed", step);
 
+  // The state step needs availability + the user's email for the waitlist.
+  const [availableStates, user] = await Promise.all([
+    step === "state" ? getAvailableStateCodes() : Promise.resolve<string[]>([]),
+    step === "state" ? getUser() : Promise.resolve(null),
+  ]);
+
   const def = stepDef(step);
 
   return (
@@ -35,6 +43,8 @@ export default async function InterviewStepPage({
             stepKey={step}
             answers={answers}
             docType={matter.doc_type}
+            availableStates={availableStates}
+            userEmail={user?.email ?? ""}
           />
         </CardContent>
       </Card>

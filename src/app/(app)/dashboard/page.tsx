@@ -126,6 +126,24 @@ export default async function DashboardPage() {
                 Add membership — {formatUsd(LAUNCH_PRICES.membership.annual)}/yr
               </CheckoutButton>
             )}
+            {entitlement.membership && (
+              <>
+                <Button variant="outline" render={<Link href="/vault" />}>
+                  Secure vault
+                </Button>
+                <Button variant="outline" render={<Link href="/checkup" />}>
+                  Annual checkup
+                </Button>
+                {matterRows[0] && (
+                  <Button
+                    variant="outline"
+                    render={<Link href={`/interview/${matterRows[0].id}/funding`} />}
+                  >
+                    Funding tracker
+                  </Button>
+                )}
+              </>
+            )}
             <form action={openBillingPortalAction}>
               <Button type="submit" variant="outline">
                 Manage billing

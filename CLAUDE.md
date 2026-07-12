@@ -108,8 +108,17 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
   - **Deviation:** templates are code-based generators (programmatic `docx`),
     not binary docxtemplater merge files — chosen for testability + data-driven
     conditionals. All clause text centralized in `src/lib/documents/*` for review.
-- Live-service acceptance for Phases 0–3 (auth / migrations / seed / Stripe /
-  interview / real Storage upload + PDF + email) pending hosted Supabase +
+- **Phase 4 — Compliance Layer & Membership: code-complete.** Affirmative
+  disclaimer acknowledgment gates generation + is logged per document
+  (`disclaimer_acknowledgments`, migration 0009); excluded-state enforcement
+  (client + server) with waitlist capture; find-an-attorney page (state bar
+  referrals + ABA fallback). Membership perks: secure vault (owner-only
+  up/download via signed URLs), trust funding tracker (persist per matter),
+  annual estate checkup + reminder scaffold (`vault_items`, `funding_items`,
+  profile checkup fields — migration 0010). Membership renew/cancel via Stripe
+  portal (Phase 1).
+- Live-service acceptance for Phases 0–4 (auth / migrations / seed / Stripe /
+  interview / Storage + PDF + email / vault + funding) pending hosted Supabase +
   Stripe (+ optional Gotenberg for PDF). See `docs/SUPABASE_SETUP.md`,
   `docs/STRIPE_SETUP.md`.
-- Phases 4–7: not started. Next: Phase 4 — Compliance Layer & Membership.
+- Phases 5–7: not started. Next: Phase 5 — Trust Flow + Ancillary Documents.
