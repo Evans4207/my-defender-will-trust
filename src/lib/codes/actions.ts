@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeAccessCode, isValidAccessCodeFormat } from "@/lib/access-code";
+import { checkRateLimit, getClientIp, TOO_MANY } from "@/lib/rate-limit";
 
 export type RedeemState = { error?: string };
 
@@ -27,6 +28,9 @@ export async function redeemCodeAction(
   _prev: RedeemState,
   formData: FormData,
 ): Promise<RedeemState> {
+  const ip = await getClientIp();
+  if (!(await checkRateLimit(`redeem:${ip}`, 10, 300))) return { error: TOO_MANY };
+
   const code = normalizeAccessCode(String(formData.get("code") ?? ""));
   if (!isValidAccessCodeFormat(code)) {
     return {

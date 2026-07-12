@@ -146,5 +146,6 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
 `docs/LAUNCH_CHECKLIST.md`: counsel review of all `[ATTORNEY REVIEW REQUIRED]`
 text + per-state QA, and standing up the hosted accounts (Supabase, Stripe,
 Resend, optional Gotenberg). See `docs/SUPABASE_SETUP.md`, `docs/STRIPE_SETUP.md`.
-Not-yet-implemented items flagged in the checklist: rate limiting on auth/redeem,
-account-deletion/data-retention flow.
+Launch hardening done post-Phase-7: rate limiting on auth + code redemption
+(Postgres fixed-window limiter, migration 0012) and user-initiated account
+deletion (`/account`, purges storage + cascades DB rows). Migrations through 0012.

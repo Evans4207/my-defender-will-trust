@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/lib/auth/actions";
@@ -13,6 +14,13 @@ export function AppHeader({ email }: { email?: string | null }) {
               {email}
             </span>
           )}
+          <Button
+            render={<Link href="/account" />}
+            variant="ghost"
+            className="text-white hover:bg-white/10 hover:text-white"
+          >
+            Account
+          </Button>
           <form action={signOutAction}>
             <Button
               type="submit"

@@ -34,11 +34,13 @@ outside attorney; **[infra]** require the hosted accounts.
       (run the guarded integration tests: `RUN_DB_TESTS=1 npm test`).
 - [ ] Signed, expiring URLs for all document + vault downloads; no public buckets.
 - [ ] MFA enabled for admin accounts (Supabase Auth).
-- [ ] Rate limiting on auth + code-redemption endpoints (add via Supabase/edge or
-      a WAF — not yet implemented; TODO before launch).
+- [x] Rate limiting on auth + code-redemption endpoints — Postgres fixed-window
+      limiter (`rate_limit_hit`, migration 0012) applied to signup/login/magic/
+      reset + redeem. Verify thresholds; consider a network WAF as defense-in-depth.
 - [ ] Audit log capturing document access + admin actions (`audit_log`).
-- [ ] Data retention & user-initiated account deletion flow (TODO — implement
-      before launch).
+- [x] User-initiated account deletion flow (`/account` → `deleteAccountAction`:
+      purges storage + cascades DB rows). **[counsel]** confirm the written
+      data-retention policy language on the Privacy page.
 
 ## Penetration-test checklist
 - [ ] Authz: attempt cross-user access to matters, documents, vault, downloads,

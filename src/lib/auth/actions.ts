@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { clientEnv } from "@/lib/env";
+import { checkRateLimit, getClientIp, TOO_MANY } from "@/lib/rate-limit";
 import {
   signupSchema,
   loginSchema,
@@ -30,6 +31,9 @@ export async function signUpAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const ip = await getClientIp();
+  if (!(await checkRateLimit(`signup:${ip}`, 5, 3600))) return { error: TOO_MANY };
+
   const parsed = signupSchema.safeParse({
     fullName: formData.get("fullName"),
     email: formData.get("email"),
@@ -62,6 +66,9 @@ export async function loginAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const ip = await getClientIp();
+  if (!(await checkRateLimit(`login:${ip}`, 10, 300))) return { error: TOO_MANY };
+
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -85,6 +92,9 @@ export async function magicLinkAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const ip = await getClientIp();
+  if (!(await checkRateLimit(`magic:${ip}`, 5, 3600))) return { error: TOO_MANY };
+
   const parsed = magicLinkSchema.safeParse({ email: formData.get("email") });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid email." };
@@ -106,6 +116,9 @@ export async function forgotPasswordAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const ip = await getClientIp();
+  if (!(await checkRateLimit(`reset:${ip}`, 5, 3600))) return { error: TOO_MANY };
+
   const parsed = forgotPasswordSchema.safeParse({
     email: formData.get("email"),
   });
