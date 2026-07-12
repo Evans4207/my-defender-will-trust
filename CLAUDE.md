@@ -86,6 +86,13 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
 ## Phase status
 
 - **Phase 0 — Foundations: code-complete.** Scaffold, branding, data model +
-  RLS, pilot-state seed, CI, landing page. Live-DB acceptance (auth works /
-  migrations run / seed loads) pending the hosted Supabase project.
-- Phases 1–7: not started.
+  RLS, pilot-state seed, CI, landing page.
+- **Phase 1 — Auth, Payments & Codes: code-complete.** Supabase Auth
+  (email/password + magic link + reset), gate screen, entitlements resolver,
+  access-code redemption (atomic RPC), Stripe Checkout + idempotent webhooks +
+  billing portal, dashboard. Tests: entitlements, webhook handling, and a
+  redemption-concurrency integration test (`RUN_DB_TESTS=1` + live DB).
+- Live-service acceptance for Phases 0–1 (auth works / migrations run / seed
+  loads / real Stripe checkout + webhooks) pending the hosted Supabase + Stripe
+  accounts. See `docs/SUPABASE_SETUP.md` and `docs/STRIPE_SETUP.md`.
+- Phases 2–7: not started.
