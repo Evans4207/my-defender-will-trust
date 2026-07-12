@@ -1,1 +1,91 @@
-@AGENTS.md
+# My Defender Will & Trust
+
+Self-help legal-document platform. Guided, interview-style creation of a
+state-compliant Last Will & Testament or Revocable Living Trust (50 states + DC).
+Two entry paths: direct Stripe subscribers, and partner access-code users.
+
+**Compliance posture is a core feature, not boilerplate.** This is self-help
+document-preparation software (LegalZoom / Trust & Will model). It is NOT a law
+firm, provides NO legal advice, and forms NO attorney-client relationship.
+Prominent self-help disclaimers appear at signup, in the interview footer, and
+before generation. See `src/lib/legal.ts`.
+
+The full brief lives in `docs/BUILD_PLAN.md` — it is the source of truth. Work
+**phase by phase**; complete each acceptance checklist before advancing.
+
+## Rules for contributors (human or AI)
+
+1. Work phase by phase; do not scaffold everything at once.
+2. All legal template text, disclaimers, ToS/Privacy = clearly marked
+   `[ATTORNEY REVIEW REQUIRED]` placeholders. Never present output as final legal
+   language.
+3. Keep the 50-state legal engine **data-driven** (`state_rules` table) — no
+   state-specific `if` statements scattered through templates or code.
+4. When populating state rules, research current statutes and record the
+   `citation` + `checked_at`. Flag ambiguity with `needs_review = true`.
+5. Ask the product owner (Dave) before decisions on: pricing amounts, review-mode
+   defaults, which states launch beyond the pilot five, and Louisiana strategy.
+6. Write tests for: code redemption (concurrency), Stripe webhooks, template
+   rendering per state, and access control on document downloads.
+
+## Tech stack
+
+- **Next.js 16** (App Router, TypeScript, Turbopack) — ⚠️ NOT Next 15; see below.
+- **Tailwind v4** + **shadcn/ui** (built on **Base UI**, not Radix).
+- **Supabase** — Postgres + Auth + Storage (hosted).
+- **Stripe** (Phase 1), **Resend/Postmark** email (Phase 3).
+- **Vitest** for unit tests.
+
+> Note: the brief specified Next.js 15; `create-next-app@latest` installed 16.
+> We proceeded on 16 (current release). Flagged for the owner.
+
+## Next.js 16 gotchas (breaking vs. most tutorials)
+
+- **Async request APIs**: `cookies()`, `headers()`, `params`, `searchParams` are
+  Promises — always `await`. (See `src/lib/supabase/server.ts`.)
+- **`proxy.ts` replaces `middleware.ts`** (Node.js runtime). Session refresh lives
+  in `src/proxy.ts`.
+- `next lint` removed — use `eslint` directly (`npm run lint`).
+
+## Layout
+
+```
+src/
+  app/
+    (marketing)/        # public site: landing, signup/login stubs, states, terms, privacy
+    layout.tsx          # root: fonts (Lora serif + Source Sans), Toaster
+    globals.css         # brand theme (navy/gold, oklch) — Tailwind v4 @theme
+  components/
+    brand/              # Shield motif, Logo lockup
+    ui/                 # shadcn/Base UI primitives
+    site-header.tsx, site-footer.tsx
+  lib/
+    supabase/           # client.ts, server.ts, types.ts (regenerate after migrations)
+    env.ts              # zod-validated env (client vs server)
+    legal.ts            # [ATTORNEY REVIEW REQUIRED] disclaimer copy
+    pricing.ts          # owner-approved launch prices (§3.2)
+    access-code.ts      # DFND-XXXX-XXXX format (§6)
+  proxy.ts              # Supabase session refresh (Next 16 middleware)
+supabase/
+  migrations/           # schema + RLS (§4)
+  seed.sql              # state_rules + availability for pilot states
+```
+
+## Commands
+
+- `npm run dev` — dev server (http://localhost:3000)
+- `npm run typecheck` / `npm run lint` / `npm test` / `npm run build`
+- `npm run db:push` — apply migrations to linked Supabase project
+- `npm run db:seed` — load `supabase/seed.sql` (needs `SUPABASE_DB_URL`)
+- `npm run db:types` — regenerate `src/lib/supabase/types.ts` from live schema
+
+## Setup
+
+See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
+
+## Phase status
+
+- **Phase 0 — Foundations: code-complete.** Scaffold, branding, data model +
+  RLS, pilot-state seed, CI, landing page. Live-DB acceptance (auth works /
+  migrations run / seed loads) pending the hosted Supabase project.
+- Phases 1–7: not started.
