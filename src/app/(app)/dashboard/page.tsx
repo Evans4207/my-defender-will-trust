@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckoutButton } from "@/components/checkout-button";
 import { openBillingPortalAction } from "@/lib/stripe/actions";
+import { startMatterAction } from "@/lib/interview/actions";
 import { formatUsd, LAUNCH_PRICES } from "@/lib/pricing";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -63,13 +64,23 @@ export default async function DashboardPage() {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  {/* The guided interview arrives in Phase 2. */}
-                  <Button disabled className="w-full">
-                    {existing ? "Resume interview" : "Start interview"}
-                  </Button>
-                  <p className="mt-2 text-center text-xs text-muted-foreground">
-                    Guided interview coming in the next phase.
-                  </p>
+                  {pkg === "will" ? (
+                    <form action={startMatterAction}>
+                      <input type="hidden" name="doc_type" value={pkg} />
+                      <Button type="submit" className="w-full">
+                        {existing ? "Resume interview" : "Start interview"}
+                      </Button>
+                    </form>
+                  ) : (
+                    <>
+                      <Button disabled className="w-full">
+                        Start interview
+                      </Button>
+                      <p className="mt-2 text-center text-xs text-muted-foreground">
+                        Trust interview launches in a later release.
+                      </p>
+                    </>
+                  )}
                 </CardContent>
               </Card>
             );

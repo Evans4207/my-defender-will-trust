@@ -92,7 +92,13 @@ See `docs/SUPABASE_SETUP.md` to create the hosted project and apply the schema.
   access-code redemption (atomic RPC), Stripe Checkout + idempotent webhooks +
   billing portal, dashboard. Tests: entitlements, webhook handling, and a
   redemption-concurrency integration test (`RUN_DB_TESTS=1` + live DB).
-- Live-service acceptance for Phases 0–1 (auth works / migrations run / seed
-  loads / real Stripe checkout + webhooks) pending the hosted Supabase + Stripe
-  accounts. See `docs/SUPABASE_SETUP.md` and `docs/STRIPE_SETUP.md`.
-- Phases 2–7: not started.
+- **Phase 2 — Interview Engine: code-complete.** Resumable, autosaving Will-flow
+  wizard: step registry, progress + est-time, per-step validation, review &
+  inline edit, funnel events (`interview_events`), resume pointer
+  (`matters.current_step`). Steps: state (LA notice), document, about, family,
+  fiduciaries, assets, distributions (100% share validation, per stirpes/capita),
+  special provisions, ancillary, review → generate handoff. Trust flow = Phase 5.
+- Live-service acceptance for Phases 0–2 (auth / migrations / seed / Stripe /
+  full interview run) pending the hosted Supabase + Stripe accounts. See
+  `docs/SUPABASE_SETUP.md` and `docs/STRIPE_SETUP.md`.
+- Phases 3–7: not started. Next: Phase 3 — Document Generation.
