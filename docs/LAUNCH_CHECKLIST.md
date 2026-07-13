@@ -66,3 +66,6 @@ outside attorney; **[infra]** require the hosted accounts.
 - [ ] Accessibility: WCAG 2.1 AA pass (keyboard nav, focus states, contrast,
       labels, skip-link) — run an automated audit (axe/Lighthouse) + manual check.
 - [ ] SEO: sitemap + robots reachable; OG tags present; titles per page.
+- [ ] **Re-enable search indexing** (currently NOINDEX for the test phase):
+      restore selective rules in `src/app/robots.ts` and remove
+      `robots: { index: false }` from `src/app/layout.tsx`.

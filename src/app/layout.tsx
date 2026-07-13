@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   },
   description:
     "Create a state-compliant Last Will & Testament or Revocable Living Trust with guided, self-help document preparation software. Available in all 50 states plus DC.",
+  // TEST PHASE: keep the staging site out of search results. Remove before
+  // public launch (see docs/LAUNCH_CHECKLIST.md).
+  robots: { index: false, follow: false },
   openGraph: {
     title: "My Defender Will & Trust",
     description:
