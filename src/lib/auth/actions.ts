@@ -45,7 +45,7 @@ export async function signUpAction(
 
   const supabase = await createClient();
   const origin = await getOrigin();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
@@ -55,6 +55,9 @@ export async function signUpAction(
   });
 
   if (error) return { error: error.message };
+
+  // If email confirmation is disabled, signUp returns a session — go straight in.
+  if (data.session) redirect("/gate");
 
   return {
     message:
