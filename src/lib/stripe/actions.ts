@@ -10,6 +10,7 @@ import {
   type PlanKey,
 } from "./config";
 import { createClient } from "@/lib/supabase/server";
+import { getPendingDiscount } from "@/lib/entitlements.server";
 import { clientEnv } from "@/lib/env";
 import type { PackageKey, PartyType } from "@/lib/pricing";
 
@@ -41,8 +42,31 @@ export async function startCheckoutAction(formData: FormData): Promise<void> {
 
   const origin = await getOrigin();
   const mode = checkoutMode(plan);
+  const stripe = getStripe();
 
-  const session = await getStripe().checkout.sessions.create({
+  // If the user redeemed a partner DISCOUNT code for this package, apply it as a
+  // one-time coupon. (Comp codes never reach checkout — they unlock directly.)
+  let discountParam:
+    | { discounts: { coupon: string }[] }
+    | { allow_promotion_codes: true } = { allow_promotion_codes: true };
+  if (plan === "will" || plan === "trust") {
+    const pending = await getPendingDiscount();
+    if (
+      pending &&
+      pending.package === plan &&
+      pending.discountPct > 0 &&
+      pending.discountPct < 100
+    ) {
+      const coupon = await stripe.coupons.create({
+        percent_off: pending.discountPct,
+        duration: "once",
+        name: `Partner ${pending.discountPct}% off`,
+      });
+      discountParam = { discounts: [{ coupon: coupon.id }] };
+    }
+  }
+
+  const session = await stripe.checkout.sessions.create({
     mode,
     line_items: [{ price: priceId, quantity: 1 }],
     client_reference_id: user.id,
@@ -53,7 +77,7 @@ export async function startCheckoutAction(formData: FormData): Promise<void> {
       : {}),
     success_url: `${origin}/dashboard?checkout=success`,
     cancel_url: `${origin}/gate?checkout=cancel`,
-    allow_promotion_codes: true,
+    ...discountParam,
   });
 
   if (!session.url) throw new Error("Stripe did not return a checkout URL");

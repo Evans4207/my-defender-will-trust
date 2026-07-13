@@ -145,9 +145,10 @@ create table public.state_rules (
   updated_at     timestamptz not null default now()
 );
 
--- Unique per (state, rule, doc_type) treating NULL doc_type as '*'.
+-- Unique per (state, rule, doc_type) treating NULL doc_type as a real value
+-- (so two "applies to both" rows for the same state+key collide). Requires PG15+.
 create unique index state_rules_unique_idx
-  on public.state_rules (state_code, rule_key, coalesce(doc_type::text, '*'));
+  on public.state_rules (state_code, rule_key, doc_type) nulls not distinct;
 create index state_rules_state_idx on public.state_rules (state_code);
 create trigger state_rules_set_updated_at
   before update on public.state_rules

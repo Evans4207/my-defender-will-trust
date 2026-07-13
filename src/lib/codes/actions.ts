@@ -39,10 +39,18 @@ export async function redeemCodeAction(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("redeem_access_code", { p_code: code });
+  const { data, error } = await supabase.rpc("redeem_access_code", { p_code: code });
 
   if (error) return { error: mapRedeemError(error.message) };
 
-  // Atomic redemption succeeded (or was idempotently already redeemed).
+  const row = (Array.isArray(data) ? data[0] : data) as
+    | { grants_access?: boolean }
+    | undefined;
+
+  // Comp code (100% off) unlocks directly. Discount code (<100%) sends the user
+  // to check out at the reduced price — the discount is applied automatically.
+  if (row?.grants_access === false) {
+    redirect("/gate?discount=1");
+  }
   redirect("/dashboard");
 }

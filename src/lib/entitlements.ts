@@ -13,7 +13,7 @@ export type Entitlement = {
 };
 
 type SubRow = { status: string | null; plan: string | null };
-type RedemptionRow = { package: string | null };
+type RedemptionRow = { package: string | null; grants_access?: boolean | null };
 
 const ACTIVE_STATUSES = new Set(["active", "trialing"]);
 
@@ -32,6 +32,9 @@ export function computeEntitlement(input: {
     .filter((p): p is PackageKey => p === "will" || p === "trust");
 
   const codePackages = input.redemptions
+    // Only comp redemptions (grants_access) unlock directly; discount
+    // redemptions grant access via the Stripe subscription they check out with.
+    .filter((r) => r.grants_access !== false)
     .map((r) => r.package)
     .filter((p): p is PackageKey => p === "will" || p === "trust");
 

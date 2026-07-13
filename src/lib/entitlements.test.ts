@@ -25,6 +25,24 @@ describe("computeEntitlement", () => {
     expect(e.source).toBe("code");
   });
 
+  it("does NOT unlock from a discount redemption (grants_access false)", () => {
+    const e = computeEntitlement({
+      subscriptions: [],
+      redemptions: [{ package: "will", grants_access: false }],
+    });
+    expect(e.unlocked).toBe(false);
+    expect(e.packages).toEqual([]);
+  });
+
+  it("unlocks from a comp redemption (grants_access true)", () => {
+    const e = computeEntitlement({
+      subscriptions: [],
+      redemptions: [{ package: "will", grants_access: true }],
+    });
+    expect(e.unlocked).toBe(true);
+    expect(e.packages).toEqual(["will"]);
+  });
+
   it("treats membership-only as not unlocking a document package", () => {
     const e = computeEntitlement({
       subscriptions: [{ status: "active", plan: "membership" }],

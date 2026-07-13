@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getEntitlement } from "@/lib/entitlements.server";
+import { getEntitlement, getPendingDiscount } from "@/lib/entitlements.server";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckoutButton } from "@/components/checkout-button";
-import { formatUsd, LAUNCH_PRICES } from "@/lib/pricing";
+import { formatUsd, LAUNCH_PRICES, applyDiscountCents } from "@/lib/pricing";
 
 export const metadata: Metadata = { title: "Choose how to get started" };
+
+const PACKAGE_LABEL = { will: "Will Package", trust: "Trust Package" } as const;
 
 export default async function GatePage() {
   const entitlement = await getEntitlement();
   if (entitlement.unlocked) redirect("/dashboard");
+
+  const pending = await getPendingDiscount();
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -23,6 +27,44 @@ export default async function GatePage() {
           Redeem a partner access code, or choose a package.
         </p>
       </div>
+
+      {pending && (
+        <Card className="mb-6 border-accent bg-accent/10">
+          <CardHeader>
+            <h2 className="font-serif text-xl font-semibold">
+              Your partner discount: {pending.discountPct}% off the{" "}
+              {PACKAGE_LABEL[pending.package]}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Applied automatically at checkout.
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {(["individual", "couples"] as const).map((party) => {
+              const list = LAUNCH_PRICES[pending.package][party];
+              const discounted = applyDiscountCents(list, pending.discountPct);
+              return (
+                <div key={party} className="flex items-center justify-between gap-4">
+                  <p className="text-sm">
+                    <span className="capitalize">{party}</span>:{" "}
+                    <span className="text-muted-foreground line-through">
+                      {formatUsd(list)}
+                    </span>{" "}
+                    <span className="font-semibold">{formatUsd(discounted)}</span>
+                  </p>
+                  <CheckoutButton
+                    plan={pending.package}
+                    party={party}
+                    className="bg-accent text-accent-foreground hover:bg-brand-gold-bright"
+                  >
+                    Check out ({party})
+                  </CheckoutButton>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Access-code path */}

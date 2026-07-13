@@ -145,7 +145,7 @@ for (const code of JURISDICTIONS) {
       return `  (${sqlStr(code)}, ${dt}, ${sqlStr(key)}, ${sqlStr(JSON.stringify(val))}::jsonb, ${sqlStr(citation)}, ${sqlStr(CHECKED)}, ${needsReview})`;
     })
     .join(",\n");
-  out += `\non conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();\n\n`;
+  out += `\non conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();\n\n`;
 }
 
 // Availability: all available except the excluded high-risk set.

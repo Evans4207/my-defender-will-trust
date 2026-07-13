@@ -13,7 +13,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('AL', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('AL', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('AL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- AK
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -24,7 +24,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('AK', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('AK', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'AS 13.12 electronic-will provisions (SB 90)', '2026-07-12', true),
   ('AK', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- AZ
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -35,7 +35,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('AZ', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('AZ', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'ARS §14-2518', '2026-07-12', true),
   ('AZ', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- AR
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -46,7 +46,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('AR', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Ark. Code §28-25-103 (at the end)', '2026-07-12', true),
   ('AR', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('AR', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- CA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -57,7 +57,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('CA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('CA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('CA', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- CO
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -68,7 +68,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('CO', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('CO', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'C.R.S. 15-11-1301 to 1311 (CO UEWA)', '2026-07-12', true),
   ('CO', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- CT
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -79,7 +79,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('CT', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Conn. Gen. Stat. §45a-251 (subscribed)', '2026-07-12', true),
   ('CT', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('CT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- DE
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -90,7 +90,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('DE', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('DE', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('DE', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- DC
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -101,7 +101,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('DC', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('DC', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'D.C. Code §§18-901 to 18-911 (2022 UEWA)', '2026-07-12', true),
   ('DC', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- FL
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -112,7 +112,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('FL', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('FL', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Fla. Stat. §732.521+', '2026-07-12', true),
   ('FL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- GA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -123,7 +123,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('GA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('GA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('GA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- HI
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -134,7 +134,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('HI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('HI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('HI', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- ID
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -145,7 +145,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('ID', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('ID', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('ID', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- IL
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -156,7 +156,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('IL', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('IL', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, '755 ILCS 6/ (2021)', '2026-07-12', true),
   ('IL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- IN
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -167,7 +167,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('IN', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('IN', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Ind. Code ch. 29-1-21 (2018)', '2026-07-12', true),
   ('IN', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- IA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -178,7 +178,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('IA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('IA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('IA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- KS
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -189,7 +189,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('KS', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'K.S.A. 59-606 (signed at the end)', '2026-07-12', true),
   ('KS', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('KS', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- KY
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -200,7 +200,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('KY', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'KRS 394.040 (signed at the end)', '2026-07-12', true),
   ('KY', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('KY', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- LA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -211,7 +211,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('LA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Acts 2025 No. 30 (SB 49): signature may appear anywhere', '2026-07-12', true),
   ('LA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('LA', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- ME
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -222,7 +222,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('ME', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('ME', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('ME', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MD
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -233,7 +233,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MD', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MD', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Md. Est. & Trusts §4-102 (2022 SB 36)', '2026-07-12', true),
   ('MD', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -244,7 +244,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MI
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -255,7 +255,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MI', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MN
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -266,7 +266,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MN', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MN', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MN', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MS
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -277,7 +277,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MS', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MS', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MS', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MO
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -288,7 +288,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MO', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MO', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'MO UEWA (eff. 8/28/2025)', '2026-07-12', true),
   ('MO', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MT
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -299,7 +299,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('MT', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MT', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NE
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -310,7 +310,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NE', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NE', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NE', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NV
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -321,7 +321,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NV', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NV', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'NRS §133.085', '2026-07-12', true),
   ('NV', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NH
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -332,7 +332,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NH', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NH', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NH', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NJ
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -343,7 +343,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NJ', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NJ', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NJ', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NM
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -354,7 +354,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NM', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NM', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NM', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NY
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -365,7 +365,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NY', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'N.Y. EPTL §3-2.1 (at the end thereof)', '2026-07-12', true),
   ('NY', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NY', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NC
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -376,7 +376,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('NC', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NC', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'N.C. Gen. Stat. Ch.31 Art.11 (UEWA, eff. 2025)', '2026-07-12', true),
   ('NC', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- ND
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -387,7 +387,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('ND', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('ND', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'N.D. Cent. Code ch. 30.1-37 (UEWA, 2021)', '2026-07-12', true),
   ('ND', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- OH
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -398,7 +398,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('OH', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Ohio Rev. Code §2107.03 (at the end)', '2026-07-12', true),
   ('OH', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('OH', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- OK
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -409,7 +409,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('OK', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, '84 O.S. §55 (at the end)', '2026-07-12', true),
   ('OK', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'OK UEWA (eff. 11/1/2024)', '2026-07-12', true),
   ('OK', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- OR
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -420,7 +420,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('OR', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('OR', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'ORS 112.235(3) excludes electronic records (no e-wills)', '2026-07-12', true),
   ('OR', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- PA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -431,7 +431,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('PA', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, '20 Pa.C.S. §2502 (at the end)', '2026-07-12', true),
   ('PA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('PA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- RI
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -442,7 +442,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('RI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('RI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('RI', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- SC
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -453,7 +453,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('SC', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('SC', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('SC', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- SD
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -464,7 +464,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('SD', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('SD', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('SD', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- TN
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -475,7 +475,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('TN', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('TN', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('TN', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- TX
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -486,7 +486,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('TX', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('TX', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('TX', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- UT
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -497,7 +497,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('UT', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('UT', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Utah Code §§75-2-1401 to 1411 (UEWA)', '2026-07-12', true),
   ('UT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- VT
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -508,7 +508,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('VT', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('VT', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('VT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- VA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -519,7 +519,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('VA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('VA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('VA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WA
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -530,7 +530,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('WA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WA', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'RCW 11.12.400–491 (UEWA, eff. 2022)', '2026-07-12', true),
   ('WA', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WV
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -541,7 +541,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('WV', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WV', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('WV', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WI
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -552,7 +552,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('WI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('WI', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WY
 insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
@@ -563,7 +563,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('WY', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WY', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('WY', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, coalesce(doc_type::text, '*')) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- State availability (all available except high-risk excluded set)
 insert into public.state_availability (state_code, available, reason) values
