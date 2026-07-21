@@ -28,6 +28,25 @@ The full brief lives in `docs/BUILD_PLAN.md` — it is the source of truth. Work
 6. Write tests for: code redemption (concurrency), Stripe webhooks, template
    rendering per state, and access control on document downloads.
 
+## Working with marketing/content collaborators
+
+A non-developer marketing collaborator edits this site through Claude Code. When a
+session is doing **content/marketing edits** (copy, headlines, images, SEO on the
+public `(marketing)` pages), follow `docs/MARKETING_GUIDE.md` and these guardrails:
+
+- **Protected — stop and confirm with the owner (Dave) before editing:** any
+  `[ATTORNEY REVIEW REQUIRED]` text, `src/lib/legal.ts`, the Terms/Privacy pages,
+  and prices in `src/lib/pricing.ts`. Do not soften, remove, or contradict legal
+  language, and never write marketing copy implying legal advice or an
+  attorney-client relationship.
+- **Out of scope for content edits:** the signup/auth flow, interview engine,
+  document generation, dashboard, and admin. Flag these as app-logic, not content.
+- **Ship via preview, not straight to main.** For a collaborator's change, create a
+  branch, push it, and surface the Vercel preview URL for review. Merge to `main`
+  only on explicit approval. Never edit `robots`/`noindex` settings — staging is
+  intentionally hidden from search during the test phase.
+- Explain what you're doing in plain English; assume no coding knowledge.
+
 ## Tech stack
 
 - **Next.js 16** (App Router, TypeScript, Turbopack) — ⚠️ NOT Next 15; see below.
