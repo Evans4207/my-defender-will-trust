@@ -48,8 +48,7 @@ export default async function GatePage() {
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
-            {/* Couples tier disabled until mirror documents ship (see config.ts). */}
-            {(["individual"] as const).map((party) => {
+            {(["individual", "couples"] as const).map((party) => {
               const list = LAUNCH_PRICES[pending.package][party];
               const discounted = applyDiscountCents(list, pending.discountPct);
               return (
@@ -109,21 +108,41 @@ export default async function GatePage() {
               <p className="text-sm font-medium">
                 Will Package · {formatUsd(LAUNCH_PRICES.will.individual)} individual
               </p>
-              <CheckoutButton plan="will" party="individual" className="w-full">
-                Get the Will Package
-              </CheckoutButton>
+              <div className="flex gap-2">
+                <CheckoutButton plan="will" party="individual" className="flex-1">
+                  Individual
+                </CheckoutButton>
+                <CheckoutButton
+                  plan="will"
+                  party="couples"
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Couples
+                </CheckoutButton>
+              </div>
             </div>
             <div className="space-y-2">
               <p className="text-sm font-medium">
                 Trust Package · {formatUsd(LAUNCH_PRICES.trust.individual)} individual
               </p>
-              <CheckoutButton
-                plan="trust"
-                party="individual"
-                className="w-full bg-accent text-accent-foreground hover:bg-brand-gold-bright"
-              >
-                Get the Trust Package
-              </CheckoutButton>
+              <div className="flex gap-2">
+                <CheckoutButton
+                  plan="trust"
+                  party="individual"
+                  className="flex-1 bg-accent text-accent-foreground hover:bg-brand-gold-bright"
+                >
+                  Individual
+                </CheckoutButton>
+                <CheckoutButton
+                  plan="trust"
+                  party="couples"
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Couples
+                </CheckoutButton>
+              </div>
             </div>
           </CardContent>
         </Card>

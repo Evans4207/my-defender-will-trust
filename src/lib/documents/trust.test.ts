@@ -83,7 +83,7 @@ describe("assemblePouroverWill", () => {
 describe("assembleDocument dispatch", () => {
   it("routes each kind to the right assembler", () => {
     for (const kind of ["will", "trust", "pourover", "poa", "healthcare", "hipaa"] as const) {
-      const d = assembleDocument(kind, { answers, ruleset: ruleset() });
+      const d = assembleDocument({ kind, signer: "primary" }, { answers, ruleset: ruleset() });
       expect(d.kind).toBe(kind);
       expect(d.attorneyReviewRequired).toBe(true);
     }

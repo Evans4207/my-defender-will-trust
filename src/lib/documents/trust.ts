@@ -1,12 +1,19 @@
 import type { AssembledDocument, DocSection } from "./model";
-import type { StateRuleset } from "./state-rules";
 import { STATE_NAMES } from "@/lib/interview/states";
 import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
-import { s, list, type Answers, type Child, type Beneficiary } from "./answers";
+import { s, list, type Child, type Beneficiary } from "./answers";
+import {
+  perspective,
+  isCouple,
+  partyNames,
+  jointTrustName,
+  type AssembleOpts,
+} from "./couples";
 
 /*
  * ⚠️ [ATTORNEY REVIEW REQUIRED] — PLACEHOLDER language. Conditional inclusion is
- * driven by the normalized StateRuleset + answers (data-driven).
+ * driven by the normalized StateRuleset + answers (data-driven). A couples
+ * (joint) trust names both spouses/partners as co-grantors and co-trustees.
  */
 
 function trustName(signer: string): string {
@@ -17,10 +24,7 @@ function ordinalWitnessWord(n: number): string {
   return n === 2 ? "two (2)" : `${n}`;
 }
 
-export function assembleTrust(opts: {
-  answers: Answers;
-  ruleset: StateRuleset;
-}): AssembledDocument {
+export function assembleTrust(opts: AssembleOpts): AssembledDocument {
   const { answers, ruleset } = opts;
   const about = answers.about ?? {};
   const fid = answers.fiduciaries ?? {};
@@ -28,15 +32,25 @@ export function assembleTrust(opts: {
   const assets = answers.assets ?? {};
   const special = answers.special ?? {};
 
-  const signerName = s(about.fullName) || "[Grantor]";
+  const couple = isCouple(opts);
+  const { primary, spouse } = partyNames(answers);
+
+  // Grantor(s): "we"/"Grantors" for a joint trust, "I"/"Grantor" for one person.
+  const signerName = couple ? `${primary} and ${spouse}` : s(about.fullName) || "[Grantor]";
   const stateName = STATE_NAMES[ruleset.state] ?? ruleset.state;
-  const name = trustName(signerName);
-  const trustee = s(fid.trusteeName) || signerName;
+  const name = couple ? jointTrustName(answers) : trustName(signerName);
+  const trustee = couple
+    ? `${primary} and ${spouse}`
+    : s(fid.trusteeName) || signerName;
   const successor = s(fid.successorTrusteeName);
   const successorAlt = s(fid.successorTrusteeAlt);
   const beneficiaries = list<Beneficiary>(dist.beneficiaries);
   const realEstate = list<{ description?: unknown }>(assets.realEstate);
   const accounts = list<{ institution?: unknown }>(assets.accounts);
+
+  // Pronoun helpers so one code path serves both single and joint trusts.
+  const grantorWord = couple ? "Grantors" : "Grantor";
+  const grantorPoss = couple ? "Grantors'" : "Grantor's";
 
   const sections: DocSection[] = [];
 
@@ -50,23 +64,29 @@ export function assembleTrust(opts: {
   sections.push({
     heading: "Article I — Establishment of Trust",
     paragraphs: [
-      `I, ${signerName}, a resident of ${stateName} (the "Grantor"), establish ${name} (the "Trust"). This Trust is governed by the laws of ${stateName}.`,
-      "This Trust is revocable: the Grantor may amend or revoke it at any time during the Grantor's lifetime while competent.",
+      couple
+        ? `We, ${primary} and ${spouse}, residents of ${stateName} (the "Grantors"), establish ${name} (the "Trust"). This Trust is governed by the laws of ${stateName}.`
+        : `I, ${signerName}, a resident of ${stateName} (the "Grantor"), establish ${name} (the "Trust"). This Trust is governed by the laws of ${stateName}.`,
+      couple
+        ? "This Trust is revocable: either Grantor may amend or revoke it as provided herein during the Grantors' joint lives while competent."
+        : "This Trust is revocable: the Grantor may amend or revoke it at any time during the Grantor's lifetime while competent.",
     ],
   });
 
   sections.push({
     heading: "Article II — Trustees",
     paragraphs: [
-      `The initial Trustee is ${trustee}.`,
+      couple
+        ? `The initial Co-Trustees are ${primary} and ${spouse}.`
+        : `The initial Trustee is ${trustee}.`,
       successor
-        ? `Upon the initial Trustee's death, resignation, or incapacity, ${successor} shall serve as successor Trustee${successorAlt ? `, and if unable, ${successorAlt}` : ""}.`
+        ? `Upon the ${couple ? "Co-Trustees'" : "initial Trustee's"} death, resignation, or incapacity, ${successor} shall serve as successor Trustee${successorAlt ? `, and if unable, ${successorAlt}` : ""}.`
         : `${ATTORNEY_REVIEW_REQUIRED} A successor Trustee should be named.`,
     ],
   });
 
   // Funding (data-driven from listed assets).
-  const fundingParas = ["The Grantor transfers the following property to the Trust:"];
+  const fundingParas = [`The ${grantorWord} transfer the following property to the Trust:`];
   for (const re of realEstate) {
     const d = s(re.description);
     if (d) fundingParas.push(`• Real property: ${d}`);
@@ -81,16 +101,23 @@ export function assembleTrust(opts: {
   sections.push({ heading: "Article III — Funding", paragraphs: fundingParas });
 
   sections.push({
-    heading: "Article IV — Administration During the Grantor's Life",
+    heading: `Article IV — Administration During the ${grantorPoss} Life`,
     paragraphs: [
-      "During the Grantor's life and competence, the Trustee shall manage the trust property for the Grantor's benefit and distribute income and principal as the Grantor directs.",
+      couple
+        ? "During the Grantors' joint lives and competence, the Co-Trustees shall manage the trust property for the Grantors' benefit and distribute income and principal as the Grantors direct."
+        : "During the Grantor's life and competence, the Trustee shall manage the trust property for the Grantor's benefit and distribute income and principal as the Grantor directs.",
     ],
   });
 
   // Distribution on death.
-  const deathParas: string[] = [
-    "Upon the Grantor's death, after payment of expenses, the Trustee shall distribute the remaining trust property as follows:",
-  ];
+  const deathParas: string[] = couple
+    ? [
+        "Upon the death of the first Grantor, the trust property shall continue to be held for the benefit of the surviving Grantor.",
+        "Upon the death of the surviving Grantor, after payment of expenses, the Trustee shall distribute the remaining trust property as follows:",
+      ]
+    : [
+        "Upon the Grantor's death, after payment of expenses, the Trustee shall distribute the remaining trust property as follows:",
+      ];
   if (beneficiaries.length) {
     for (const b of beneficiaries) {
       deathParas.push(`• ${s(String(b.percent))}% to ${s(b.name)}.`);
@@ -98,10 +125,11 @@ export function assembleTrust(opts: {
   } else {
     deathParas.push(`${ATTORNEY_REVIEW_REQUIRED} No beneficiaries specified.`);
   }
+  const predeceasesWord = couple ? "the surviving Grantor" : "the Grantor";
   if (dist.distributionType === "per_stirpes") {
-    deathParas.push("If a beneficiary predeceases the Grantor, that share passes to their descendants, per stirpes.");
+    deathParas.push(`If a beneficiary predeceases ${predeceasesWord}, that share passes to their descendants, per stirpes.`);
   } else if (dist.distributionType === "per_capita") {
-    deathParas.push("If a beneficiary predeceases the Grantor, that share is divided among the surviving beneficiaries, per capita.");
+    deathParas.push(`If a beneficiary predeceases ${predeceasesWord}, that share is divided among the surviving beneficiaries, per capita.`);
   }
   const minorAge = s(special.minorTrustAge);
   if (minorAge) {
@@ -121,11 +149,15 @@ export function assembleTrust(opts: {
   sections.push({
     heading: "Pour-Over Coordination",
     paragraphs: [
-      `Any property not titled in the Trust at the Grantor's death is directed to this Trust through the Grantor's Pour-Over Will.`,
+      couple
+        ? `Any property not titled in the Trust at a Grantor's death is directed to this Trust through that Grantor's Pour-Over Will.`
+        : `Any property not titled in the Trust at the Grantor's death is directed to this Trust through the Grantor's Pour-Over Will.`,
     ],
   });
 
-  const signatureLines = [`Grantor: ${signerName}`, `Trustee: ${trustee}`, "Date", "Notary Public"];
+  const signatureLines = couple
+    ? [`Grantor: ${primary}`, `Grantor: ${spouse}`, "Date", "Notary Public"]
+    : [`Grantor: ${signerName}`, `Trustee: ${trustee}`, "Date", "Notary Public"];
 
   return {
     kind: "trust",
@@ -138,21 +170,21 @@ export function assembleTrust(opts: {
   };
 }
 
-export function assemblePouroverWill(opts: {
-  answers: Answers;
-  ruleset: StateRuleset;
-}): AssembledDocument {
+export function assemblePouroverWill(opts: AssembleOpts): AssembledDocument {
   const { answers, ruleset } = opts;
-  const about = answers.about ?? {};
   const family = answers.family ?? {};
   const fid = answers.fiduciaries ?? {};
 
-  const signerName = s(about.fullName) || "[Testator]";
+  const couple = isCouple(opts);
+  const { self: signerName, other: spouseName } = perspective(answers, opts.signer ?? "primary");
   const stateName = STATE_NAMES[ruleset.state] ?? ruleset.state;
-  const name = trustName(signerName);
+  // A couple's pour-over wills both feed the one joint trust.
+  const name = couple ? jointTrustName(answers) : trustName(signerName);
   const children = list<Child>(family.children);
   const minors = children.filter((c) => c.isMinor === true);
   const nWit = ordinalWitnessWord(ruleset.witnessesRequired);
+  const execName = couple ? spouseName : s(fid.executorName) || "[Executor]";
+  const execAlt = couple ? s(fid.executorAlt) || s(fid.executorName) : s(fid.executorAlt);
 
   const sections: DocSection[] = [
     {
@@ -174,7 +206,9 @@ export function assemblePouroverWill(opts: {
     {
       heading: "Article III — Executor",
       paragraphs: [
-        `I appoint ${s(fid.executorName) || "[Executor]"} as Executor${s(fid.executorAlt) ? `, and ${s(fid.executorAlt)} as alternate` : ""}.`,
+        couple
+          ? `I appoint my spouse, ${execName}, as Executor${execAlt ? `, and ${execAlt} as alternate` : ""}.`
+          : `I appoint ${execName} as Executor${execAlt ? `, and ${execAlt} as alternate` : ""}.`,
       ],
     },
   ];

@@ -1,16 +1,15 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { assertPartyAvailable, stripeConfigured } from "./config";
 
-// Guards the checkout action: the couples tier is intentionally disabled until
-// mirror-document generation ships and counsel clears it. If someone re-enables
-// couples without also restoring generation, these fail first.
-describe("assertPartyAvailable (couples tier disabled)", () => {
+// Guards the checkout action against malformed party values. Individual and
+// couples are both supported (couples => mirror wills / joint trust).
+describe("assertPartyAvailable", () => {
   it("allows the individual party", () => {
     expect(assertPartyAvailable("individual")).toBe("individual");
   });
 
-  it("rejects couples — cannot be fulfilled yet", () => {
-    expect(() => assertPartyAvailable("couples")).toThrow(/couples/i);
+  it("allows the couples party", () => {
+    expect(assertPartyAvailable("couples")).toBe("couples");
   });
 
   it("rejects any other value (crafted POST)", () => {

@@ -1,7 +1,7 @@
 import type { AssembledDocument, DocSection } from "./model";
-import type { StateRuleset } from "./state-rules";
 import { STATE_NAMES } from "@/lib/interview/states";
 import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
+import { perspective, isCouple, type AssembleOpts } from "./couples";
 
 /*
  * ⚠️ [ATTORNEY REVIEW REQUIRED] — Every clause below is PLACEHOLDER language for
@@ -10,7 +10,6 @@ import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
  * never by hardcoded state codes.
  */
 
-type Answers = Record<string, Record<string, unknown>>;
 const s = (v: unknown) => (typeof v === "string" ? v.trim() : "");
 const list = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : []);
 
@@ -22,10 +21,7 @@ function ordinalWitnessWord(n: number): string {
   return n === 2 ? "two (2)" : `${n}`;
 }
 
-export function assembleWill(opts: {
-  answers: Answers;
-  ruleset: StateRuleset;
-}): AssembledDocument {
+export function assembleWill(opts: AssembleOpts): AssembledDocument {
   const { answers, ruleset } = opts;
   const about = answers.about ?? {};
   const family = answers.family ?? {};
@@ -34,7 +30,13 @@ export function assembleWill(opts: {
   const special = answers.special ?? {};
   const ancillary = answers.ancillary ?? {};
 
-  const signerName = s(about.fullName) || "[Testator]";
+  const couple = isCouple(opts);
+  // For a couple, each spouse's will is generated from one shared interview:
+  // "self" is this will's testator, "spouseName" is the other spouse.
+  const { self: signerName, other: spouseName } = perspective(
+    answers,
+    opts.signer ?? "primary",
+  );
   const stateName = STATE_NAMES[ruleset.state] ?? ruleset.state;
   const children = list<Child>(family.children);
   const minorChildren = children.filter((c) => c.isMinor === true);
@@ -63,7 +65,9 @@ export function assembleWill(opts: {
   const familyParas: string[] = [];
   const maritalStatus = s(about.maritalStatus);
   const spouse = s(family.spouseName);
-  if (maritalStatus === "married" && spouse) {
+  if (couple) {
+    familyParas.push(`I am married to ${spouseName}.`);
+  } else if (maritalStatus === "married" && spouse) {
     familyParas.push(`I am married to ${spouse}.`);
   } else if (maritalStatus) {
     familyParas.push(`My marital status is: ${maritalStatus}.`);
@@ -77,14 +81,27 @@ export function assembleWill(opts: {
   }
   sections.push({ heading: "Article II — Family", paragraphs: familyParas });
 
-  // --- Executor ---
-  const execParas = [
-    `I appoint ${s(fid.executorName) || "[Executor]"} as the Executor (personal representative) of this Will.`,
-  ];
-  if (s(fid.executorAlt)) {
+  // --- Executor (couples name each other, with the shared alternate) ---
+  const execParas: string[] = [];
+  if (couple) {
     execParas.push(
-      `If that person is unable or unwilling to serve, I appoint ${s(fid.executorAlt)} as alternate Executor.`,
+      `I appoint my spouse, ${spouseName}, as the Executor (personal representative) of this Will.`,
     );
+    const altExec = s(fid.executorAlt) || s(fid.executorName);
+    if (altExec) {
+      execParas.push(
+        `If my spouse is unable or unwilling to serve, I appoint ${altExec} as alternate Executor.`,
+      );
+    }
+  } else {
+    execParas.push(
+      `I appoint ${s(fid.executorName) || "[Executor]"} as the Executor (personal representative) of this Will.`,
+    );
+    if (s(fid.executorAlt)) {
+      execParas.push(
+        `If that person is unable or unwilling to serve, I appoint ${s(fid.executorAlt)} as alternate Executor.`,
+      );
+    }
   }
   sections.push({ heading: "Article III — Executor", paragraphs: execParas });
 
@@ -107,7 +124,19 @@ export function assembleWill(opts: {
       distParas.push(`• ${s(b.item)} to ${s(b.recipient)}.`);
     }
   }
-  if (beneficiaries.length) {
+  if (couple) {
+    distParas.push(
+      `I give my entire residuary estate to my spouse, ${spouseName}, if my spouse survives me.`,
+    );
+    if (beneficiaries.length) {
+      distParas.push(
+        "If my spouse does not survive me, I give my residuary estate as follows:",
+      );
+      for (const b of beneficiaries) {
+        distParas.push(`• ${s(String(b.percent))}% to ${s(b.name)}.`);
+      }
+    }
+  } else if (beneficiaries.length) {
     distParas.push("I give my residuary estate as follows:");
     for (const b of beneficiaries) {
       distParas.push(`• ${s(String(b.percent))}% to ${s(b.name)}.`);
@@ -160,9 +189,15 @@ export function assembleWill(opts: {
 
   // --- Ancillary references ---
   const ancParas: string[] = [];
-  if (s(ancillary.financialPoaAgent)) ancParas.push(`A separate Durable Financial Power of Attorney appoints ${s(ancillary.financialPoaAgent)}.`);
-  if (s(ancillary.healthcareAgent)) ancParas.push(`A separate Healthcare Directive appoints ${s(ancillary.healthcareAgent)}.`);
-  if (ancillary.hipaaAuthorize === true) ancParas.push("A separate HIPAA authorization is included with this package.");
+  if (couple) {
+    ancParas.push(`A separate Durable Financial Power of Attorney appoints my spouse, ${spouseName}, as my agent.`);
+    ancParas.push(`A separate Healthcare Directive appoints my spouse, ${spouseName}, as my healthcare agent.`);
+    ancParas.push("A separate HIPAA authorization is included with this package.");
+  } else {
+    if (s(ancillary.financialPoaAgent)) ancParas.push(`A separate Durable Financial Power of Attorney appoints ${s(ancillary.financialPoaAgent)}.`);
+    if (s(ancillary.healthcareAgent)) ancParas.push(`A separate Healthcare Directive appoints ${s(ancillary.healthcareAgent)}.`);
+    if (ancillary.hipaaAuthorize === true) ancParas.push("A separate HIPAA authorization is included with this package.");
+  }
   if (ancParas.length) {
     sections.push({ heading: "Article VIII — Related Documents", paragraphs: ancParas });
   }

@@ -42,18 +42,14 @@ export function stripeConfigured(): boolean {
 }
 
 /**
- * Couples/mirror documents cannot yet be generated (interview schema has no
- * second-testator branch), so the couples tier is disabled — selling it would
- * be a sale we can't fulfil. Checkout is restricted to `individual` until mirror
- * documents ship AND counsel clears the new document types.
- *
- * Re-enabling is a deliberate revert: delete this guard, restore the couples
- * CheckoutButtons in the gate page, and the couples price displays on the
- * marketing page. The couples price ids in this file are left intact on purpose.
+ * Validate the party type coming off a checkout form. Both individual and
+ * couples are supported: couples produce mirror wills / a joint trust plus
+ * matching directives for each spouse (see documents/couples.ts). Anything else
+ * is a malformed/crafted request and is rejected.
  */
 export function assertPartyAvailable(rawParty: string): PartyType {
-  if (rawParty !== "individual") {
-    throw new Error("Couples packages are not currently available.");
+  if (rawParty === "individual" || rawParty === "couples") {
+    return rawParty;
   }
-  return "individual";
+  throw new Error(`Unknown package type: ${rawParty}`);
 }

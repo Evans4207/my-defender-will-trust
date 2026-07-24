@@ -12,6 +12,7 @@ type DocRow = {
   kind: string;
   status: string;
   generated_at: string | null;
+  storage_path: string | null;
 };
 
 const KIND_LABEL: Record<string, string> = {
@@ -22,6 +23,15 @@ const KIND_LABEL: Record<string, string> = {
   healthcare: "Healthcare Directive",
   hipaa: "HIPAA Authorization",
 };
+
+/** For couples, the storage path is tagged by signer — surface who each doc is for. */
+function ownerSuffix(storagePath: string | null): string {
+  const p = storagePath ?? "";
+  if (p.includes("-spouse-")) return " — Your spouse";
+  if (p.includes("-primary-")) return " — You";
+  if (p.includes("-joint-")) return " — Joint (both of you)";
+  return "";
+}
 
 export default async function DocumentsPage({
   params,
@@ -35,7 +45,7 @@ export default async function DocumentsPage({
   const supabase = await createClient();
   const { data } = await supabase
     .from("documents")
-    .select("id, kind, status, generated_at")
+    .select("id, kind, status, generated_at, storage_path")
     .eq("matter_id", matterId)
     .order("generated_at", { ascending: false });
   const docs = (data as DocRow[] | null) ?? [];
@@ -67,6 +77,7 @@ export default async function DocumentsPage({
               <div className="flex items-center justify-between">
                 <h2 className="font-serif text-lg font-semibold">
                   {KIND_LABEL[d.kind] ?? d.kind}
+                  <span className="text-muted-foreground">{ownerSuffix(d.storage_path)}</span>
                 </h2>
                 <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium capitalize">
                   {d.status.replace(/_/g, " ")}

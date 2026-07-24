@@ -29,6 +29,9 @@ export const aboutStepSchema = z.object({
   state: z.string().refine(isValidStateCode, "Please choose a state."),
   zip: z.string().trim().min(3, "Please enter your ZIP code."),
   maritalStatus: z.enum(["single", "married", "divorced", "widowed"]),
+  // Whether documents are for one person or a couple (mirror wills / joint
+  // trust). Drives the couples document package in generation.
+  party: z.enum(["individual", "couples"]).default("individual"),
   priorMarriages: z.boolean().default(false),
   priorMarriagesDetail: z.string().trim().optional(),
 });

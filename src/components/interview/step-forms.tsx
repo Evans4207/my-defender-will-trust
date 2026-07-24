@@ -171,12 +171,23 @@ function AboutStep({ matterId, initial }: { matterId: string; initial: Record<st
       state: str(initial.state),
       zip: str(initial.zip),
       maritalStatus: str(initial.maritalStatus),
+      party: str(initial.party) || "individual",
       priorMarriages: bool(initial.priorMarriages),
       priorMarriagesDetail: str(initial.priorMarriagesDetail),
     },
   });
   return (
     <div className="space-y-5">
+      <SelectField
+        label="Who are these documents for?"
+        hint="Couples get mirror wills (or a joint trust) plus matching directives for each spouse or partner."
+        value={f.values.party}
+        onChange={(v) => f.setField("party", v)}
+        options={[
+          { value: "individual", label: "Just me" },
+          { value: "couples", label: "My spouse or partner and me" },
+        ]}
+      />
       <TextField label="Full legal name" value={f.values.fullName} onChange={(v) => f.setField("fullName", v)} />
       <TextField label="Date of birth" type="date" value={f.values.dob} onChange={(v) => f.setField("dob", v)} />
       <TextField label="Street address" value={f.values.address1} onChange={(v) => f.setField("address1", v)} />
@@ -229,7 +240,9 @@ function FamilyStep({
   initial: Record<string, unknown>;
   context: Answers;
 }) {
+  const couple = str(context.about?.party) === "couples";
   const married = str(context.about?.maritalStatus) === "married";
+  const showSpouse = couple || married;
   const f = useStepForm({
     matterId,
     stepKey: "family",
@@ -241,8 +254,17 @@ function FamilyStep({
   });
   return (
     <div className="space-y-6">
-      {married && (
-        <TextField label="Spouse's full name" value={f.values.spouseName} onChange={(v) => f.setField("spouseName", v)} />
+      {showSpouse && (
+        <TextField
+          label={couple ? "Spouse or partner's full legal name" : "Spouse's full name"}
+          hint={
+            couple
+              ? "Your documents and your spouse or partner's will be prepared together."
+              : undefined
+          }
+          value={f.values.spouseName}
+          onChange={(v) => f.setField("spouseName", v)}
+        />
       )}
       <Field label="Children" hint="Include minors, adult children, and stepchildren you wish to provide for.">
         <Repeatable<Child>

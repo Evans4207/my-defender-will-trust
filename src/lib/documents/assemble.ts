@@ -1,28 +1,36 @@
-import type { AssembledDocument, DocumentKind } from "./model";
+import type { AssembledDocument } from "./model";
 import type { StateRuleset } from "./state-rules";
 import type { Answers } from "./answers";
+import type { Party, SignerRole } from "./couples";
+import type { DocumentSpec } from "./package";
 import { assembleWill } from "./will";
 import { assembleTrust, assemblePouroverWill } from "./trust";
 import { assemblePoa, assembleHealthcare, assembleHipaa } from "./ancillary";
 
-/** Dispatch: build the assembled document for a given kind. */
+/** Dispatch: build the assembled document for a given spec (kind + signer). */
 export function assembleDocument(
-  kind: DocumentKind,
-  opts: { answers: Answers; ruleset: StateRuleset },
+  spec: DocumentSpec,
+  opts: { answers: Answers; ruleset: StateRuleset; party?: Party },
 ): AssembledDocument {
-  switch (kind) {
+  const full = {
+    answers: opts.answers,
+    ruleset: opts.ruleset,
+    party: opts.party,
+    signer: spec.signer as SignerRole,
+  };
+  switch (spec.kind) {
     case "will":
-      return assembleWill(opts);
+      return assembleWill(full);
     case "trust":
-      return assembleTrust(opts);
+      return assembleTrust(full);
     case "pourover":
-      return assemblePouroverWill(opts);
+      return assemblePouroverWill(full);
     case "poa":
-      return assemblePoa(opts);
+      return assemblePoa(full);
     case "healthcare":
-      return assembleHealthcare(opts);
+      return assembleHealthcare(full);
     case "hipaa":
-      return assembleHipaa(opts);
+      return assembleHipaa(full);
     case "affidavit":
       throw new Error("affidavit is embedded in the will, not generated standalone");
   }

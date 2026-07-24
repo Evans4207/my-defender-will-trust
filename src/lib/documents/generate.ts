@@ -8,13 +8,12 @@ import { clientEnv } from "@/lib/env";
 import { DISCLAIMER_VERSION } from "@/lib/legal";
 import { getMatter, getAnswers } from "@/lib/interview/data";
 import { getStateRuleset, isStateAvailable } from "./state-rules.server";
-import { documentKindsFor } from "./package";
+import { documentSpecsFor } from "./package";
 import { assembleDocument } from "./assemble";
 import { renderDocx } from "./docx";
 import { convertDocxToPdf } from "./pdf";
 import { uploadDocument } from "./storage";
 import { sendDocumentsReadyEmail } from "./email";
-import type { DocumentKind } from "./model";
 
 const DOCX_MIME =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -78,25 +77,31 @@ export async function generateDocumentsAction(
     if (!templateByKind.has(r.kind)) templateByKind.set(r.kind, { id: r.id, version: r.version });
   }
 
-  const kinds = documentKindsFor(matter.doc_type);
+  // Individual → one document set; couples → a set per spouse (mirror wills /
+  // reciprocal directives) plus a joint trust. Party comes from the interview.
+  const party = answers.about?.party === "couples" ? "couples" : "individual";
+  const specs = documentSpecsFor(matter.doc_type, party);
   const documentRows: Record<string, unknown>[] = [];
 
   try {
-    for (const kind of kinds) {
-      const assembled = assembleDocument(kind as DocumentKind, { answers, ruleset });
+    for (const spec of specs) {
+      const assembled = assembleDocument(spec, { answers, ruleset, party });
       const docx = await renderDocx(assembled);
       const pdf = await convertDocxToPdf(docx);
 
-      const tpl = templateByKind.get(kind);
+      const tpl = templateByKind.get(spec.kind);
       const version = tpl?.version ?? 1;
-      const base = `${user.id}/${matterId}/${kind}-v${version}`;
+      // For couples, tag the path by signer so each spouse's set is distinct
+      // (two "will" documents for one matter would otherwise collide).
+      const tag = party === "couples" ? `-${spec.signer}` : "";
+      const base = `${user.id}/${matterId}/${spec.kind}${tag}-v${version}`;
 
       await uploadDocument(`${base}.docx`, docx, DOCX_MIME);
       if (pdf) await uploadDocument(`${base}.pdf`, pdf, "application/pdf");
 
       documentRows.push({
         matter_id: matterId,
-        kind,
+        kind: spec.kind,
         version,
         template_version_id: tpl?.id ?? null,
         storage_path: `${base}.docx`,
@@ -118,7 +123,12 @@ export async function generateDocumentsAction(
     action: "documents_generated",
     entity: "matter",
     entity_id: matterId,
-    metadata: { kinds, state: matter.state, doc_type: matter.doc_type },
+    metadata: {
+      kinds: specs.map((sp) => sp.kind),
+      party,
+      state: matter.state,
+      doc_type: matter.doc_type,
+    },
   });
   await admin.from("matters").update({ status: "ready_to_sign" }).eq("id", matterId);
 
