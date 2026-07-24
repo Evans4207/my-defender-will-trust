@@ -5,6 +5,7 @@ import { getEntitlement, getPendingDiscount } from "@/lib/entitlements.server";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckoutButton } from "@/components/checkout-button";
+import { stripeConfigured } from "@/lib/stripe/config";
 import { formatUsd, LAUNCH_PRICES, applyDiscountCents } from "@/lib/pricing";
 
 export const metadata: Metadata = { title: "Choose how to get started" };
@@ -28,6 +29,13 @@ export default async function GatePage() {
         </p>
       </div>
 
+      {!stripeConfigured() && (
+        <div className="mb-6 rounded-lg border border-border bg-muted/40 p-4 text-center text-sm text-muted-foreground">
+          Card checkout is being set up and isn&rsquo;t available yet. You can
+          still explore everything with a partner access code.
+        </div>
+      )}
+
       {pending && (
         <Card className="mb-6 border-accent bg-accent/10">
           <CardHeader>
@@ -40,7 +48,8 @@ export default async function GatePage() {
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
-            {(["individual", "couples"] as const).map((party) => {
+            {/* Couples tier disabled until mirror documents ship (see config.ts). */}
+            {(["individual"] as const).map((party) => {
               const list = LAUNCH_PRICES[pending.package][party];
               const discounted = applyDiscountCents(list, pending.discountPct);
               return (
@@ -100,41 +109,21 @@ export default async function GatePage() {
               <p className="text-sm font-medium">
                 Will Package · {formatUsd(LAUNCH_PRICES.will.individual)} individual
               </p>
-              <div className="flex gap-2">
-                <CheckoutButton plan="will" party="individual" className="flex-1">
-                  Individual
-                </CheckoutButton>
-                <CheckoutButton
-                  plan="will"
-                  party="couples"
-                  variant="outline"
-                  className="flex-1"
-                >
-                  Couples
-                </CheckoutButton>
-              </div>
+              <CheckoutButton plan="will" party="individual" className="w-full">
+                Get the Will Package
+              </CheckoutButton>
             </div>
             <div className="space-y-2">
               <p className="text-sm font-medium">
                 Trust Package · {formatUsd(LAUNCH_PRICES.trust.individual)} individual
               </p>
-              <div className="flex gap-2">
-                <CheckoutButton
-                  plan="trust"
-                  party="individual"
-                  className="flex-1 bg-accent text-accent-foreground hover:bg-brand-gold-bright"
-                >
-                  Individual
-                </CheckoutButton>
-                <CheckoutButton
-                  plan="trust"
-                  party="couples"
-                  variant="outline"
-                  className="flex-1"
-                >
-                  Couples
-                </CheckoutButton>
-              </div>
+              <CheckoutButton
+                plan="trust"
+                party="individual"
+                className="w-full bg-accent text-accent-foreground hover:bg-brand-gold-bright"
+              >
+                Get the Trust Package
+              </CheckoutButton>
             </div>
           </CardContent>
         </Card>

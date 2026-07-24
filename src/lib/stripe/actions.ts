@@ -7,6 +7,7 @@ import {
   packagePriceId,
   membershipPriceId,
   checkoutMode,
+  assertPartyAvailable,
   type PlanKey,
 } from "./config";
 import { createClient } from "@/lib/supabase/server";
@@ -24,7 +25,11 @@ async function getOrigin(): Promise<string> {
 /** Create a Stripe Checkout session for a plan and redirect to it. */
 export async function startCheckoutAction(formData: FormData): Promise<void> {
   const plan = String(formData.get("plan")) as PlanKey;
-  const party = (String(formData.get("party") || "individual")) as PartyType;
+  // Reject the disabled couples tier up front — server actions are HTTP
+  // endpoints, so hiding the buttons is not enough to prevent a crafted POST.
+  const party: PartyType = assertPartyAvailable(
+    String(formData.get("party") || "individual"),
+  );
 
   const supabase = await createClient();
   const {
@@ -36,8 +41,10 @@ export async function startCheckoutAction(formData: FormData): Promise<void> {
     plan === "membership"
       ? membershipPriceId()
       : packagePriceId(plan as PackageKey, party);
+  // Stripe not configured yet (pre-launch/test phase): fail gracefully to a
+  // notice rather than a 500. The UI already renders these CTAs disabled.
   if (!priceId) {
-    throw new Error(`No Stripe price configured for plan="${plan}" party="${party}"`);
+    redirect("/gate?checkout=unavailable");
   }
 
   const origin = await getOrigin();
