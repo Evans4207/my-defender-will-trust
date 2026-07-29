@@ -1,21 +1,26 @@
 import { createClient } from "@/lib/supabase/server";
-import { computeEntitlement, type Entitlement } from "@/lib/entitlements";
+import {
+  computeEntitlement,
+  type Entitlement,
+  type GrantRow,
+} from "@/lib/entitlements";
 
-/** Resolve the current user's entitlement from their own rows (RLS-scoped). */
+/**
+ * Resolve the current user's entitlement from `entitlement_grants` (RLS-scoped,
+ * so a user can only ever read their own grants).
+ *
+ * `subscriptions` is deliberately NOT consulted here. It mirrors Stripe's own
+ * state for the billing portal; access is resolved from grants, where a one-time
+ * purchase carries no expiry and therefore cannot lapse.
+ */
 export async function getEntitlement(): Promise<Entitlement> {
   const supabase = await createClient();
-  const [subsRes, redsRes] = await Promise.all([
-    supabase.from("subscriptions").select("status, plan"),
-    supabase.from("code_redemptions").select("package, grants_access"),
-  ]);
+  const { data } = await supabase
+    .from("entitlement_grants")
+    .select("product, source, granted_at, expires_at, revoked_at");
 
   return computeEntitlement({
-    subscriptions:
-      (subsRes.data as { status: string | null; plan: string | null }[] | null) ??
-      [],
-    redemptions:
-      (redsRes.data as { package: string | null; grants_access: boolean | null }[] | null) ??
-      [],
+    grants: (data as GrantRow[] | null) ?? [],
   });
 }
 

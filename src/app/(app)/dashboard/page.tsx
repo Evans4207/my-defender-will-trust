@@ -26,7 +26,6 @@ const PACKAGE_LABEL: Record<string, string> = {
 
 export default async function DashboardPage() {
   const entitlement = await getEntitlement();
-  if (!entitlement.unlocked) redirect("/gate");
 
   const supabase = await createClient();
   const { data: matters } = await supabase
@@ -35,14 +34,29 @@ export default async function DashboardPage() {
     .order("created_at", { ascending: false });
   const matterRows = (matters as MatterRow[] | null) ?? [];
 
+  // Gate the BUILDER, never the archive. A customer with no live entitlement but
+  // existing matters still reaches the documents they already generated — those
+  // must never become unreachable. Only someone with nothing at all is sent to
+  // the sales gate.
+  if (!entitlement.unlocked && matterRows.length === 0) redirect("/gate");
+
+  const buildable = new Set<string>(entitlement.packages);
+  // Everything worth showing: what they can build, plus anything they have
+  // already started or finished.
+  const visiblePackages = Array.from(
+    new Set<string>([...entitlement.packages, ...matterRows.map((m) => m.doc_type)]),
+  );
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl font-semibold">Your dashboard</h1>
         <p className="mt-1 text-muted-foreground">
-          {entitlement.source === "code"
-            ? "Unlocked with a partner access code."
-            : "Thanks for your purchase."}
+          {!entitlement.unlocked
+            ? "Your documents stay available to download. Purchase again to make further edits."
+            : entitlement.source === "code"
+              ? "Unlocked with a partner access code."
+              : "Thanks for your purchase."}
         </p>
       </div>
 
@@ -50,8 +64,12 @@ export default async function DashboardPage() {
       <section className="space-y-4">
         <h2 className="font-serif text-xl font-semibold">Your documents</h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          {entitlement.packages.map((pkg) => {
+          {visiblePackages.map((pkg) => {
             const existing = matterRows.find((m) => m.doc_type === pkg);
+            const canBuild = buildable.has(pkg);
+            const hasDocuments =
+              existing &&
+              (existing.status === "ready_to_sign" || existing.status === "signed");
             return (
               <Card key={pkg}>
                 <CardHeader>
@@ -66,23 +84,28 @@ export default async function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <form action={startMatterAction}>
-                      <input type="hidden" name="doc_type" value={pkg} />
-                      <Button type="submit" className="w-full">
-                        {existing ? "Resume interview" : "Start interview"}
-                      </Button>
-                    </form>
-                    {existing &&
-                      (existing.status === "ready_to_sign" ||
-                        existing.status === "signed") && (
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          render={<Link href={`/interview/${existing.id}/documents`} />}
-                        >
-                          View documents
+                    {canBuild && (
+                      <form action={startMatterAction}>
+                        <input type="hidden" name="doc_type" value={pkg} />
+                        <Button type="submit" className="w-full">
+                          {existing ? "Resume interview" : "Start interview"}
                         </Button>
-                      )}
+                      </form>
+                    )}
+                    {hasDocuments && (
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        render={<Link href={`/interview/${existing.id}/documents`} />}
+                      >
+                        View documents
+                      </Button>
+                    )}
+                    {!canBuild && (
+                      <p className="text-xs text-muted-foreground">
+                        Download stays available. Editing needs an active purchase.
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
