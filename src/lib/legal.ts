@@ -33,8 +33,46 @@ export const ATTORNEY_REVIEW_RECOMMENDATION =
 export const ATTORNEY_REVIEW_REQUIRED = "[ATTORNEY REVIEW REQUIRED]" as const;
 
 /**
- * Version stamp for the self-help disclaimer text. Bump when counsel updates the
- * wording so acknowledgments record which version the user agreed to.
- * ⚠️ [ATTORNEY REVIEW REQUIRED] — placeholder version.
+ * Version stamp for the self-help disclaimer text, written to
+ * `disclaimer_acknowledgments` on every generation. It records WHICH wording the
+ * customer agreed to, so it has to change whenever counsel changes the wording.
+ *
+ * Set `DISCLAIMER_VERSION` in the environment to the value counsel signs off on
+ * (a date is the usual convention, e.g. "2026-09-01"). Until then this resolves
+ * to an explicit placeholder, and `assertDisclaimerVersionApproved()` refuses to
+ * run in production — every consent record produced during the test phase is
+ * stamped with the placeholder and should be treated as unapproved.
  */
-export const DISCLAIMER_VERSION = "2026-07-placeholder" as const;
+export const DISCLAIMER_VERSION_PLACEHOLDER = "unapproved-placeholder" as const;
+
+export const DISCLAIMER_VERSION: string =
+  process.env.DISCLAIMER_VERSION?.trim() || DISCLAIMER_VERSION_PLACEHOLDER;
+
+/** True when counsel's version string has been supplied. */
+export function isDisclaimerVersionApproved(
+  version: string = DISCLAIMER_VERSION,
+): boolean {
+  return (
+    version.trim().length > 0 &&
+    version !== DISCLAIMER_VERSION_PLACEHOLDER &&
+    !version.includes("placeholder")
+  );
+}
+
+/**
+ * Refuse to record a consent stamped with a placeholder version in production.
+ *
+ * A consent record is the evidence that a customer accepted specific wording. One
+ * carrying a placeholder version cannot support that claim, so producing it in
+ * production is worse than failing loudly.
+ */
+export function assertDisclaimerVersionApproved(
+  env: string | undefined = process.env.NODE_ENV,
+): void {
+  if (env === "production" && !isDisclaimerVersionApproved()) {
+    throw new Error(
+      "DISCLAIMER_VERSION is unset or still a placeholder. Set it to the version " +
+        "string counsel has approved before generating documents in production.",
+    );
+  }
+}

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "check:env": "node scripts/check-env.mjs",
     "test:watch": "vitest",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset",
