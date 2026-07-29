@@ -6,6 +6,7 @@ import { VaultUploadForm } from "@/components/vault/upload-form";
 import { deleteVaultFileAction } from "@/lib/vault/actions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CheckoutButton } from "@/components/checkout-button";
 
 export const metadata: Metadata = { title: "Secure vault" };
 
@@ -25,9 +26,16 @@ function formatSize(bytes: number | null): string {
 
 export default async function VaultPage() {
   const entitlement = await getEntitlement();
-  if (!entitlement.membership) {
+
+  // Gate UPLOADING on membership, never retrieval. A lapsed member must still be
+  // able to get back the files they uploaded themselves — stranding a customer's
+  // own documents behind a subscription is not an acceptable failure mode.
+  // Only someone who has never held a membership sees the upsell.
+  if (!entitlement.membership && !entitlement.membershipEver) {
     return <MembershipUpsell feature="The secure document vault" />;
   }
+
+  const readOnly = !entitlement.membership;
 
   const supabase = await createClient();
   const { data } = await supabase
@@ -46,14 +54,47 @@ export default async function VaultPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <h2 className="font-serif text-lg font-semibold">Upload a file</h2>
-        </CardHeader>
-        <CardContent>
-          <VaultUploadForm />
-        </CardContent>
-      </Card>
+      {readOnly ? (
+        <Card className="border-accent/50 bg-accent/5">
+          <CardHeader>
+            <h2 className="font-serif text-lg font-semibold">
+              Your membership has ended
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {entitlement.membershipGrace
+                ? "You can still download everything here. Renew to upload new files again."
+                : "Your files remain available to download for as long as you have an account. Renew to upload new files again."}
+            </p>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-3">
+            <CheckoutButton
+              plan="membership"
+              className="bg-accent text-accent-foreground hover:bg-brand-gold-bright"
+            >
+              Renew membership
+            </CheckoutButton>
+            <Button variant="outline" render={<a href="/account/export" />}>
+              Download everything
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <h2 className="font-serif text-lg font-semibold">Upload a file</h2>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <VaultUploadForm />
+            <Button
+              variant="outline"
+              size="sm"
+              render={<a href="/account/export" />}
+            >
+              Download everything
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {items.length === 0 ? (
         <p className="text-sm text-muted-foreground">No files yet.</p>

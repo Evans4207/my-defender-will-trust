@@ -16,8 +16,12 @@ export async function uploadVaultFileAction(
   }
   if (file.size > MAX_BYTES) return { error: "File too large (max 20 MB)." };
 
+  // Uploading is a membership feature. Downloading and deleting your own files
+  // are not — see the vault page and /account/export.
   const entitlement = await getEntitlement();
-  if (!entitlement.membership) return { error: "Membership required." };
+  if (!entitlement.membership) {
+    return { error: "An active membership is required to upload new files." };
+  }
 
   const supabase = await createClient();
   const {

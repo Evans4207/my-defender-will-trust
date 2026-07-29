@@ -28,3 +28,11 @@ export async function createSignedUrl(
   if (error || !data) throw error ?? new Error("Could not create signed URL");
   return data.signedUrl;
 }
+
+/** Download a private object's bytes server-side (for the account export). */
+export async function downloadDocument(path: string): Promise<Buffer | null> {
+  const admin = createAdminClient();
+  const { data, error } = await admin.storage.from(BUCKET).download(path);
+  if (error || !data) return null;
+  return Buffer.from(await data.arrayBuffer());
+}
