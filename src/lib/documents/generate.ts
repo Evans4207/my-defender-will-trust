@@ -5,7 +5,11 @@ import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { clientEnv } from "@/lib/env";
-import { DISCLAIMER_VERSION } from "@/lib/legal";
+import {
+  DISCLAIMER_VERSION,
+  assertDisclaimerVersionApproved,
+} from "@/lib/legal";
+import { COUPLES_TIER_OPEN } from "@/lib/features";
 import { getMatter, getAnswers } from "@/lib/interview/data";
 import { getStateRuleset, isStateAvailable } from "./state-rules.server";
 import { documentSpecsFor } from "./package";
@@ -56,6 +60,10 @@ export async function generateDocumentsAction(
 
   const admin = createAdminClient();
 
+  // A consent record stamped with a placeholder version is not evidence of
+  // anything, so refuse to write one in production.
+  assertDisclaimerVersionApproved();
+
   // Log the affirmative disclaimer acknowledgment (§8).
   const h = await headers();
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
@@ -78,8 +86,14 @@ export async function generateDocumentsAction(
   }
 
   // Individual → one document set; couples → a set per spouse (mirror wills /
-  // reciprocal directives) plus a joint trust. Party comes from the interview.
-  const party = answers.about?.party === "couples" ? "couples" : "individual";
+  // reciprocal directives) plus a joint trust. Party comes from the interview,
+  // which is user-supplied, so the closed-tier check has to happen here rather
+  // than in the UI: while COUPLES_TIER_OPEN is false a couples answer must not
+  // produce a couples package. See lib/features.ts.
+  const party =
+    COUPLES_TIER_OPEN && answers.about?.party === "couples"
+      ? "couples"
+      : "individual";
   const specs = documentSpecsFor(matter.doc_type, party);
   const documentRows: Record<string, unknown>[] = [];
 

@@ -1,15 +1,11 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { assertPartyAvailable, stripeConfigured } from "./config";
 
-// Guards the checkout action against malformed party values. Individual and
-// couples are both supported (couples => mirror wills / joint trust).
+// Guards the checkout action against malformed party values. The couples tier is
+// currently closed — see lib/features.ts and features.test.ts for that contract.
 describe("assertPartyAvailable", () => {
   it("allows the individual party", () => {
     expect(assertPartyAvailable("individual")).toBe("individual");
-  });
-
-  it("allows the couples party", () => {
-    expect(assertPartyAvailable("couples")).toBe("couples");
   });
 
   it("rejects any other value (crafted POST)", () => {

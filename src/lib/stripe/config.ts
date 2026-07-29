@@ -1,4 +1,7 @@
 import type { PackageKey, PartyType } from "@/lib/pricing";
+import { COUPLES_TIER_OPEN } from "@/lib/features";
+
+export { COUPLES_TIER_OPEN };
 
 /**
  * Maps our internal plans to Stripe Price IDs (from env). Packages (will/trust)
@@ -41,15 +44,21 @@ export function stripeConfigured(): boolean {
   return Boolean(process.env.STRIPE_SECRET_KEY);
 }
 
+// The couples tier flag lives in lib/features.ts — see there for why it is off.
+
 /**
- * Validate the party type coming off a checkout form. Both individual and
- * couples are supported: couples produce mirror wills / a joint trust plus
- * matching directives for each spouse (see documents/couples.ts). Anything else
- * is a malformed/crafted request and is rejected.
+ * Validate the party type coming off a checkout form. Server actions are HTTP
+ * endpoints, so hiding the couples buttons is not enough — a crafted POST has to
+ * be rejected here too.
  */
 export function assertPartyAvailable(rawParty: string): PartyType {
-  if (rawParty === "individual" || rawParty === "couples") {
-    return rawParty;
+  if (rawParty === "individual") return "individual";
+  if (rawParty === "couples") {
+    if (COUPLES_TIER_OPEN) return "couples";
+    throw new Error(
+      "The couples package is not available yet: each spouse needs their own " +
+        "account before we can sell it.",
+    );
   }
   throw new Error(`Unknown package type: ${rawParty}`);
 }

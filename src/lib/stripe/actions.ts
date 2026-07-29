@@ -25,8 +25,9 @@ async function getOrigin(): Promise<string> {
 /** Create a Stripe Checkout session for a plan and redirect to it. */
 export async function startCheckoutAction(formData: FormData): Promise<void> {
   const plan = String(formData.get("plan")) as PlanKey;
-  // Reject the disabled couples tier up front — server actions are HTTP
-  // endpoints, so hiding the buttons is not enough to prevent a crafted POST.
+  // Reject the closed couples tier up front — server actions are HTTP endpoints,
+  // so hiding the buttons is not enough to prevent a crafted POST. See
+  // COUPLES_TIER_OPEN in stripe/config.ts for why it is closed.
   const party: PartyType = assertPartyAvailable(
     String(formData.get("party") || "individual"),
   );

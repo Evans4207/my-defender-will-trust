@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useStepForm } from "@/lib/interview/use-step-form";
 import { prevStepKey, type StepKey } from "@/lib/interview/steps";
 import { US_STATES, STATE_NAMES } from "@/lib/interview/states";
+import { COUPLES_TIER_OPEN } from "@/lib/features";
 import { Button } from "@/components/ui/button";
 import { WaitlistForm } from "@/components/waitlist-form";
 import {
@@ -180,13 +181,21 @@ function AboutStep({ matterId, initial }: { matterId: string; initial: Record<st
     <div className="space-y-5">
       <SelectField
         label="Who are these documents for?"
-        hint="Couples get mirror wills (or a joint trust) plus matching directives for each spouse or partner."
+        hint={
+          COUPLES_TIER_OPEN
+            ? "Couples get mirror wills (or a joint trust) plus matching directives for each spouse or partner."
+            : "Joint packages for couples are coming soon — each spouse will get their own login."
+        }
         value={f.values.party}
         onChange={(v) => f.setField("party", v)}
-        options={[
-          { value: "individual", label: "Just me" },
-          { value: "couples", label: "My spouse or partner and me" },
-        ]}
+        options={
+          COUPLES_TIER_OPEN
+            ? [
+                { value: "individual", label: "Just me" },
+                { value: "couples", label: "My spouse or partner and me" },
+              ]
+            : [{ value: "individual", label: "Just me" }]
+        }
       />
       <TextField label="Full legal name" value={f.values.fullName} onChange={(v) => f.setField("fullName", v)} />
       <TextField label="Date of birth" type="date" value={f.values.dob} onChange={(v) => f.setField("dob", v)} />

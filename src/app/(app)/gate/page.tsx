@@ -5,10 +5,16 @@ import { getEntitlement, getPendingDiscount } from "@/lib/entitlements.server";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckoutButton } from "@/components/checkout-button";
-import { stripeConfigured } from "@/lib/stripe/config";
+import { stripeConfigured, COUPLES_TIER_OPEN } from "@/lib/stripe/config";
+import type { PartyType } from "@/lib/pricing";
 import { formatUsd, LAUNCH_PRICES, applyDiscountCents } from "@/lib/pricing";
 
 export const metadata: Metadata = { title: "Choose how to get started" };
+
+/** Party tiers currently on sale. Couples is closed — see COUPLES_TIER_OPEN. */
+const AVAILABLE_PARTIES: readonly PartyType[] = COUPLES_TIER_OPEN
+  ? (["individual", "couples"] as const)
+  : (["individual"] as const);
 
 const PACKAGE_LABEL = { will: "Will Package", trust: "Trust Package" } as const;
 
@@ -48,7 +54,7 @@ export default async function GatePage() {
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
-            {(["individual", "couples"] as const).map((party) => {
+            {AVAILABLE_PARTIES.map((party) => {
               const list = LAUNCH_PRICES[pending.package][party];
               const discounted = applyDiscountCents(list, pending.discountPct);
               return (
@@ -112,14 +118,16 @@ export default async function GatePage() {
                 <CheckoutButton plan="will" party="individual" className="flex-1">
                   Individual
                 </CheckoutButton>
-                <CheckoutButton
-                  plan="will"
-                  party="couples"
-                  variant="outline"
-                  className="flex-1"
-                >
-                  Couples
-                </CheckoutButton>
+                {COUPLES_TIER_OPEN && (
+                  <CheckoutButton
+                    plan="will"
+                    party="couples"
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Couples
+                  </CheckoutButton>
+                )}
               </div>
             </div>
             <div className="space-y-2">
@@ -134,14 +142,16 @@ export default async function GatePage() {
                 >
                   Individual
                 </CheckoutButton>
-                <CheckoutButton
-                  plan="trust"
-                  party="couples"
-                  variant="outline"
-                  className="flex-1"
-                >
-                  Couples
-                </CheckoutButton>
+                {COUPLES_TIER_OPEN && (
+                  <CheckoutButton
+                    plan="trust"
+                    party="couples"
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Couples
+                  </CheckoutButton>
+                )}
               </div>
             </div>
           </CardContent>
