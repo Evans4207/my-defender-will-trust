@@ -72,6 +72,14 @@ if (!couples) {
   console.log("          Re-run with --couples once that tier reopens.");
 }
 
+if (process.env.ALLOW_PLACEHOLDER_DISCLAIMER === "true") {
+  console.log(
+    "\n  WARNING ALLOW_PLACEHOLDER_DISCLAIMER=true \u2014 document generation is permitted",
+  );
+  console.log("          with an UNAPPROVED disclaimer version. Pre-launch only.");
+  console.log("          Remove it before serving real customers.");
+}
+
 if (missingCount > 0) {
   console.log(`\n  ${missingCount} variable(s) still unset.`);
   process.exit(1);

@@ -47,3 +47,5 @@ next-env.d.ts
 
 # One-off helper script; not part of the app.
 commit-fixes.command
+apply-migration.command
+commit-hotfix.command

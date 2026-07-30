@@ -42,6 +42,10 @@ export const ATTORNEY_REVIEW_REQUIRED = "[ATTORNEY REVIEW REQUIRED]" as const;
  * to an explicit placeholder, and `assertDisclaimerVersionApproved()` refuses to
  * run in production — every consent record produced during the test phase is
  * stamped with the placeholder and should be treated as unapproved.
+ *
+ * A hosted test deployment also runs as NODE_ENV=production. Set
+ * `ALLOW_PLACEHOLDER_DISCLAIMER=true` there to allow generation during the pre-launch
+ * phase, and remove it the moment counsel supplies a real version.
  */
 export const DISCLAIMER_VERSION_PLACEHOLDER = "unapproved-placeholder" as const;
 
@@ -69,10 +73,20 @@ export function isDisclaimerVersionApproved(
 export function assertDisclaimerVersionApproved(
   env: string | undefined = process.env.NODE_ENV,
 ): void {
-  if (env === "production" && !isDisclaimerVersionApproved()) {
-    throw new Error(
-      "DISCLAIMER_VERSION is unset or still a placeholder. Set it to the version " +
-        "string counsel has approved before generating documents in production.",
-    );
-  }
+  if (env !== "production") return;
+  if (isDisclaimerVersionApproved()) return;
+
+  // A hosted pre-launch deployment also runs with NODE_ENV=production, so the test
+  // phase needs a way through. It is a deliberate, greppable opt-out rather than a
+  // relaxed default: forgetting to set it fails CLOSED, which is the whole point.
+  // Remove it from the environment the moment counsel supplies a real version.
+  if (process.env.ALLOW_PLACEHOLDER_DISCLAIMER === "true") return;
+
+  throw new Error(
+    "DISCLAIMER_VERSION is unset or still a placeholder. Set it to the version " +
+      "string counsel has approved before generating documents in production. " +
+      "For a pre-launch test deployment, set ALLOW_PLACEHOLDER_DISCLAIMER=true — " +
+      "every consent record written under it is stamped " +
+      `"${DISCLAIMER_VERSION_PLACEHOLDER}" and should be treated as unapproved.`,
+  );
 }
