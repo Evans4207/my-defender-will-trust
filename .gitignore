@@ -50,3 +50,5 @@ commit-fixes.command
 apply-migration.command
 commit-hotfix.command
 commit-testplan.command
+grant-test-membership.command
+commit-scripts.command
