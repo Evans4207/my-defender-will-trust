@@ -42,9 +42,8 @@ active purchase. New section 13 tests this.
 
 **You can now download everything at once.** New in section 9.
 
-**The vault, checkup and funding tracker need a membership**, and no test account
-has one yet. See section 9 — ask Dave to add one to your account if he wants those
-tested.
+**The vault, checkup and funding tracker are now testable.** They need a membership,
+and one has been added to your account through July 2027. Section 10.
 
 ---
 
@@ -105,8 +104,8 @@ tested.
   problem on the server, not something you did.
 
 ## 8. Trust funding tracker
-- **8.1** Reachable from the documents page for a trust matter. _Heads-up:_ needs a
-  membership — see section 9.
+- **8.1** Reachable from the documents page for a trust matter. Your account has the
+  membership this needs — see section 10.
 
 ## 9. Download everything (new)
 - **9.1** Go to `/account/export` directly in the address bar.
@@ -117,12 +116,10 @@ tested.
 - **9.5** This must work **whether or not** you have a membership, and must never
   ask you to buy anything. It is your own data. If it blocks you, that IS a bug.
 
-## 10. Membership perks — needs setup
-These three all require an active membership, and **no test account currently has
-one**, so you will see a "membership required" upsell instead. That is correct
-behaviour, not a bug.
+## 10. Membership perks
+Your account has been given a membership through **July 2027**, so all three of these
+should work. They are recorded as test grants and will be withdrawn before launch.
 
-If Dave wants these tested, ask him to add a membership to your account first. Then:
 - **10.1 Vault** — upload a file, download it back intact.
 - **10.2 Annual estate checkup** — saves answers.
 - **10.3 Funding tracker** — loads and saves.
@@ -141,12 +138,17 @@ If Dave wants these tested, ask him to add a membership to your account first. T
   a ZIP downloads on a phone; it may not be usable, and that is worth knowing.
 
 ## 13. Access should never strand you (new — worth doing carefully)
-This is the area that changed most, and it is hard to test without Dave's help
-because it needs your access altered mid-test. Coordinate with him.
+This is the area that changed most, and it needs your access altered mid-test, so
+coordinate with Dave — he has a script for it:
 
-- **13.1** With documents already generated, ask Dave to remove your access code
-  entitlement. _Expect:_ you can still reach the dashboard, still see your matters,
-  and still download your documents. You should NOT be bounced to the sales page.
+```
+node scripts/toggle-test-access.mjs your@email.com --revoke
+node scripts/toggle-test-access.mjs your@email.com --restore
+```
+
+- **13.1** With documents already generated, have Dave run `--revoke`, then reload.
+  _Expect:_ you can still reach the dashboard, still see your matters, and still
+  download your documents. You should NOT be bounced to the sales page.
 - **13.2** _Expect:_ the dashboard says something like "Your documents stay available
   to download. Purchase again to make further edits," and the Start/Resume interview
   button is gone while the "View documents" button remains.
@@ -154,6 +156,8 @@ because it needs your access altered mid-test. Coordinate with him.
 - **13.4** A brand-new account with no code and no documents should still be sent to
   the plan page. _Expect:_ that one DOES redirect — it is only people with existing
   documents who stay in.
+- **13.5** Have Dave run `--restore`, reload, and confirm the Start/Resume interview
+  button comes back.
 
 ## 14. Your marketer's eye
 - **14.1** Note typos, awkward wording, confusing/slow steps, anything off-brand —
@@ -175,8 +179,6 @@ because it needs your access altered mid-test. Coordinate with him.
 - **"Documents ready" emails** — email not connected; UI may say sent, nothing is
   delivered.
 - **PDF downloads** — DOCX only for now.
-- **Vault, checkup and funding tracker** — need a membership; no test account has
-  one. Ask Dave.
 - **A help/FAQ page or a contact form** — not built yet. There is currently no way
   to contact support from inside the app; that is known and scoped.
 - **Admin area** — unless granted admin access.
