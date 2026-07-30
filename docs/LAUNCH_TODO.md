@@ -85,6 +85,16 @@ model below.
       entitlement automatically (`charge.refunded`, `charge.dispute.created`). A
       partial refund deliberately leaves access intact.
 
+## Must be undone before launch — added 30 July 2026
+These are deliberate pre-launch overrides. Each one is safe now and wrong later.
+- [ ] **Remove `ALLOW_PLACEHOLDER_DISCLAIMER` from Vercel** the day counsel supplies a
+      real `DISCLAIMER_VERSION`. It exists only because a hosted test deployment runs
+      as `NODE_ENV=production` and would otherwise block generation. Every consent
+      record written under it is stamped `unapproved-placeholder`.
+- [ ] **Revoke the six test memberships** — `node scripts/grant-test-membership.mjs
+      --revoke`. They run to July 2027 and are `source = manual`.
+- [ ] **Decide with counsel whether to purge test-phase consent records.**
+
 ## Final step — last
 - [ ] **Turn search indexing back on** — `src/app/robots.ts` +
       `src/app/layout.tsx` metadata. The very last flip when going live.
