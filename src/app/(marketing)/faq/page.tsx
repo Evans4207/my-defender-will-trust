@@ -38,9 +38,10 @@ export default function FaqPage() {
         <div className="mt-6 rounded-md border border-accent/50 bg-accent/10 p-4">
           <p className="text-sm">
             <span className="font-semibold">Pre-launch preview.</span> {pending}{" "}
-            answer{pending === 1 ? "" : "s"} on this page {pending === 1 ? "is" : "are"}{" "}
-            awaiting review and {pending === 1 ? "is" : "are"} hidden in production.
-            This notice does not appear on the live site.
+            answer{pending === 1 ? "" : "s"} on this page {pending === 1 ? "has" : "have"}{" "}
+            not been through legal review yet, and the wording will change. Nothing
+            here is final. This notice and the unreviewed answers both disappear once
+            they are approved.
           </p>
         </div>
       )}
