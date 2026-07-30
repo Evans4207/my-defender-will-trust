@@ -42,6 +42,11 @@ active purchase. New section 13 tests this.
 
 **You can now download everything at once.** New in section 9.
 
+**There is now an FAQ.** New section 14. It is a pre-launch preview: every answer is
+still awaiting counsel review, so you will see an amber notice at the top of the page
+saying so. That notice does not appear on the real live site — it is there precisely
+because you are looking at unapproved wording.
+
 **The vault, checkup and funding tracker are now testable.** They need a membership,
 and one has been added to your account through July 2027. Section 10.
 
@@ -159,12 +164,34 @@ node scripts/toggle-test-access.mjs your@email.com --restore
 - **13.5** Have Dave run `--restore`, reload, and confirm the Start/Resume interview
   button comes back.
 
-## 14. Your marketer's eye
-- **14.1** Note typos, awkward wording, confusing/slow steps, anything off-brand —
+## 14. FAQ (new — and your judgement matters most here)
+- **14.1** Open `/faq`, or use the FAQ link in the footer. _Expect:_ nine sections
+  with a jump list at the top, and an amber "pre-launch preview" notice.
+- **14.2** The jump links should scroll to the right section, and the page should be
+  readable rather than an undifferentiated wall of text.
+- **14.3** Read it as a customer would, not as a proofreader. Where would you still
+  be unsure after reading? What would you have expected to find and didn't?
+- **14.4** Two answers are deliberately uncomfortable — "Can my spouse have their own
+  login?" and "What happens to my documents when I die?" Both currently answer
+  honestly that the feature does not exist yet. Tell us how those read. If they feel
+  alarming rather than straight, that is worth knowing before a customer reads them.
+- **14.5** Check it on a phone. It is a long page.
+- **14.6** _Heads-up:_ do not file the wording itself as bugs. Every answer is going
+  to counsel and will change. Typos, contradictions with what the product actually
+  does, and anything that reads as legal advice **are** worth reporting.
+
+## 15. Support and contact
+- **15.1** Try to find a way to contact anyone from inside the site. _Expect:_ you
+  can't — there is no contact form or support address yet. That is known and scoped,
+  not a bug.
+- **15.2** Note where you *looked* for it. That tells us where to put it.
+
+## 16. Your marketer's eye
+- **16.1** Note typos, awkward wording, confusing/slow steps, anything off-brand —
   as valuable as bugs.
-- **14.2** Particularly: the wording where the couples option used to be, and the
-  new dashboard message in 13.2. Both are new copy that has never had a second pair
-  of eyes on it.
+- **16.2** Particularly: the wording where the couples option used to be, the new
+  dashboard message in 13.2, and the whole FAQ. All new copy that has never had a
+  second pair of eyes on it.
 
 ---
 
@@ -179,8 +206,10 @@ node scripts/toggle-test-access.mjs your@email.com --restore
 - **"Documents ready" emails** — email not connected; UI may say sent, nothing is
   delivered.
 - **PDF downloads** — DOCX only for now.
-- **A help/FAQ page or a contact form** — not built yet. There is currently no way
-  to contact support from inside the app; that is known and scoped.
+- **A contact form or support address** — not built yet. There is currently no way to
+  contact support from inside the app; that is known and scoped.
+- **The FAQ wording** — every answer is awaiting counsel review and will change.
+  Report contradictions and typos, not style.
 - **Admin area** — unless granted admin access.
 - **Final legal wording** — all legal/Terms/Privacy text is placeholder pending
   counsel.

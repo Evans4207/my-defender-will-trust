@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Shield } from "@/components/brand/shield";
 import { SELF_HELP_DISCLAIMER } from "@/lib/legal";
+import { hasVisibleEntries } from "@/lib/faq/content";
 
 export function SiteFooter() {
   return (
@@ -19,6 +20,11 @@ export function SiteFooter() {
             </p>
           </div>
           <nav className="grid grid-cols-2 gap-x-10 gap-y-2 text-sm">
+            {hasVisibleEntries() && (
+              <Link className="hover:text-white" href="/faq">
+                FAQ
+              </Link>
+            )}
             <Link className="hover:text-white" href="/states">
               State Availability
             </Link>

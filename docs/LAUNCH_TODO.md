@@ -94,6 +94,11 @@ These are deliberate pre-launch overrides. Each one is safe now and wrong later.
 - [ ] **Revoke the six test memberships** — `node scripts/grant-test-membership.mjs
       --revoke`. They run to July 2027 and are `source = manual`.
 - [ ] **Decide with counsel whether to purge test-phase consent records.**
+- [ ] **Remove `FAQ_PREVIEW_DRAFTS` from Vercel** once the FAQ answers are approved.
+      While set, unapproved answers are publicly visible.
+- [ ] **Get the FAQ answers approved** — `src/lib/faq/content.ts`, 45 entries, all
+      `reviewStatus: "draft"`. None render in production until flipped one by one.
+      The footer link appears automatically once the first is approved.
 
 ## Final step — last
 - [ ] **Turn search indexing back on** — `src/app/robots.ts` +

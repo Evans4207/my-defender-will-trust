@@ -20,6 +20,8 @@ been given a test membership through July 2027._
   purchase. New, and worth testing carefully with Dave's help (test plan §13).
 - **Vault, annual checkup, trust funding tracker** — your account has a test
   membership through July 2027, so all three are reachable.
+- **The FAQ** at `/faq` — 45 answers across nine sections. New. Shown as a pre-launch
+  preview because none of the wording is counsel-approved yet.
 - The admin portal — partners, codes, state-rules editor, metrics
 
 ## ⏳ Not available yet — expected, don't file as bugs
@@ -29,7 +31,8 @@ been given a test membership through July 2027._
 | **Card checkout / membership** | Buttons are **disabled** with "Card payments are being set up"; the gate page shows a notice | Stripe isn't connected yet — that's the next step |
 | **Couples package** | Not offered anywhere — not on the home page, not at the gate, not in the interview | The documents are built and work, but both spouses' documents would sit in one login and the second spouse would have no way to reach their own will. Closed until each spouse can hold their own account. If you find it offered anywhere, that IS a bug |
 | **Refunds removing access** | N/A | The logic exists but needs Stripe to exercise |
-| **Help/FAQ page or contact form** | Neither exists | Not built yet — there is currently no way to contact support from inside the app. Known and scoped |
+| **Contact form / support address** | Neither exists | Not built yet — there is currently no way to contact support from inside the app. Known and scoped |
+| **FAQ wording** | An amber "pre-launch preview" notice at the top | Every answer is awaiting counsel review and will change. Report contradictions with how the product actually behaves, and typos — not style |
 | **Payment → access unlock** | N/A | Needs Stripe |
 | **Document-ready email** | The app may say it sent, but **no email is actually delivered** | Email service (Resend) isn't connected yet |
 | **PDF output** | You'll get a **DOCX only**, no PDF | PDF service isn't connected yet |

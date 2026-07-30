@@ -52,3 +52,4 @@ commit-hotfix.command
 commit-testplan.command
 grant-test-membership.command
 commit-scripts.command
+commit-faq.command
