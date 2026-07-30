@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Shield } from "@/components/brand/shield";
 import { formatUsd, LAUNCH_PRICES } from "@/lib/pricing";
+import { COUPLES_TIER_OPEN } from "@/lib/features";
 import { ATTORNEY_REVIEW_RECOMMENDATION } from "@/lib/legal";
 
 const STEPS = [
@@ -77,7 +78,10 @@ export default function LandingPage() {
               <p className="text-3xl font-semibold">
                 {formatUsd(LAUNCH_PRICES.will.individual)}
                 <span className="ml-2 text-base font-normal text-muted-foreground">
-                  individual · {formatUsd(LAUNCH_PRICES.will.couples)} couples
+                  individual
+                  {COUPLES_TIER_OPEN
+                    ? ` · ${formatUsd(LAUNCH_PRICES.will.couples)} couples`
+                    : ""}
                 </span>
               </p>
               <Button render={<Link href="/signup" />} className="w-full">
@@ -100,7 +104,10 @@ export default function LandingPage() {
               <p className="text-3xl font-semibold">
                 {formatUsd(LAUNCH_PRICES.trust.individual)}
                 <span className="ml-2 text-base font-normal text-muted-foreground">
-                  individual · {formatUsd(LAUNCH_PRICES.trust.couples)} couples
+                  individual
+                  {COUPLES_TIER_OPEN
+                    ? ` · ${formatUsd(LAUNCH_PRICES.trust.couples)} couples`
+                    : ""}
                 </span>
               </p>
               <Button

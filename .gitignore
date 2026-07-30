@@ -49,3 +49,4 @@ next-env.d.ts
 commit-fixes.command
 apply-migration.command
 commit-hotfix.command
+commit-testplan.command

@@ -4,13 +4,20 @@ We're in the **pre-Stripe test phase**. This scopes your testing honestly so you
 don't file false bugs on things that aren't wired up yet — and don't sign off on
 paths that were never really exercised.
 
+_Updated 30 July 2026. Two things moved off the ready list: the couples package is
+switched off, and the vault, checkup and funding tracker need a membership no test
+account currently has. Details below._
+
 ## ✅ Ready to test
 
 - Signup, login, magic link, password reset
 - Partner **access-code** redemption (comp codes and discount codes)
 - The full **Will and Trust interview** — autosave, leave-and-resume, validation
 - **DOCX** document generation and download
-- Vault upload/download, trust funding tracker, annual checkup
+- **Download everything** — `/account/export` returns a ZIP of every document you
+  have, with no membership or purchase required. New.
+- **Access persistence** — once you own a document you keep it, even with no active
+  purchase. New, and worth testing carefully with Dave's help (test plan §13).
 - The admin portal — partners, codes, state-rules editor, metrics
 
 ## ⏳ Not available yet — expected, don't file as bugs
@@ -18,7 +25,10 @@ paths that were never really exercised.
 | Area | What you'll see | Why |
 |---|---|---|
 | **Card checkout / membership** | Buttons are **disabled** with "Card payments are being set up"; the gate page shows a notice | Stripe isn't connected yet — that's the next step |
-| **Couples package** | Not offered anywhere | Intentionally disabled until couples documents are built + attorney-reviewed |
+| **Couples package** | Not offered anywhere — not on the home page, not at the gate, not in the interview | The documents are built and work, but both spouses' documents would sit in one login and the second spouse would have no way to reach their own will. Closed until each spouse can hold their own account. If you find it offered anywhere, that IS a bug |
+| **Vault, annual checkup, funding tracker** | A "membership required" upsell | These need an active membership and no test account has one. Ask Dave to add one if he wants them tested |
+| **Refunds removing access** | N/A | The logic exists but needs Stripe to exercise |
+| **Help/FAQ page or contact form** | Neither exists | Not built yet — there is currently no way to contact support from inside the app. Known and scoped |
 | **Payment → access unlock** | N/A | Needs Stripe |
 | **Document-ready email** | The app may say it sent, but **no email is actually delivered** | Email service (Resend) isn't connected yet |
 | **PDF output** | You'll get a **DOCX only**, no PDF | PDF service isn't connected yet |
@@ -34,5 +44,13 @@ paths that were never really exercised.
 - The site is intentionally **hidden from Google** during this phase — that's
   correct, not a bug.
 
-Found something outside this list that seems broken? That's a real bug — send it to
-Dave with the page URL and what you did.
+## Two things to raise immediately rather than log
+
+These mean a server setting is wrong, not that a feature is unfinished:
+
+1. You're sent to the plan page even though you redeemed a code and previously had
+   access.
+2. Generating documents shows an error mentioning `DISCLAIMER_VERSION`.
+
+Found something else outside this list that seems broken? That's a real bug — send it
+to Dave with the page URL and what you did.
