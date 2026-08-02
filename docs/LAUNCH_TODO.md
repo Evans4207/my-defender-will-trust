@@ -35,6 +35,11 @@ model below.
       approval workflow) and bump `DISCLAIMER_VERSION` off the placeholder value.
 - [ ] Per-state QA sign-off — clear `needs_review` / `qa_approved`; decide which of
       LA / TX / NC / MO / OH to open (Texas alone ≈ 9% of US population).
+      **Before deciding, read `docs/STATE_COMPLIANCE_DOSSIER.md` §2–3** — the
+      Texas exclusion rests on authority vacated in 1999, North Carolina has a
+      statute written for this business model (§84-2.2), and Nevada's NRS ch. 240A
+      registration regime (with its software exemption at 240A.030(3)(k)) was not
+      previously in the picture at all.
 
 ## Engineering — the one that blocks couples revenue
 - [ ] **Household model, so each spouse has their own login.** This is the only
@@ -84,6 +89,22 @@ model below.
 - [ ] Decide the refund policy wording now that a full refund revokes the
       entitlement automatically (`charge.refunded`, `charge.dispute.created`). A
       partial refund deliberately leaves access intact.
+
+## Known errors, deliberately deferred while Donovan tests — added 2 August 2026
+Dave's call: record now, push later, so fixes don't land mid-test. Full detail on
+every item, including the exact replacement wording, is in
+**`docs/PENDING_CORRECTIONS.md`** — delete that file when these are done.
+- [ ] **Fix the false statutory-form sentence** in
+      `src/lib/documents/ancillary.ts` — every generated POA/directive/HIPAA
+      currently states a statutory form "is used verbatim" when no statutory form
+      text exists in the codebase. Highest priority of the deferred items: it is a
+      false statement on the face of generated legal documents.
+- [ ] **Correct the Idaho electronic-will seed row** — seeded false; Idaho enacted
+      the UEWA (Idaho Code §§ 15-2-1101 et seq.). Fix `gen-state-seed.mjs`,
+      regenerate, single-row update to hosted (never `db-apply.mjs`).
+- [ ] **Port the compliance schema extension** (product dimension on
+      `state_rules` + evidence/verification fields) once drafted in the Family
+      First scope. Also closes the La. art. 1581 witness-disqualifier gap.
 
 ## Must be undone before launch — added 30 July 2026
 These are deliberate pre-launch overrides. Each one is safe now and wrong later.
