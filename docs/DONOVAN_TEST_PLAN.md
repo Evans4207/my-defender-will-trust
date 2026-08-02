@@ -181,10 +181,14 @@ node scripts/toggle-test-access.mjs your@email.com --restore
   does, and anything that reads as legal advice **are** worth reporting.
 
 ## 15. Support and contact
-- **15.1** Try to find a way to contact anyone from inside the site. _Expect:_ you
-  can't — there is no contact form or support address yet. That is known and scoped,
-  not a bug.
+- **15.1** Try to find a way to contact a human from inside the site. _Expect:_ you
+  can't. The FAQ ends with a "Still have a question?" block, but it only links to
+  find-an-attorney — there is no contact form and no support address anywhere. That
+  is known and scoped, not a bug.
 - **15.2** Note where you *looked* for it. That tells us where to put it.
+- **15.3** Given 15.1, does the FAQ answer enough on its own? If you hit a question
+  it doesn't cover and had no way to ask it, that is the single most useful thing you
+  can report from this whole section.
 
 ## 16. Your marketer's eye
 - **16.1** Note typos, awkward wording, confusing/slow steps, anything off-brand —

@@ -53,3 +53,8 @@ commit-testplan.command
 grant-test-membership.command
 commit-scripts.command
 commit-faq.command
+
+# Scratch folder for files awaiting deletion. device_bash cannot unlink on the
+# connected-folder mount, so things get moved here instead of removed.
+_to_delete/
+commit-cleanup.command
