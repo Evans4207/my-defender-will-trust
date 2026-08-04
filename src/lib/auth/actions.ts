@@ -18,6 +18,18 @@ export type ActionState = {
   message?: string;
 };
 
+/**
+ * Validate a post-auth redirect target. Only same-site absolute PATHS are
+ * allowed ("/household/join/..."); anything else (protocol-relative "//evil",
+ * absolute URLs, empty) falls back to null so callers use their default. Guards
+ * against open-redirect via the invite flow's ?next= parameter.
+ */
+function safeNext(value: FormDataEntryValue | null): string | undefined {
+  const s = typeof value === "string" ? value.trim() : "";
+  if (s.startsWith("/") && !s.startsWith("//")) return s;
+  return undefined;
+}
+
 /** Resolve this environment's base URL (prefers the real request origin). */
 async function getOrigin(): Promise<string> {
   const h = await headers();
@@ -56,8 +68,9 @@ export async function signUpAction(
 
   if (error) return { error: error.message };
 
-  // If email confirmation is disabled, signUp returns a session — go straight in.
-  if (data.session) redirect("/gate");
+  // If email confirmation is disabled, signUp returns a session — go straight in,
+  // honouring a safe ?next= (e.g. a household invite the user is accepting).
+  if (data.session) redirect(safeNext(formData.get("next")) ?? "/gate");
 
   return {
     message:
@@ -88,7 +101,7 @@ export async function loginAction(
 
   if (error) return { error: error.message };
 
-  redirect("/dashboard");
+  redirect(safeNext(formData.get("next")) ?? "/dashboard");
 }
 
 export async function magicLinkAction(

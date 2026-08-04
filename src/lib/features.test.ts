@@ -8,8 +8,8 @@ import { assertPartyAvailable } from "./stripe/config";
  * leaving a red suite for someone else to interpret.
  */
 describe("couples tier gate", () => {
-  it("is currently closed", () => {
-    expect(COUPLES_TIER_OPEN).toBe(false);
+  it("is open now that the household model has shipped", () => {
+    expect(COUPLES_TIER_OPEN).toBe(true);
   });
 
   it("always allows the individual party", () => {

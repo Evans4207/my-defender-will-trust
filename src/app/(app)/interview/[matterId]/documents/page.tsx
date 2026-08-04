@@ -15,6 +15,8 @@ type DocRow = {
   storage_path: string | null;
 };
 
+type HouseholdDocRow = DocRow & { matter_id: string };
+
 const KIND_LABEL: Record<string, string> = {
   will: "Last Will & Testament",
   trust: "Revocable Living Trust",
@@ -49,6 +51,19 @@ export default async function DocumentsPage({
     .eq("matter_id", matterId)
     .order("generated_at", { ascending: false });
   const docs = (data as DocRow[] | null) ?? [];
+
+  // Household-shared documents (the joint trust) live on the OTHER member's
+  // matter, so they are not in the matter-scoped list above. RLS returns only
+  // household-scoped documents the viewer may read (migration 15); excluding the
+  // current matter avoids showing the account holder their own joint trust twice.
+  // Empty for a solo user, so the individual flow is unchanged.
+  const { data: sharedData } = await supabase
+    .from("documents")
+    .select("id, kind, status, generated_at, storage_path, matter_id")
+    .eq("scope", "household")
+    .neq("matter_id", matterId)
+    .order("generated_at", { ascending: false });
+  const sharedDocs = (sharedData as HouseholdDocRow[] | null) ?? [];
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -105,6 +120,50 @@ export default async function DocumentsPage({
         ))
       )}
 
+      {sharedDocs.length > 0 && (
+        <section className="space-y-4">
+          <div>
+            <h2 className="font-serif text-xl font-semibold">Shared with your household</h2>
+            <p className="text-sm text-muted-foreground">
+              Documents you share with the other member of your household, such as your joint
+              trust. You can download them, but only their owner can change them.
+            </p>
+          </div>
+          {sharedDocs.map((d) => (
+            <Card key={d.id}>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-serif text-lg font-semibold">
+                    {KIND_LABEL[d.kind] ?? d.kind}
+                    <span className="text-muted-foreground"> — Joint (both of you)</span>
+                  </h3>
+                  <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium capitalize">
+                    {d.status.replace(/_/g, " ")}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-3">
+                <Button
+                  render={
+                    <a href={`/interview/${d.matter_id}/documents/download?id=${d.id}&format=docx`} />
+                  }
+                >
+                  Download DOCX
+                </Button>
+                <Button
+                  variant="outline"
+                  render={
+                    <a href={`/interview/${d.matter_id}/documents/download?id=${d.id}&format=pdf`} />
+                  }
+                >
+                  Download PDF
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+      )}
+
       <div className="flex flex-wrap gap-3">
         <Button variant="outline" render={<Link href={`/interview/${matterId}/instructions`} />}>
           Execution instructions
@@ -112,6 +171,11 @@ export default async function DocumentsPage({
         <Button variant="outline" render={<Link href={`/interview/${matterId}/review`} />}>
           Update &amp; regenerate
         </Button>
+        {matter.household_id && (
+          <Button variant="outline" render={<Link href="/household" />}>
+            Manage household
+          </Button>
+        )}
         {matter.doc_type === "trust" && (
           <Button variant="outline" render={<Link href={`/interview/${matterId}/funding`} />}>
             Trust funding tracker

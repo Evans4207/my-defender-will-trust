@@ -3,6 +3,48 @@
 Running record of notable work, with pointers to deliverables that live outside
 the repo (shareable web pages). Newest first.
 
+## 2026-08-04 — Household model (couples, two real accounts)
+
+Owner decision (4 Aug): build the household model **here first** (this repo has live
+testers), then port to Family First — reversing the usual porting direction for this
+one feature. Scope: `docs/HOUSEHOLD_WORK_ORDER.md`. Reopens the couples tier that was
+closed because both spouses' documents landed in one login.
+
+Built on branch `household-model`, stage by stage:
+- **Migration 15** (`20260712000015_households.sql`) — `households`,
+  `household_members` (roles a/b, capped at two), `household_invites` (stores a token
+  **hash**, never the raw token); `documents` gains `owner_user_id` (backfilled) +
+  `scope` ('private'|'household'); `matters` gains `household_id`. `security definer`
+  helpers `is_household_member` / `can_read_household_document`, and an additive RLS
+  policy letting both members read the shared joint trust. No user write policy on
+  documents — immutability of the other member's set is a schema property.
+- **Migration 16** (`20260712000016_household_rpcs.sql`) — all household writes go
+  through `security definer` RPCs (like `redeem_access_code`), never the service role:
+  `create_household`, `issue_household_invite`, `revoke_household_invite`,
+  `accept_household_invite` (adds B, mirrors A's permanent will/trust grants to B as
+  independent grants, consumes the invite).
+- **Invite / accept flow** — `src/lib/household/*`, `/household` (member A invites; the
+  invite email no-ops until Resend is wired, so a **copy-link fallback is always
+  shown**) and public `/join/[token]` (member B). Minimal, open-redirect-guarded
+  `?next=` added to signup/login so B returns to accept after creating their account.
+- **Ownership routing** — `generate.ts` routes A's set + the joint trust
+  (`scope='household'`) to A's matter, and B's mirror set to **B's own matter, owned by
+  B**. A answers for both (MVP §3.1); B reviews. The documents page shows the viewer
+  their own set plus a "Shared with your household" section.
+- **Activation** — `COUPLES_TIER_OPEN = true`. Choosing couples on the About step forms
+  the household and links the matter. FAQ (`spouse-own-login`, `couples-pricing`)
+  reworded to match (still `reviewStatus: "draft"`). Test plan gains §17.
+
+**Applied to the hosted DB** (2026-08-04) via `apply-migration-15.mjs` then
+`apply-migration-16.mjs` (never `db-apply.mjs`): tables + 4 RPCs live, 12 existing
+documents backfilled to `owner_user_id` + `scope='private'`, PostgREST schema reloaded.
+Verified: `npm run typecheck` / `lint` clean, 163 tests pass, `build` green.
+
+Deferred / notes: `types.ts` left as the permissive placeholder (regenerate once the
+Supabase CLI is linked). MVP simplifications (work order §3): A answers for both;
+either-member joint-trust regeneration is a TODO. All couples clause text stays
+`[ATTORNEY REVIEW REQUIRED]`. Not yet committed/pushed to `main`.
+
 ## 2026-07-29/30 — Entitlement model, access fixes, live-deploy repairs
 
 Triggered by a review of the Family First codebase: the two are identical outside

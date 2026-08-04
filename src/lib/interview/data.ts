@@ -8,6 +8,8 @@ export type Matter = {
   state: string | null;
   status: string;
   current_step: string | null;
+  /** Set when this matter belongs to a household (couples). Null otherwise. */
+  household_id: string | null;
 };
 
 /** Load a matter the current user owns (RLS-scoped). Null if not found. */
@@ -15,7 +17,7 @@ export async function getMatter(matterId: string): Promise<Matter | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("matters")
-    .select("id, user_id, doc_type, state, status, current_step")
+    .select("id, user_id, doc_type, state, status, current_step, household_id")
     .eq("id", matterId)
     .maybeSingle();
   return (data as Matter | null) ?? null;

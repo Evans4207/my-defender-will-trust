@@ -4,7 +4,12 @@ import { SignupForm } from "@/components/auth/signup-form";
 
 export const metadata: Metadata = { title: "Create your account" };
 
-export default function SignupPage() {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
   return (
     <Card>
       <CardHeader>
@@ -14,7 +19,7 @@ export default function SignupPage() {
         </p>
       </CardHeader>
       <CardContent>
-        <SignupForm />
+        <SignupForm next={next} />
       </CardContent>
     </Card>
   );

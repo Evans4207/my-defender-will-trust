@@ -11,11 +11,12 @@ import { SELF_HELP_DISCLAIMER } from "@/lib/legal";
 
 const initial: ActionState = {};
 
-export function SignupForm() {
+export function SignupForm({ next }: { next?: string }) {
   const [state, formAction] = useActionState(signUpAction, initial);
 
   return (
     <form action={formAction} className="space-y-4">
+      {next && <input type="hidden" name="next" value={next} />}
       <FormAlert state={state} />
       <div className="space-y-2">
         <Label htmlFor="fullName">Full legal name</Label>
@@ -46,7 +47,10 @@ export function SignupForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+        <Link
+          href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"}
+          className="font-medium text-foreground underline-offset-4 hover:underline"
+        >
           Log in
         </Link>
       </p>

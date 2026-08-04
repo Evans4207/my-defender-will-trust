@@ -26,14 +26,13 @@ happened**, and a **screenshot**. Check the "Not ready yet" list first.
 
 Read this first. It will save you filing bugs on deliberate changes.
 
-**The couples package is switched off everywhere.** Section 6 of the old plan was a
-whole couples walkthrough; it is gone. The documents themselves work, but both
-spouses' documents would end up in one login, and the second spouse would have no
-way to reach their own will — so the tier is closed until each spouse can have their
-own account. The About step no longer offers "my spouse or partner and me", the gate
-page shows no Couples buttons, and the home page no longer quotes a couples price.
-**All of that is correct.** If you find couples offered anywhere, that IS a bug —
-please report it.
+**The couples package is back — now with two real accounts.** This is the big new
+thing to test. Each spouse gets their own login and owns their own documents;
+anything genuinely joint (the trust) is shared between you. The About step offers "my
+spouse or partner and me" again, the gate shows the couples option, and choosing it
+starts a household you invite your partner into by email. **New section 17 walks the
+whole two-account flow.** Email invites aren't wired yet, so you'll copy an invite
+link instead — that's expected, not a bug.
 
 **Your documents can no longer become unreachable.** Previously access was tied to a
 payment status that could change. Now, once you own a document you own it
@@ -193,15 +192,43 @@ node scripts/toggle-test-access.mjs your@email.com --restore
 ## 16. Your marketer's eye
 - **16.1** Note typos, awkward wording, confusing/slow steps, anything off-brand —
   as valuable as bugs.
-- **16.2** Particularly: the wording where the couples option used to be, the new
-  dashboard message in 13.2, and the whole FAQ. All new copy that has never had a
-  second pair of eyes on it.
+- **16.2** Particularly: the new couples/household wording (section 17 and the invite
+  screens), the new dashboard message in 13.2, and the whole FAQ. All new copy that has
+  never had a second pair of eyes on it.
+
+---
+
+## 17. Couples — two real accounts (new — the big one)
+You need a **second email address you control** for partner B (a private/incognito
+window keeps the two logins separate).
+- **17.1** As **partner A**, redeem a comp code and start a Will (or Trust). On the
+  **About** step, choose **"my spouse or partner and me"**.
+- **17.2** Finish to the generate step and use **"Invite your partner"** (also on your
+  documents page as "Manage household"). Email isn't connected, so click **Copy link**
+  and open that link in a separate browser or a private window.
+- **17.3** As **partner B**, create **your own account** with your own email, then
+  **Join the household**.
+- **17.4** Back as **A**, finish the interview and **Generate**.
+- **17.5** Log in as each of you separately. Each of you should see **your own** will,
+  POA, healthcare directive and HIPAA authorisation. On a Trust plan, **both** of you
+  should see the **joint trust** under "Shared with your household". **Neither** of you
+  should see the other's private documents.
+- **17.6** Confirm there is **no button or link** that lets one of you edit or delete
+  the other's documents.
+- **17.7** Ask Dave to revoke one spouse's access (`toggle-test-access`), then confirm
+  the **other** spouse still reaches their own documents — neither depends on the other.
+- **17.8** The per-state signing rules (`STATE_PAPERWORK_QA`) apply to **both** sets —
+  check the witnessing/notary steps appear for each spouse.
+- **17.9** Regression: the plain **"just me"** flow (sections 5–7) is unchanged.
+- **17.10** Try to accept an invite while already in a household, or accept your own
+  invite — both should be refused with a clear message, not an error page.
 
 ---
 
 ## Not ready yet — don't file as bugs
-- **The couples / joint package** — deliberately switched off until each spouse can
-  hold their own login. Not a bug anywhere it is absent.
+- **Paid couples checkout** — the couples flow is testable via comp codes, but card
+  payment for it (and matching the purchased tier to the interview choice) waits on
+  Stripe, like every other paid path.
 - **Paying by card / subscribing** — Stripe not connected; buttons disabled on
   purpose.
 - **Access unlocking after a card payment** — needs Stripe.

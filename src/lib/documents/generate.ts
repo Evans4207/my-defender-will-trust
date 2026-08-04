@@ -94,33 +94,112 @@ export async function generateDocumentsAction(
     COUPLES_TIER_OPEN && answers.about?.party === "couples"
       ? "couples"
       : "individual";
+
+  // A household couples matter routes each spouse's set to a DIFFERENT account:
+  // member A's set + the joint trust land on this matter (A owns it); member B's
+  // mirror set lands on B's OWN matter, owned by B, so the survivor can always
+  // reach their own will (docs/HOUSEHOLD_WORK_ORDER.md §2). A answers for both
+  // (MVP §3.1); member B reviews. Reads here are all of A's own data; the writes
+  // to B's matter go through the admin client, exactly as generation already
+  // writes documents.
+  const isHousehold = party === "couples" && !!matter.household_id;
+
+  // Resolve member B and their matter (if B has joined). A can read household
+  // members via RLS (is_household_member) — no service-role read of user data.
+  let bUserId: string | null = null;
+  let bMatterId: string | null = null;
+  if (isHousehold) {
+    const { data: memberRows } = await supabase
+      .from("household_members")
+      .select("user_id, role")
+      .eq("household_id", matter.household_id as string);
+    bUserId =
+      (memberRows as { user_id: string; role: string }[] | null)?.find(
+        (m) => m.role === "b",
+      )?.user_id ?? null;
+
+    if (bUserId) {
+      const { data: existingB } = await admin
+        .from("matters")
+        .select("id")
+        .eq("user_id", bUserId)
+        .eq("household_id", matter.household_id as string)
+        .maybeSingle();
+      bMatterId = (existingB as { id: string } | null)?.id ?? null;
+      if (!bMatterId) {
+        const { data: createdB } = await admin
+          .from("matters")
+          .insert({
+            user_id: bUserId,
+            household_id: matter.household_id,
+            doc_type: matter.doc_type,
+            state: matter.state,
+            status: "in_progress",
+          })
+          .select("id")
+          .single();
+        bMatterId = (createdB as { id: string } | null)?.id ?? null;
+      }
+    }
+  }
+
+  // Where a given signer's documents live: which matter, who owns them, whose
+  // storage folder, and whether they are private or shared across the household.
+  type Target = {
+    matterId: string;
+    owner: string;
+    folder: string;
+    scope: "private" | "household";
+  };
+  const targetFor = (signer: string): Target | null => {
+    if (!isHousehold) {
+      return { matterId, owner: user.id, folder: user.id, scope: "private" };
+    }
+    if (signer === "primary") {
+      return { matterId, owner: user.id, folder: user.id, scope: "private" };
+    }
+    if (signer === "joint") {
+      return { matterId, owner: user.id, folder: user.id, scope: "household" };
+    }
+    if (signer === "spouse") {
+      return bUserId && bMatterId
+        ? { matterId: bMatterId, owner: bUserId, folder: bUserId, scope: "private" }
+        : null; // B hasn't joined yet — A can regenerate once they do (MVP §3.2)
+    }
+    return null;
+  };
+
   const specs = documentSpecsFor(matter.doc_type, party);
-  const documentRows: Record<string, unknown>[] = [];
+  const rowsByMatter: Record<string, Record<string, unknown>[]> = {};
 
   try {
     for (const spec of specs) {
+      const target = targetFor(spec.signer);
+      if (!target) continue;
+
       const assembled = assembleDocument(spec, { answers, ruleset, party });
       const docx = await renderDocx(assembled);
       const pdf = await convertDocxToPdf(docx);
 
       const tpl = templateByKind.get(spec.kind);
       const version = tpl?.version ?? 1;
-      // For couples, tag the path by signer so each spouse's set is distinct
-      // (two "will" documents for one matter would otherwise collide).
-      const tag = party === "couples" ? `-${spec.signer}` : "";
-      const base = `${user.id}/${matterId}/${spec.kind}${tag}-v${version}`;
+      // Each signer's set now lives on its own matter, so document kinds no
+      // longer collide and the per-signer path tag is unnecessary.
+      const base = `${target.folder}/${target.matterId}/${spec.kind}-v${version}`;
 
       await uploadDocument(`${base}.docx`, docx, DOCX_MIME);
       if (pdf) await uploadDocument(`${base}.pdf`, pdf, "application/pdf");
 
-      documentRows.push({
-        matter_id: matterId,
+      (rowsByMatter[target.matterId] ??= []).push({
+        matter_id: target.matterId,
         kind: spec.kind,
         version,
         template_version_id: tpl?.id ?? null,
         storage_path: `${base}.docx`,
         status: "generated",
         generated_at: new Date().toISOString(),
+        owner_user_id: target.owner,
+        scope: target.scope,
       });
     }
   } catch (err) {
@@ -128,9 +207,15 @@ export async function generateDocumentsAction(
     return { error: "We couldn't generate your documents. Please try again." };
   }
 
-  // Replace the matter's prior documents (idempotent regeneration).
-  await admin.from("documents").delete().eq("matter_id", matterId);
-  await admin.from("documents").insert(documentRows);
+  // Replace prior documents on each affected matter (idempotent regeneration).
+  // For a household that is A's matter (A's set + joint) and B's matter (B's set)
+  // — each member's regeneration only ever touches their own matter's rows.
+  const affectedMatters = Object.keys(rowsByMatter);
+  for (const mid of affectedMatters) {
+    await admin.from("documents").delete().eq("matter_id", mid);
+  }
+  const allRows = Object.values(rowsByMatter).flat();
+  if (allRows.length) await admin.from("documents").insert(allRows);
 
   await admin.from("audit_log").insert({
     user_id: user.id,
@@ -140,11 +225,15 @@ export async function generateDocumentsAction(
     metadata: {
       kinds: specs.map((sp) => sp.kind),
       party,
+      household: isHousehold,
+      partner_matter: bMatterId,
       state: matter.state,
       doc_type: matter.doc_type,
     },
   });
-  await admin.from("matters").update({ status: "ready_to_sign" }).eq("id", matterId);
+  for (const mid of affectedMatters) {
+    await admin.from("matters").update({ status: "ready_to_sign" }).eq("id", mid);
+  }
 
   if (user.email) {
     await sendDocumentsReadyEmail(user.email, {

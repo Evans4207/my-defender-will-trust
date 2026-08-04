@@ -37,6 +37,22 @@ export default async function GeneratePage({
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
+          {matter.household_id && (
+            <div className="rounded-md border border-accent/40 bg-accent/10 p-4 text-sm">
+              <p className="font-medium">Adding your spouse or partner?</p>
+              <p className="mt-1 text-muted-foreground">
+                Invite them before you generate, so each of you gets your own set in your own
+                account. You can also do this afterward and regenerate.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-3"
+                render={<Link href="/household" />}
+              >
+                Invite your partner
+              </Button>
+            </div>
+          )}
           <GenerateButton matterId={matterId} />
           <div className="rounded-md border border-accent/40 bg-accent/10 p-4 text-sm">
             <p className="font-medium">{ATTORNEY_REVIEW_RECOMMENDATION}</p>
