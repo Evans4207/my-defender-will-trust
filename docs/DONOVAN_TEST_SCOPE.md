@@ -4,15 +4,21 @@ We're in the **pre-Stripe test phase**. This scopes your testing honestly so you
 don't file false bugs on things that aren't wired up yet — and don't sign off on
 paths that were never really exercised.
 
-_Updated 30 July 2026. The couples package is switched off; everything else on the
-ready list below, including the vault and checkup, is now testable — your account has
-been given a test membership through July 2027._
+_Updated 4 August 2026. **The couples package is now ON** — built on the household
+model: each spouse gets their own login and owns their own documents, with the joint
+trust shared between them. Test it with comp codes (test plan **§17**). Everything else
+on the ready list below is testable too; your account has a test membership through
+July 2027._
 
 ## ✅ Ready to test
 
 - Signup, login, magic link, password reset
 - Partner **access-code** redemption (comp codes and discount codes)
 - The full **Will and Trust interview** — autosave, leave-and-resume, validation
+- **Couples — two real accounts (new).** Choose "my spouse or partner and me", invite
+  your partner with the copy-link (email isn't wired), they create their **own** account
+  and join. Each of you owns your own set; the joint trust is shared. You'll need a second
+  email you control. Full walkthrough in test plan **§17**.
 - **DOCX** document generation and download
 - **Download everything** — `/account/export` returns a ZIP of every document you
   have, with no membership or purchase required. New.
@@ -29,7 +35,7 @@ been given a test membership through July 2027._
 | Area | What you'll see | Why |
 |---|---|---|
 | **Card checkout / membership** | Buttons are **disabled** with "Card payments are being set up"; the gate page shows a notice | Stripe isn't connected yet — that's the next step |
-| **Couples package** | Not offered anywhere — not on the home page, not at the gate, not in the interview | The documents are built and work, but both spouses' documents would sit in one login and the second spouse would have no way to reach their own will. Closed until each spouse can hold their own account. If you find it offered anywhere, that IS a bug |
+| **Paying for couples by card** | The couples flow is fully testable with a comp code (see §17); only *paying* for it by card is off | Card checkout for every plan — individual and couples — waits on Stripe, exactly like the row above. Email invites are also off, so use the copy-link |
 | **Refunds removing access** | N/A | The logic exists but needs Stripe to exercise |
 | **Contact form / support address** | Neither exists | Not built yet — there is currently no way to contact support from inside the app. Known and scoped |
 | **FAQ wording** | An amber "pre-launch preview" notice at the top | Every answer is awaiting counsel review and will change. Report contradictions with how the product actually behaves, and typos — not style |
