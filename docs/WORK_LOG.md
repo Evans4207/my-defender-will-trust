@@ -3,6 +3,24 @@
 Running record of notable work, with pointers to deliverables that live outside
 the repo (shareable web pages). Newest first.
 
+## 2026-08-04 — Hotfix: missing table grants broke code access
+
+Symptom: users who redeemed an access code were bounced to the pricing gate even
+though the code worked. Root cause: `entitlement_grants` (migration 14) and the new
+household tables had **no grant for the `authenticated` role** on the hosted DB — the
+one-migration-at-a-time applier (`apply-migration-*.mjs`) doesn't run the global GRANTS
+block that `db-apply.mjs` runs on a full rebuild. So the service role wrote the grant on
+redemption, but the logged-in user's client got "permission denied" reading it back, and
+`getEntitlement()` saw nothing → `unlocked = false`.
+
+Fix: granted table/sequence/routine privileges to `anon, authenticated, service_role`
+across `public` and reloaded PostgREST. RLS is enabled on every table (verified: no
+public table has RLS off, `entitlement_grants` has a `user_id = auth.uid()` policy), so
+this restricts nothing — it just lets the API roles reach the rows RLS already scopes.
+Verified by impersonating a real code-redeeming user: they now read their own grant, and
+zero other users'. Migrations 15/16 updated to grant their own objects so a future
+single-apply doesn't reopen the gap.
+
 ## 2026-08-04 — Household model (couples, two real accounts)
 
 Owner decision (4 Aug): build the household model **here first** (this repo has live

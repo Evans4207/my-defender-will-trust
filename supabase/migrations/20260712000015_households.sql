@@ -176,4 +176,13 @@ create policy documents_household_select on public.documents
     and public.can_read_household_document(matter_id)
   );
 
+-- ---------------------------------------------------------------------------
+-- 5. Grants for the API roles. RLS (above) still restricts rows; without the
+--    base table grant, PostgREST returns "permission denied" for authenticated.
+--    db-apply.mjs grants globally at the end of a full rebuild, but the
+--    one-migration-at-a-time applier does NOT — so grant the new tables here.
+-- ---------------------------------------------------------------------------
+grant all on public.households, public.household_members, public.household_invites
+  to anon, authenticated, service_role;
+
 commit;

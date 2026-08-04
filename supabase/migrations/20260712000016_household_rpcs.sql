@@ -214,4 +214,13 @@ begin
 end;
 $$;
 
+-- EXECUTE defaults to PUBLIC for new functions, but grant explicitly so a
+-- one-migration-at-a-time apply matches db-apply.mjs's global grants.
+grant execute on function
+  public.create_household(),
+  public.issue_household_invite(text, text, timestamptz),
+  public.revoke_household_invite(uuid),
+  public.accept_household_invite(text)
+  to anon, authenticated, service_role;
+
 commit;
