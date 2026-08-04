@@ -301,19 +301,19 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     category: "accounts-and-access",
     question: "Can my spouse have their own login?",
     answer: [
-      "Not at the moment. An account belongs to one person, and joint packages for couples are not currently on sale for exactly that reason — we are not willing to sell a plan where the second person has no way to reach their own documents.",
-      "For now, each person creates their own account and their own documents. We are building a proper household model where each spouse holds their own login and owns their own documents, with anything genuinely joint shared between them.",
+      "Yes. When you choose the couples option, you start a household and invite your spouse or partner by email. They create their own account with their own login and own their own documents — their will, power of attorney, healthcare directive and HIPAA authorisation are theirs to reach, never locked inside your account.",
+      "Anything genuinely joint, such as a joint trust, is shared between the two of you. Neither of you can change or delete the other's documents.",
     ],
     reviewStatus: "draft",
-    revisitWhen: "The household model ships and the couples tier reopens.",
+    revisitWhen: "Counsel to confirm the wording before it goes live.",
   },
   {
     id: "who-can-see-documents",
     category: "accounts-and-access",
     question: "Who else can see my documents?",
     answer: [
-      "Nobody. Documents are visible only to the account that created them. Files are held in private storage and served through short-lived links that only you can request.",
-      "There is currently no way to grant someone else access from inside your account, so the practical answer is that anyone who needs a copy needs you to give them one.",
+      "Only you — and, if you have a household, the spouse or partner you added. Documents are visible to the account that created them, held in private storage and served through short-lived links that only you can request. Within a household, anything genuinely joint (such as a trust) is shared with the other member; each of you still keeps your own private documents to yourselves.",
+      "Beyond a household, there is currently no way to grant someone else access from inside your account, so anyone else who needs a copy needs you to give them one.",
     ],
     reviewStatus: "draft",
     revisitWhen: "Sharing ships.",
@@ -323,7 +323,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     category: "accounts-and-access",
     question: "What happens to my documents when I die?",
     answer: [
-      "This is the most important thing on this page to get right, so we will be direct: there is currently no mechanism for anyone else to reach your account after your death. We are building one, and it is not there yet.",
+      "This is the most important thing on this page to get right, so we will be direct. If you have a household, your spouse or partner already has their own account and their own copy of anything joint, so they are not locked out if something happens to you. Beyond that, there is currently no mechanism for anyone else to reach your account after your death — we are building one, and it is not there yet.",
       "So do what you would do with any important document. Sign it, keep the signed original somewhere your family can find it, and tell the people you have named — your executor, your healthcare agent — that they have been named and where the paperwork is. A document nobody can find does not help anyone.",
     ],
     reviewStatus: "draft",
@@ -490,11 +490,11 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     category: "pricing",
     question: "Do you offer a couples price?",
     answer: [
-      "Not currently. A joint package would put both people's documents in a single account, and we are not prepared to sell that until each spouse can hold their own login.",
-      "Two people can each create their own account and their own documents in the meantime.",
+      "Yes. Choosing “my spouse or partner and me” covers both of you — mirror wills (or a joint trust) plus matching directives for each person — and each of you still gets your own login and your own documents. The current couples pricing is shown on the plan page.",
+      "You invite the second person by email; they create their own account and join your household.",
     ],
     reviewStatus: "draft",
-    revisitWhen: "The household model ships and the couples tier reopens.",
+    revisitWhen: "Counsel to confirm the wording before it goes live.",
   },
   {
     id: "access-codes",

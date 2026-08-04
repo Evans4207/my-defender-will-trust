@@ -5,25 +5,22 @@
  */
 
 /**
- * The couples tier is CLOSED.
+ * The couples tier is OPEN — the household model shipped (migrations 15–16;
+ * docs/HOUSEHOLD_WORK_ORDER.md). Each spouse now holds their OWN login and owns
+ * their OWN document set; the joint trust is shared across the household. So the
+ * survivor can always reach the will that names them, which is exactly what the
+ * closed tier could not guarantee.
  *
- * Document generation for couples works — mirror wills, a joint trust and
- * reciprocal directives are all produced — but every document lands in ONE
- * account.
+ * This one switch is read in three places and turning it on activates all three:
+ *   1. the couples price is offered at checkout (gate page + assertPartyAvailable)
+ *   2. the interview offers "my spouse or partner and me" (which creates the
+ *      household and links this matter to it — see interview/actions.ts)
+ *   3. generation produces the couples package and routes each spouse's set to
+ *      their own account (documents/generate.ts)
  *
- * `matters` has a single `user_id`, `documents` hangs off `matter_id`, and RLS is
- * `user_id = auth.uid()`. So the second spouse gets no login and no route to
- * their own will, POA, healthcare directive or HIPAA authorisation. If the
- * account holder dies — the event this product exists for — the survivor cannot
- * reach the will that names them. On separation, one party holds both sets.
- *
- * Closing the tier means three things, and all three are enforced:
- *   1. no couples price is offered at checkout (gate page + assertPartyAvailable)
- *   2. the interview does not offer "my spouse or partner and me"
- *   3. generation coerces party to "individual" even if an answer says otherwise
- *
- * Reopen only once the household model ships: spouse B invited by email, holding
- * their own auth account, owning their own documents, with the joint trust
- * shared between them. See docs/LAUNCH_TODO.md.
+ * Note: Stripe is still unwired, so testers enter via comp codes exactly as
+ * individuals do; enforcing that the purchased tier matches the interview choice
+ * stays deferred until Stripe (docs/LAUNCH_TODO.md). All couples clause text
+ * remains [ATTORNEY REVIEW REQUIRED] placeholder pending counsel.
  */
-export const COUPLES_TIER_OPEN = false;
+export const COUPLES_TIER_OPEN = true;

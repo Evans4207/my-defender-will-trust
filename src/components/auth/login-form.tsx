@@ -16,13 +16,14 @@ import { FormAlert } from "./form-alert";
 
 const initial: ActionState = {};
 
-export function LoginForm() {
+export function LoginForm({ next }: { next?: string }) {
   const [state, formAction] = useActionState(loginAction, initial);
   const [magicState, magicAction] = useActionState(magicLinkAction, initial);
 
   return (
     <div className="space-y-6">
       <form action={formAction} className="space-y-4">
+        {next && <input type="hidden" name="next" value={next} />}
         <FormAlert state={state} />
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -75,7 +76,10 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         New here?{" "}
-        <Link href="/signup" className="font-medium text-foreground underline-offset-4 hover:underline">
+        <Link
+          href={next ? `/signup?next=${encodeURIComponent(next)}` : "/signup"}
+          className="font-medium text-foreground underline-offset-4 hover:underline"
+        >
           Create an account
         </Link>
       </p>

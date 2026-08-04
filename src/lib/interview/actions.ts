@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getEntitlement } from "@/lib/entitlements.server";
 import { isStateAvailable } from "@/lib/documents/state-rules.server";
+import { COUPLES_TIER_OPEN } from "@/lib/features";
 import { isStepKey, nextStepKey, type StepKey } from "./steps";
 import { validateStep } from "./schema";
 
@@ -145,6 +146,20 @@ export async function completeStepAction(
   // Persist doc type selection.
   if (stepKey === "doctype" && (data.doc_type === "will" || data.doc_type === "trust")) {
     await supabase.from("matters").update({ doc_type: data.doc_type }).eq("id", matterId);
+  }
+  // Choosing couples on the "about" step forms the household (member A) and links
+  // this matter to it, so generation can route each spouse's set to their own
+  // account (docs/HOUSEHOLD_WORK_ORDER.md §2). create_household is idempotent —
+  // toggling the answer back and forth is safe. The RPC runs SECURITY DEFINER, so
+  // no service-role write is used here.
+  if (stepKey === "about" && COUPLES_TIER_OPEN && data.party === "couples") {
+    const { data: householdId, error: hhError } = await supabase.rpc("create_household");
+    if (!hhError && householdId) {
+      await supabase
+        .from("matters")
+        .update({ household_id: householdId as string })
+        .eq("id", matterId);
+    }
   }
 
   const next: StepKey | null = nextStepKey(stepKey);

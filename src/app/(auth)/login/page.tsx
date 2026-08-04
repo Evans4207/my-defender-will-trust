@@ -4,7 +4,12 @@ import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata: Metadata = { title: "Log in" };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
   return (
     <Card>
       <CardHeader>
@@ -14,7 +19,7 @@ export default function LoginPage() {
         </p>
       </CardHeader>
       <CardContent>
-        <LoginForm />
+        <LoginForm next={next} />
       </CardContent>
     </Card>
   );
