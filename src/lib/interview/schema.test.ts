@@ -51,6 +51,28 @@ describe("validateStep", () => {
     ).toBe(false);
   });
 
+  it("gives a plain-English message when the distribution type is skipped", () => {
+    const res = validateStep("distributions", {
+      beneficiaries: [{ name: "A", percent: "100" }],
+      distributionType: "",
+    });
+    expect(res.ok).toBe(false);
+    // Must not leak the raw Zod enum error to the user.
+    expect(res.ok === false && res.error).not.toMatch(/expected one of|invalid option/i);
+  });
+
+  it("treats a blank minor-trust age as unset (optional)", () => {
+    expect(
+      validateStep("special", { minorTrustAge: "" }).ok,
+    ).toBe(true);
+  });
+
+  it("rejects an out-of-range minor-trust age with a friendly message", () => {
+    const res = validateStep("special", { minorTrustAge: "12" });
+    expect(res.ok).toBe(false);
+    expect(res.ok === false && res.error).not.toMatch(/too small|>=|greater than/i);
+  });
+
   it("requires an executor", () => {
     expect(validateStep("fiduciaries", { executorName: "Sam" }).ok).toBe(true);
     expect(validateStep("fiduciaries", { executorName: "" }).ok).toBe(false);

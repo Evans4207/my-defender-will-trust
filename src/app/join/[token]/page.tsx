@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getMyHousehold } from "@/lib/household/data";
 import { AcceptPanel } from "@/components/household/accept-panel";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,41 @@ export default async function JoinPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // If the viewer already belongs to a household, accepting can only fail
+  // (their own invite, or one already used). Rather than a naked button that
+  // returns an error on click, tell them plainly where they stand — this is the
+  // common case when someone re-opens an already-used link or clicks their own.
+  const existingHousehold = user ? await getMyHousehold() : null;
+
+  if (existingHousehold) {
+    return (
+      <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-12">
+        <Card>
+          <CardHeader>
+            <h1 className="font-serif text-2xl font-semibold">
+              You&apos;re already part of a household
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {existingHousehold.role === "a"
+                ? "This is your own household. Share your invite link with your spouse or partner so they can join — they'll create their own account from it."
+                : "You've already joined this household. Your documents are in your dashboard."}
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              className="w-full"
+              render={
+                <Link href={existingHousehold.role === "a" ? "/household" : "/dashboard"} />
+              }
+            >
+              {existingHousehold.role === "a" ? "Manage your household" : "Go to your documents"}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-12">

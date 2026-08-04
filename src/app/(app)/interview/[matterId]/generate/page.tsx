@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getMatter } from "@/lib/interview/data";
+import { getHouseholdMembers } from "@/lib/household/data";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Shield } from "@/components/brand/shield";
@@ -21,6 +22,12 @@ export default async function GeneratePage({
     redirect(`/interview/${matterId}/documents`);
   }
 
+  // Has the partner already joined this household? If so, don't keep nudging to
+  // invite them — acknowledge the joined state instead.
+  const partnerJoined = matter.household_id
+    ? (await getHouseholdMembers(matter.household_id)).some((m) => m.role === "b")
+    : false;
+
   return (
     <div className="mx-auto max-w-xl">
       <Card>
@@ -32,27 +39,36 @@ export default async function GeneratePage({
             Generate your documents
           </h1>
           <p className="text-center text-sm text-muted-foreground">
-            We&apos;ll assemble your signing-ready Will with clauses and execution
-            instructions specific to your state.
+            {matter.doc_type === "trust"
+              ? "We'll assemble your signing-ready Trust package — your Revocable Living Trust, pour-over will, and supporting documents — with clauses and execution instructions specific to your state."
+              : "We'll assemble your signing-ready Will and supporting documents with clauses and execution instructions specific to your state."}
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          {matter.household_id && (
-            <div className="rounded-md border border-accent/40 bg-accent/10 p-4 text-sm">
-              <p className="font-medium">Adding your spouse or partner?</p>
-              <p className="mt-1 text-muted-foreground">
-                Invite them before you generate, so each of you gets your own set in your own
-                account. You can also do this afterward and regenerate.
-              </p>
-              <Button
-                variant="outline"
-                className="mt-3"
-                render={<Link href="/household" />}
-              >
-                Invite your partner
-              </Button>
-            </div>
-          )}
+          {matter.household_id &&
+            (partnerJoined ? (
+              <div className="rounded-md border border-accent/40 bg-accent/10 p-4 text-sm">
+                <p className="font-medium">Your partner has joined your household.</p>
+                <p className="mt-1 text-muted-foreground">
+                  When you generate, each of you gets your own set in your own account.
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-md border border-accent/40 bg-accent/10 p-4 text-sm">
+                <p className="font-medium">Adding your spouse or partner?</p>
+                <p className="mt-1 text-muted-foreground">
+                  Invite them before you generate, so each of you gets your own set in your own
+                  account. You can also do this afterward and regenerate.
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-3"
+                  render={<Link href="/household" />}
+                >
+                  Invite your partner
+                </Button>
+              </div>
+            ))}
           <GenerateButton matterId={matterId} />
           <div className="rounded-md border border-accent/40 bg-accent/10 p-4 text-sm">
             <p className="font-medium">{ATTORNEY_REVIEW_RECOMMENDATION}</p>

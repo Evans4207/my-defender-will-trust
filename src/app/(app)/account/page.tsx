@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getUser } from "@/lib/auth/user";
 import { DeleteAccount } from "@/components/account/delete-account";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export const metadata: Metadata = { title: "Account" };
@@ -21,6 +23,21 @@ export default async function AccountPage() {
             <span className="text-muted-foreground">Email:</span>{" "}
             <span className="font-medium">{user?.email}</span>
           </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <h2 className="font-serif text-lg font-semibold">Your data</h2>
+          <p className="text-sm text-muted-foreground">
+            Download a single ZIP with all of your generated documents and vault
+            files. Always available — no membership required.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" render={<Link href="/account/export" />}>
+            Download everything
+          </Button>
         </CardContent>
       </Card>
 

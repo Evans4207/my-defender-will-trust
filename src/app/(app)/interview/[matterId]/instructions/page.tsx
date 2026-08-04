@@ -29,7 +29,9 @@ export default async function InstructionsPage({
             How to sign in {inst.stateName}
           </h1>
           <p className="mt-1 text-muted-foreground">
-            Follow these steps to make your Will valid in your state.
+            {matter.doc_type === "trust"
+              ? "Follow these steps to make your documents valid in your state. The steps below apply to your pour-over will; sign your Revocable Living Trust as directed on the trust document itself."
+              : "Follow these steps to make your Will valid in your state."}
           </p>
         </div>
         <div className="print:hidden">

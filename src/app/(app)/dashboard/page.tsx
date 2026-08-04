@@ -24,7 +24,14 @@ const PACKAGE_LABEL: Record<string, string> = {
   trust: "Trust Package",
 };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ unlocked?: string; household?: string }>;
+}) {
+  const { unlocked, household } = await searchParams;
+  const justUnlocked = unlocked === "1";
+  const justJoined = household === "joined";
   const entitlement = await getEntitlement();
 
   const supabase = await createClient();
@@ -59,6 +66,25 @@ export default async function DashboardPage() {
               : "Thanks for your purchase."}
         </p>
       </div>
+
+      {justUnlocked && (
+        <div className="rounded-lg border border-accent bg-accent/10 p-4">
+          <p className="font-medium">Access unlocked! 🎉</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Your account is ready. Start your Will or Trust below.
+          </p>
+        </div>
+      )}
+
+      {justJoined && (
+        <div className="rounded-lg border border-accent bg-accent/10 p-4">
+          <p className="font-medium">You&apos;ve joined the household.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            You have your own account and your own documents. Any documents shared
+            with your household appear under &ldquo;Your documents.&rdquo;
+          </p>
+        </div>
+      )}
 
       {/* Entitlement + documents */}
       <section className="space-y-4">

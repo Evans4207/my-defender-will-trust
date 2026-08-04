@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeAccessCode, isValidAccessCodeFormat } from "@/lib/access-code";
 import { checkRateLimit, getClientIp, TOO_MANY } from "@/lib/rate-limit";
@@ -47,10 +48,17 @@ export async function redeemCodeAction(
     | { grants_access?: boolean }
     | undefined;
 
+  // The grant was just written by redeem_access_code(). Bust the cached layout so
+  // the destination reads the fresh entitlement on this same navigation — without
+  // this, the dashboard can render a stale "not unlocked" view and bounce a
+  // brand-new user (no matters yet) straight back to the gate, which looks exactly
+  // like the code being dead.
+  revalidatePath("/", "layout");
+
   // Comp code (100% off) unlocks directly. Discount code (<100%) sends the user
   // to check out at the reduced price — the discount is applied automatically.
   if (row?.grants_access === false) {
     redirect("/gate?discount=1");
   }
-  redirect("/dashboard");
+  redirect("/dashboard?unlocked=1");
 }

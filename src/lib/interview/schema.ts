@@ -82,7 +82,9 @@ export const distributionsStepSchema = z
         }),
       )
       .min(1, "Add at least one beneficiary."),
-    distributionType: z.enum(["per_stirpes", "per_capita"]),
+    distributionType: z.enum(["per_stirpes", "per_capita"], {
+      error: "Please choose what happens to a beneficiary's share if they pass before you.",
+    }),
     specificBequests: z
       .array(z.object({ item: personName, recipient: personName }))
       .default([]),
@@ -98,7 +100,18 @@ export const distributionsStepSchema = z
   );
 
 export const specialStepSchema = z.object({
-  minorTrustAge: z.coerce.number().int().min(18).max(35).optional(),
+  // Optional field: an empty input arrives as "" (from the number field), which
+  // z.coerce.number() would turn into 0 and fail .min(18). Treat blank as "not
+  // set" so leaving it empty is genuinely optional, and keep the bounds friendly.
+  minorTrustAge: z.preprocess(
+    (v) => (v === "" || v === null || v === undefined ? undefined : v),
+    z.coerce
+      .number({ error: "Enter an age between 18 and 35, or leave it blank." })
+      .int("Enter a whole number of years.")
+      .min(18, "Choose an age of 18 or older.")
+      .max(35, "Choose an age of 35 or younger.")
+      .optional(),
+  ),
   petCare: z.boolean().default(false),
   petCareDetail: z.string().trim().optional(),
   digitalAssets: z.boolean().default(false),

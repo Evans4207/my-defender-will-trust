@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getMatter } from "@/lib/interview/data";
 import { createClient } from "@/lib/supabase/server";
+import { existingObjects } from "@/lib/documents/storage";
 import { STATE_NAMES } from "@/lib/interview/states";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,22 @@ export default async function DocumentsPage({
     .order("generated_at", { ascending: false });
   const sharedDocs = (sharedData as HouseholdDocRow[] | null) ?? [];
 
+  // PDF export is best-effort (no converter configured = DOCX only), so a `.pdf`
+  // may not exist beside every `.docx`. Resolve which PDFs are actually present
+  // and only offer the button when one is — a dead "Download PDF" that lands on a
+  // raw error page reads as broken. `pdfPathFor` mirrors the download route's
+  // derivation so the offered link resolves to a real object.
+  const pdfPathFor = (storagePath: string | null): string | null =>
+    storagePath ? storagePath.replace(/\.docx$/, ".pdf") : null;
+  const candidatePdfs = [...docs, ...sharedDocs]
+    .map((d) => pdfPathFor(d.storage_path))
+    .filter((p): p is string => p !== null);
+  const availablePdfs = await existingObjects(candidatePdfs);
+  const hasPdf = (storagePath: string | null): boolean => {
+    const p = pdfPathFor(storagePath);
+    return p !== null && availablePdfs.has(p);
+  };
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
@@ -107,14 +124,16 @@ export default async function DocumentsPage({
               >
                 Download DOCX
               </Button>
-              <Button
-                variant="outline"
-                render={
-                  <a href={`/interview/${matterId}/documents/download?id=${d.id}&format=pdf`} />
-                }
-              >
-                Download PDF
-              </Button>
+              {hasPdf(d.storage_path) && (
+                <Button
+                  variant="outline"
+                  render={
+                    <a href={`/interview/${matterId}/documents/download?id=${d.id}&format=pdf`} />
+                  }
+                >
+                  Download PDF
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))
@@ -150,14 +169,16 @@ export default async function DocumentsPage({
                 >
                   Download DOCX
                 </Button>
-                <Button
-                  variant="outline"
-                  render={
-                    <a href={`/interview/${d.matter_id}/documents/download?id=${d.id}&format=pdf`} />
-                  }
-                >
-                  Download PDF
-                </Button>
+                {hasPdf(d.storage_path) && (
+                  <Button
+                    variant="outline"
+                    render={
+                      <a href={`/interview/${d.matter_id}/documents/download?id=${d.id}&format=pdf`} />
+                    }
+                  >
+                    Download PDF
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}

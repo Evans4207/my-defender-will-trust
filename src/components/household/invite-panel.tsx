@@ -19,9 +19,11 @@ type LatestInvite = {
 export function InvitePanel({
   latestInvite,
   partnerJoined,
+  hasTrust,
 }: {
   latestInvite: LatestInvite;
   partnerJoined: boolean;
+  hasTrust: boolean;
 }) {
   const [state, formAction] = useActionState(createInviteAction, initial);
   const [copied, setCopied] = useState(false);
@@ -31,7 +33,8 @@ export function InvitePanel({
       <Alert>
         <AlertDescription>
           Your partner has joined the household. Each of you now has your own login and
-          owns your own documents; the joint trust is shared between you.
+          owns your own documents
+          {hasTrust ? "; the joint trust is shared between you" : ""}.
         </AlertDescription>
       </Alert>
     );
