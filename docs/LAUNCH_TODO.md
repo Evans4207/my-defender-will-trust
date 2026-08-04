@@ -42,7 +42,9 @@ model below.
       previously in the picture at all.
 
 ## Engineering — the one that blocks couples revenue
-- [ ] **Household model, so each spouse has their own login.** This is the only
+- [ ] **Household model, so each spouse has their own login.** **IN BUILD — owner
+      decision 4 Aug 2026: built here first, then ported to Family First. Scope:
+      `docs/HOUSEHOLD_WORK_ORDER.md`.** This is the only
       thing standing between us and reopening the couples tier, and it is worth
       real money: couples pricing is $249 vs $159 on the Will package and $579 vs
       $449 on the Trust package.
