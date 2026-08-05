@@ -74,9 +74,13 @@ function fromStatutoryForm(
   form: StatutoryForm,
 ): SelfProvingClause {
   const [first, ...rest] = form.paragraphs;
-  // Fill only the first blank run, which is the testator's name in every form we
-  // have captured. Leaving the rest blank is deliberate.
-  const withName = first.replace(/_{4,}/, ctx.testatorName);
+
+  // Fill the testator's name, but ONLY into the blank that follows "I,". Several
+  // forms open with the officer's venue block ("STATE OF ____ COUNTY OF ____"),
+  // and blindly filling the first blank puts the testator's name in the county
+  // line. Where no "I, ____" pattern exists we leave every blank alone, which is
+  // always safe: the signer completes them by hand.
+  const withName = first.replace(/(\bI,\s*)_{4,}/, `$1${ctx.testatorName}`);
 
   return {
     paragraphs: [withName, ...rest],

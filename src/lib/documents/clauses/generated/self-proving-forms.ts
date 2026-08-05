@@ -225,5 +225,56 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "State of ____________ Judicial DistrictSubscribed, sworn to, and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________, and ____________, witness, this ____________ day of ____________(Seal)",
       "(Official capacity of officer)"
     ]
+  },
+  "CO": {
+    "citation": "C.R.S. § 15-11-504",
+    "sourceUrl": "https://leg.colorado.gov/sites/default/files/images/olls/crs2023-title-15.pdf",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to Colorado Revised Statutes 2023 Uncertified PrintoutPage 204 of 611 sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, ____________ the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as [his] [her] will and that [he] [she] signs it willingly (or willingly directs another to sign for [him] [her]), and that [he] [she] executes it as [his] [her] free and voluntary act for the purposes therein expressed, and that each of us, in the conscious presence of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "THE STATE OF ____________ COUNTY OF ____________ Subscribed, sworn to and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________ and ____________, witnesses, this ____________ day of ____________, ____________",
+      "____________ (Official capacity of officer)"
+    ]
+  },
+  "WY": {
+    "citation": "Wyo. Stat. § 2-6-114",
+    "sourceUrl": "https://wyoleg.gov/statutes/compress/title02.pdf",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, (year), and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am an adult person, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, ____________ the witnesses, sign (or electronically sign by secure means) our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his last will and that he signs it willingly (or willingly directs another to sign for him), and that he executes it as his free and voluntary act for the purposes therein expressed, and that each of us, in the presence and hearing of the testator (or appearing through the use of audio-video communication technology and able to see and hear the testator in real time), hereby signs this will (or electronically signs this will by secure means) as witnesses to the testator's signature and that to the best of our knowledge the testator is an adult person, of sound mind, and under no constraint or undue influence.",
+      "STATE OF WYOMING ) ) ss COUNTY OF ) Subscribed, sworn to and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________ and ____________, witnesses, this ____________ day of ____________ .",
+      "(SEAL) (Signed) ____________ (Official Capacity of Officer) ____________"
+    ]
+  },
+  "OK": {
+    "citation": "84 O.S. § 55",
+    "sourceUrl": "https://oksenate.gov/sites/default/files/2019-12/os84.pdf",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "STATE OF OKLAHOMA COUNTY OF ____________ Before me, the undersigned authority, on this day personally appeared ____________, ____________, and ____________, known to me to be the testator and the witnesses, respectively, whose names are subscribed to the annexed or foregoing instrument in their respective capacities, and, all of said persons being by me first duly sworn, said ____________, testator, declared to me and to the said witnesses in my presence that said instrument is his last will and testament or a codicil to his last will and testament, and that he had willingly made and executed it as his free and voluntary act and deed for the purposes therein expressed; and the said witnesses, each on his oath stated to me, in the presence and hearing of the said testator, that the said testator had declared to them that said instrument is his last will and testament or codicil to his last will and testament, and that he executed same as such and wanted each of them to sign it as a witness; and upon their oaths each witness stated further that they did sign the same as witnesses in the presence of the said testator and at his request and that said testator was at that time eighteen (18) years of age or over and was of sound mind.",
+      "Witness (signature) ____________ Name and Residence (printed) Oklahoma Statutes - Title 84. Wills and Succession Page 15 ____________ Witness (signature) ____________ Name and Residence (printed) Subscribed and acknowledged before me by the said ____________, testator, and subscribed and sworn before me by the said ____________, and ____________ witnesses, this ____________ day of ____________, A.D., ____________ (SEAL) (SIGNED)____________ ____________"
+    ]
+  },
+  "IA": {
+    "citation": "Iowa Code § 633.279",
+    "sourceUrl": "https://www.legis.iowa.gov/docs/code/633.279.pdf",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "Affidavit State of____________ ) County of____________ ) ss We, the undersigned, ____________, ____________ and ____________, the testator and the witnesses, respectively, whose names are signed to the attached or foregoing instrument, being first duly sworn, declare to the undersigned authority that at the date of the instrument, we all knew the identity of each other; the instrument was exhibited to the witnesses by the testator, who declared it to be the testator’s last will and testament and was signed by the testator or by another at the direction of the testator at ____________, in the County of ____________, State of ____________, on the date shown in the instrument, and in the presence of each other as subscribing witnesses; that we, as witnesses, declare to the undersigned authority that in our presence the testator executed and acknowledged such will as the testator’s will and that we, in the testator’s presence, at the testator’s request, and in the presence of each other, did subscribe our names thereto as attesting witnesses on the date of such will;",
+      "and that the witnesses were sixteen years of age or older.",
+      "____________ Subscribed, sworn and acknowledged before me by ____________, the testator; and subscribed and sworn before me by ____________ and ____________, witnesses, this ____________ day of ____________ (month), ____________ (year) ____________ Signature of notarial officer (Stamp) [____________] Title of office Fri Dec 12 23:51:43 2025 Iowa Code 2026, Section 63"
+    ]
+  },
+  "ND": {
+    "citation": "N.D. Cent. Code § 30.1-08-04",
+    "sourceUrl": "https://ndlegis.gov/cencode/t30-1c08.pdf",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, ____________, and being first sworn, declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly or willingly direct another to sign for me, that I execute it as my free and voluntary act for the purposes therein expressed, and that I am 18 years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, ____________, the witnesses, sign our names to this instrument, and being first sworn, declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly or willingly directs another to sign for the testator, and that each of us, in the presence and hearing of the testator, signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.",
+      "Subscribed, sworn to, and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________ and ____________, witnesses, this ____________ day of ____________ (SEAL) (Signed)____________ ____________ (Official capacity of officer)"
+    ]
   }
 };

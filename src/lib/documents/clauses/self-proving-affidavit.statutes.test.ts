@@ -138,30 +138,18 @@ describe("researched clauses track their source statute", () => {
         ).toEqual([]);
       });
 
-      it("matches the statute on the will / last will variant", () => {
-        const drafted = normalize(
-          selfProvingAffidavitFor(state, ctx).paragraphs.join(" "),
-        );
-        // Compare the testator's operative phrase against the statute's.
-        const draftedLastWill = drafted.includes("as my last will");
-        const statuteLastWill = statute.includes("as my last will");
-        expect(
-          draftedLastWill,
-          `${state}: draft says "as my ${draftedLastWill ? "last will" : "will"}" but the statute says "as my ${statuteLastWill ? "last will" : "will"}"`,
-        ).toBe(statuteLastWill);
-      });
-
-      it("matches the statute on the declare / hereby declare variant", () => {
-        const drafted = normalize(
-          selfProvingAffidavitFor(state, ctx).paragraphs.join(" "),
-        );
-        const draftedHereby = drafted.includes("do hereby declare");
-        const statuteHereby = statute.includes("do hereby declare");
-        expect(
-          draftedHereby,
-          `${state}: draft says "${draftedHereby ? "do hereby declare" : "do declare"}" but the statute says "${statuteHereby ? "do hereby declare" : "do declare"}"`,
-        ).toBe(statuteHereby);
-      });
+      /*
+       * REMOVED: the "will vs last will" and "declare vs hereby declare" variant
+       * checks. They guarded hand-chosen template flags, which no longer exist —
+       * the clause text is now extracted verbatim from the statute, so a variant
+       * cannot be mismatched.
+       *
+       * They also produced false failures once verbatim extraction landed: a
+       * statute often prints TWO forms (simultaneous execution and
+       * after-the-fact), and the phrase can appear in the one we do not extract.
+       * Oklahoma and North Dakota both trip that. The "every fixed run appears
+       * verbatim" check above is the stronger, correct guard.
+       */
     });
   }
 });

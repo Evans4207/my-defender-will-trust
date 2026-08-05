@@ -243,16 +243,54 @@ const SOURCES = [
     startsWith: "Sec. 6-4",
     blocked: "Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). Needs the current ilga.gov deep-link format for 755 ILCS 5/6-4.",
   },
+  // --- Batch 4: states that publish their code as PDF ------------------------
+  {
+    state: "IA",
+    key: "self_proving_affidavit",
+    citation: "Iowa Code § 633.279",
+    url: "https://www.legis.iowa.gov/docs/code/633.279.pdf",
+    startsWith: "633.279 Signed and witnessed",
+    pdf: true,
+  },
+  {
+    state: "CO",
+    key: "self_proving_affidavit",
+    citation: "C.R.S. § 15-11-504",
+    url: "https://leg.colorado.gov/sites/default/files/images/olls/crs2023-title-15.pdf",
+    startsWith: "15-11-504.",
+    endsBefore: "15-11-505.",
+    pdf: true,
+  },
+  {
+    state: "WY",
+    key: "self_proving_affidavit",
+    citation: "Wyo. Stat. § 2-6-114",
+    url: "https://wyoleg.gov/statutes/compress/title02.pdf",
+    startsWith: "2-6-114.",
+    endsBefore: "2-6-115.",
+    pdf: true,
+  },
+  {
+    state: "OK",
+    key: "self_proving_affidavit",
+    citation: "84 O.S. § 55",
+    url: "https://oksenate.gov/sites/default/files/2019-12/os84.pdf",
+    startsWith: "§84-55.",
+    endsBefore: "§84-56",
+    pdf: true,
+  },
   {
     state: "ND",
     key: "self_proving_affidavit",
     // CORRECTED CITATION. The seed carried § 30.1-08-03, which is "Holographic
     // will". North Dakota's self-proved will provision is § 30.1-08-04 (2-504).
     citation: "N.D. Cent. Code § 30.1-08-04",
-    url: "https://ndlegis.gov/cencode/t30-1c08.html",
-    startsWith: "30.1-08-04",
-    endsBefore: "30.1-08-05",
-    blocked: "Citation corrected from the seed's § 30.1-08-03 (Holographic will) to § 30.1-08-04 (Self-proved will). The chapter page is a table of contents only; the section text is published as PDF, so capture needs a PDF extractor.",
+    url: "https://ndlegis.gov/cencode/t30-1c08.pdf",
+    // Citation corrected from the seed's § 30.1-08-03 ("Holographic will").
+    url2Note: "chapter page is a TOC; the text is in the chapter PDF",
+    startsWith: "30.1-08-04.",
+    endsBefore: "30.1-08-05.",
+    pdf: true,
   },
   {
     state: "AK",
@@ -335,6 +373,53 @@ async function fetchRendered(url, waitForText) {
   } finally {
     await page.close();
   }
+}
+
+/**
+ * Extract text from a PDF, for the states that publish their code only as PDF.
+ *
+ * pdfjs hands back positioned glyph runs, not words, so joining them naively
+ * produces "PROBA TE CODE" and "F ormal". Rebuild lines from the glyph positions
+ * instead: start a new line when the baseline moves, and insert a space only when
+ * there is a real horizontal gap between one run and the next.
+ */
+async function fetchPdfText(url) {
+  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  const res = await fetch(url, {
+    headers: { "User-Agent": UA },
+    redirect: "follow",
+    signal: AbortSignal.timeout(60000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const doc = await getDocument({
+    data: new Uint8Array(await res.arrayBuffer()),
+    useSystemFonts: true,
+  }).promise;
+
+  let out = "";
+  for (let i = 1; i <= doc.numPages; i++) {
+    const items = (await (await doc.getPage(i)).getTextContent()).items;
+    let line = "";
+    let prevEnd = null;
+    let prevY = null;
+    for (const it of items) {
+      if (!it.str) continue;
+      const x = it.transform[4];
+      const y = it.transform[5];
+      if (prevY !== null && Math.abs(y - prevY) > 2) {
+        out += line.trim() + "\n";
+        line = "";
+        prevEnd = null;
+      }
+      if (prevEnd !== null && x - prevEnd > 1.2) line += " ";
+      line += it.str;
+      prevEnd = x + (it.width || 0);
+      prevY = y;
+    }
+    out += line.trim() + "\n";
+  }
+  return out;
 }
 
 /**
@@ -532,14 +617,17 @@ async function harvest(src, { checkOnly }) {
 
   let raw;
   try {
-    raw = src.render
-      ? await fetchRendered(src.url, src.startsWith)
-      : await fetchPage(src.url);
+    raw = src.pdf
+      ? await fetchPdfText(src.url)
+      : src.render
+        ? await fetchRendered(src.url, src.startsWith)
+        : await fetchPage(src.url);
   } catch (err) {
     return { ...src, status: "FETCH_FAILED", detail: err.message };
   }
 
-  const isolated = isolate(htmlToText(raw), src);
+  // PDF text is already plain; only HTML needs tag stripping.
+  const isolated = isolate(src.pdf ? raw : htmlToText(raw), src);
   if (!isolated.text) return { ...src, status: "EXTRACT_FAILED", detail: isolated.reason };
   const text = stripChrome(isolated.text);
   if (text.length < 400) {

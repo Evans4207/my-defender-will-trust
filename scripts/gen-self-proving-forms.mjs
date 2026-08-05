@@ -61,6 +61,11 @@ const EXTRACT = {
   VA: { from: "STATE OF VIRGINIA", to: "B." },
   PA: { from: "I,", to: "(b)" },
   AK: { from: "I,", to: "(b)" },
+  CO: { from: "I,", to: "(2)" },
+  WY: { from: "I,", to: "(b)" },
+  OK: { from: "STATE OF", to: "b. the written declaration" },
+  IA: { from: "Affidavit", to: "3." },
+  ND: { from: "I,", to: "2." },
 };
 
 /**
@@ -86,7 +91,8 @@ function normalizeBlanks(s) {
 
 function extractForm(text, { from, to }) {
   // Start at the form itself, which follows the "...following form:" preamble.
-  const preamble = /(?:following form|as follows|same intent)\s*:?/i.exec(text);
+  // Whitespace-tolerant: PDFs wrap mid-phrase, e.g. "as\nfollows:".
+  const preamble = /(?:following\s+form|as\s+follows|same\s+intent)\s*:?/i.exec(text);
   const searchFrom = preamble ? preamble.index + preamble[0].length : 0;
 
   const start = text.indexOf(from, searchFrom);
@@ -132,6 +138,8 @@ function toParagraphs(form) {
       // Drop bare label lines ("Testator", "Witness", "(Seal)") — those become
       // signature lines, not body paragraphs.
       .filter((l) => !isLabel(l))
+      // PDF running heads/feet leak into the text stream ("... Page 15").
+      .filter((l) => !/\bPage\s+\d+\s*$/i.test(l))
       .filter((l) => l.replace(/[_\s.]/g, "").length > 25)
   );
 }
