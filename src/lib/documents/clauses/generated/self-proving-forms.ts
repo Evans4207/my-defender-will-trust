@@ -276,5 +276,15 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "We, ____________, ____________, the witnesses, sign our names to this instrument, and being first sworn, declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly or willingly directs another to sign for the testator, and that each of us, in the presence and hearing of the testator, signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.",
       "Subscribed, sworn to, and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________ and ____________, witnesses, this ____________ day of ____________ (SEAL) (Signed)____________ ____________ (Official capacity of officer)"
     ]
+  },
+  "HI": {
+    "citation": "Haw. Rev. Stat. § 560:2-504",
+    "sourceUrl": "https://www.capitol.hawaii.gov/hrscurrent/Vol12_Ch0501-0588/HRS0560/HRS_0560-0002-0504.htm",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly (or willingly directs another to sign for the testator), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "The State of ____________ County of ____________ Subscribed, sworn to and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________, and ____________, witness, this ____________ day of ____________"
+    ]
   }
 };

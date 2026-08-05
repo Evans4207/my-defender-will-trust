@@ -66,6 +66,7 @@ const EXTRACT = {
   OK: { from: "STATE OF", to: "b. the written declaration" },
   IA: { from: "Affidavit", to: "3." },
   ND: { from: "I,", to: "2." },
+  HI: { from: "I,", to: "(b)" },
 };
 
 /**

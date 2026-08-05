@@ -319,6 +319,47 @@ const SOURCES = [
     endsBefore: "Sec. 45a-286",
     render: true,
   },
+  // --- Batch 5: reachable only with a real browser ----------------------------
+  {
+    state: "HI",
+    key: "self_proving_affidavit",
+    citation: "Haw. Rev. Stat. § 560:2-504",
+    url: "https://www.capitol.hawaii.gov/hrscurrent/Vol12_Ch0501-0588/HRS0560/HRS_0560-0002-0504.htm",
+    startsWith: "560:2-504",
+    render: true,
+  },
+  {
+    state: "NY",
+    key: "self_proving_affidavit",
+    citation: "N.Y. SCPA § 1406",
+    url: "https://www.nysenate.gov/legislation/laws/SCP/1406",
+    startsWith: "1406",
+    render: true,
+  },
+  {
+    state: "MA",
+    key: "self_proving_affidavit",
+    citation: "Mass. G.L. c. 190B § 2-504",
+    url: "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleII/Chapter190B",
+    startsWith: "Section 2-504",
+    endsBefore: "Section 2-505",
+    blocked: "The chapter page is a table of contents only, and every section-level URL tried returns 404. Needs the current malegislature.gov deep-link format for c.190B § 2-504.",
+  },
+  {
+    state: "NJ",
+    key: "self_proving_affidavit",
+    citation: "N.J.S.A. § 3B:3-4",
+    // PROVENANCE CAVEAT: no official New Jersey publisher was reachable — the
+    // legislature's own statute pages returned empty shells. This reads the
+    // statutory text from a commercial mirror, which is weaker provenance than
+    // every other source here. We take the statute text only, never the
+    // publisher's annotations, but counsel should verify this one against an
+    // official copy.
+    url: "https://law.justia.com/codes/new-jersey/title-3b/section-3b-3-4/",
+    startsWith: "3B:3-4",
+    render: true,
+    blocked: "No official New Jersey publisher is reachable (the legislature's own statute pages return empty shells), and the commercial mirror sits behind a Cloudflare bot wall. Needs a hand-sourced capture.",
+  },
 ];
 
 const UA = "Mozilla/5.0 (compatible; MDWT statute research; +legal form verification)";

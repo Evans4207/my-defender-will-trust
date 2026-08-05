@@ -29,11 +29,11 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-**30 of 32 registered sources capture cleanly**, covering 30 of the 46 launch
-states. **23 have verbatim clause text generated** (see
+**32 of 36 registered sources capture cleanly**, covering 32 of the 46 launch
+states. **24 have verbatim clause text generated** (see
 `docs/CLAUSE_RESEARCH_METHOD.md`).
 
-### Prescribes a self-proving affidavit form (23 states)
+### Prescribes a self-proving affidavit form (24 states)
 
 | State | Citation | Captured |
 |---|---|---|
@@ -42,6 +42,7 @@ states. **23 have verbatim clause text generated** (see
 | CO | C.R.S. § 15-11-504 | 4,580ch |
 | DE | 12 Del. C. § 1305 | 2,238ch |
 | FL | Fla. Stat. § 732.503 | 2,105ch |
+| HI | Haw. Rev. Stat. § 560:2-504 | 3,844ch |
 | IA | Iowa Code § 633.279 | 4,694ch |
 | ID | Idaho Code § 15-2-504 | 4,020ch |
 | KS | K.S.A. § 59-606 | 3,509ch |
@@ -61,7 +62,7 @@ states. **23 have verbatim clause text generated** (see
 | WI | Wis. Stat. § 853.04 | 6,702ch |
 | WY | Wyo. Stat. § 2-6-114 | 4,074ch |
 
-### Different model — no prescribed form (7 states)
+### Different model — no prescribed form (8 states)
 
 **The Arizona pattern does not transfer to these.** Each provides for proving a
 will by witness affidavit *without* prescribing the affidavit's wording, so they
@@ -73,29 +74,37 @@ what such an affidavit should say.
 | CA | Cal. Prob. Code § 8220 | 897ch |
 | CT | Conn. Gen. Stat. § 45a-285 | 1,370ch |
 | NH | N.H. RSA § 551:2-a | 1,259ch |
+| NY | N.Y. SCPA § 1406 | 1,645ch |
 | OR | ORS § 113.055 | 1,663ch |
 | RI | R.I. Gen. Laws § 33-7-26 | 2,265ch |
 | VT | 14 V.S.A. § 108 | 4,160ch |
 | WA | RCW § 11.20.020 | 1,879ch |
 
-### Blocked (2)
+### Blocked (4)
 
 | State | Issue |
 |---|---|
-| WV | **Inherited citation is wrong.** § 41-5-15 is *"Proof of will while testator living"*. West Virginia's actual provision must be identified. |
-| IL | Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). Needs the current ilga.gov deep-link format. |
+| WV | **Inherited citation is wrong.** § 41-5-15 is *"Proof of will while testator living"*. The actual provision must be identified. |
+| IL | Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). |
+| MA | Chapter page is a TOC only; every section-level URL returns 404. |
+| NJ | No official publisher reachable — the legislature's own pages return empty shells, and the commercial mirror sits behind a Cloudflare bot wall. Needs a hand-sourced capture. |
 
 ### How each source is read
 
 | Method | States |
 |---|---|
 | Plain fetch | most |
-| Headless browser (`render: true`) | UT, SD, WA, AK, VT, CT |
+| Headless browser (`render: true`) | UT, SD, WA, AK, VT, CT, HI, NY |
 | PDF text extraction (`pdf: true`) | CO, IA, ND, OK, WY |
 
 PDF text arrives as positioned glyph runs, not words, so joining it naively yields
 "PROBA TE CODE" and "F ormal". Lines are rebuilt from glyph positions: a new line
 when the baseline moves, a space only where there is a real horizontal gap.
+
+**Commercial mirrors are not a fallback.** Justia and FindLaw return HTTP 403 to
+automated fetches across the board, and Justia additionally sits behind a
+Cloudflare bot wall. That is fine: official state publishers are both more
+authoritative and safer on licensing, so they are the only source we use.
 
 ## Findings worth counsel's attention
 
@@ -107,7 +116,7 @@ against the published code** — treat the seed's remaining citations as unverif
 
 **Two distinct statutory models exist** — see the tables above. Assuming every
 state follows the Arizona/Florida "prescribed form" pattern would have produced
-documents tracking the wrong model in seven states so far.
+documents tracking the wrong model in eight states so far.
 
 **Many statutes print two forms** — one for simultaneous execution, one for making
 an already-executed will self-proved. We generate the simultaneous-execution form
