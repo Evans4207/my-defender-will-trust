@@ -29,10 +29,15 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-**33 of 37 registered sources capture cleanly**, covering 33 jurisdictions. **24 have verbatim clause text generated** (see
+**37 of 38 registered sources capture cleanly**, covering 37 jurisdictions. **25 have verbatim clause text generated** (see
 `docs/CLAUSE_RESEARCH_METHOD.md`).
 
-### Prescribes a self-proving affidavit form (24 states)
+Still entirely unregistered — no capture attempted yet: **AL, AR, GA, IN, KY, MS,
+NM, TN** (official sites render client-side with no stable per-section URL) and
+**LA, MO, NC, OH, TX** (the five states not offered for sale). Coverage is not
+complete until those are resolved or consciously scoped out.
+
+### Prescribes a self-proving affidavit form (25 states)
 
 | State | Citation | Captured |
 |---|---|---|
@@ -45,6 +50,7 @@ crude version of the first for free: each capture stores a content hash, so
 | IA | Iowa Code § 633.279 | 4,694ch |
 | ID | Idaho Code § 15-2-504 | 4,020ch |
 | KS | K.S.A. § 59-606 | 3,509ch |
+| MA | Mass. G.L. c. 190B § 2-504 | 3,283ch |
 | ME | 18-C M.R.S. § 2-503 | 5,340ch |
 | MI | Mich. Comp. Laws § 700.2504 | 8,848ch |
 | MN | Minn. Stat. § 524.2-504 | 4,188ch |
@@ -61,7 +67,7 @@ crude version of the first for free: each capture stores a content hash, so
 | WI | Wis. Stat. § 853.04 | 6,702ch |
 | WY | Wyo. Stat. § 2-6-114 | 4,074ch |
 
-### Different model — no prescribed form (8 states)
+### Different model — no prescribed form (10 states)
 
 **The Arizona pattern does not transfer to these.** Each provides for proving a
 will by witness affidavit *without* prescribing the affidavit's wording, so they
@@ -72,27 +78,35 @@ what such an affidavit should say.
 |---|---|---|
 | CA | Cal. Prob. Code § 8220 | 897ch |
 | CT | Conn. Gen. Stat. § 45a-285 | 1,370ch |
+| IL | 755 ILCS 5/6-4 | 1,545ch |
 | NH | N.H. RSA § 551:2-a | 1,259ch |
 | NY | N.Y. SCPA § 1406 | 1,645ch |
 | OR | ORS § 113.055 | 1,663ch |
 | RI | R.I. Gen. Laws § 33-7-26 | 2,265ch |
 | VT | 14 V.S.A. § 108 | 4,160ch |
 | WA | RCW § 11.20.020 | 1,879ch |
+| WV | W. Va. Code § 41-5-15 | 810ch |
 
 ### Captured but NOT usable as a form
 
 | Jurisdiction | Citation | Why |
 |---|---|---|
 | DC | D.C. Code § 18-908 | This is the Uniform **Electronic** Wills Act. It makes an *electronic* will self-proving and does not reach the paper, wet-signature wills this product generates. Captured so counsel can confirm the District has **no self-proving mechanism for paper wills at all** — which would mean a DC will cannot be self-proved and its witnesses must testify in probate. Deliberately excluded from clause generation. |
+| MD | Md. Code, Est. & Trusts § 4-102 | **The same shape as DC.** § 4-102 is the execution provision; the only affidavit forms it prescribes sit inside subsections (c)–(d), which govern **electronic and remotely-witnessed** wills. Maryland appears to have **no self-proving affidavit for an ordinary paper will**. Captured and deliberately excluded from clause generation. **Please confirm.** |
 
-### Blocked (4)
+### Blocked (1)
 
 | State | Issue |
 |---|---|
-| WV | **Inherited citation is wrong.** § 41-5-15 is *"Proof of will while testator living"*. The actual provision must be identified. |
-| IL | Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). |
-| MA | Chapter page is a TOC only; every section-level URL returns 404. |
-| NJ | No official publisher reachable — the legislature's own pages return empty shells, and the commercial mirror sits behind a Cloudflare bot wall. Needs a hand-sourced capture. |
+| NJ | Official publisher **is** reachable — `lis.njleg.state.nj.us`, "New Jersey Statutes (Unannotated)", current through P.L.2025 c.346. But it is a Folio NXT frameset: content sits in a nested frame, there is no per-section URL, the TOC expands one level per round-trip via JS, the `xhitlist` query endpoint 500s, and the search box ignores programmatic input. Needs a TOC-walking fetch mode or one hand-sourced frame URL. **Do not fall back to the Justia mirror.** |
+
+### Resolved since the last pass (3)
+
+| State | What it turned out to be |
+|---|---|
+| IL | ILGA was rebuilt; the old `/legislation/ilcs/documents/*.htm` links soft-404. Sections now come an article at a time from `/legislation/ILCS/details` with a `SeqStart`/`SeqEnd` range. **No prescribed form** — 6-4(b) allows proof by affidavit without prescribing wording. |
+| MA | The section URL takes no separator: `/Section2-504`. Massachusetts **does** prescribe a UPC-style form; it is now generated. |
+| WV | **The earlier "wrong citation" call was itself wrong.** § 41-5-15's *heading* ("Proof of will while testator living") is misleading; its *body* is West Virginia's witness-affidavit provision. See the finding below. |
 
 ### How each source is read
 
@@ -113,11 +127,29 @@ authoritative and safer on licensing, so they are the only source we use.
 
 ## Findings worth counsel's attention
 
-**Two inherited citations were wrong.** WV § 41-5-15 points at *"Proof of will
-while testator living"*; ND § 30.1-08-03 points at *"Holographic will"* (corrected
-here to **§ 30.1-08-04**). Both came from earlier desk research in
-`supabase/seed.sql`. **Capture is the first step that actually tests a citation
-against the published code** — treat the seed's remaining citations as unverified.
+**One inherited citation was wrong; a second was wrongly condemned.** ND
+§ 30.1-08-03 points at *"Holographic will"* and is corrected here to
+**§ 30.1-08-04**. WV § 41-5-15 was previously marked wrong on the strength of its
+heading — *"Proof of will while testator living"* — but the heading is misleading
+and **the citation is correct** (see below). Both lessons point the same way:
+**capture is the first step that actually tests a citation against the published
+code, and a heading is not the provision.** Treat the seed's remaining citations as
+unverified until captured *and read*.
+
+**West Virginia's affidavit is materially weaker than a self-proving affidavit.**
+§ 41-5-15 lets attesting witnesses swear an affidavit before an officer which, if
+preserved with the will, carries "the same probative value as if the affiants had
+appeared in court". But it prescribes **no form**, and it ends: *"such affidavits
+shall not be admissible in evidence in any case in which there is a contest over
+the will."* A UPC self-proving affidavit is worth the most precisely when the will
+*is* contested, so this does much less work than its counterparts elsewhere.
+**Counsel should confirm what, if anything, we should tell a West Virginia customer
+about it.**
+
+**Maryland may be a second District-of-Columbia problem.** See the table above:
+its only prescribed affidavit forms live in the electronic / remotely-witnessed
+subsections. That would make two jurisdictions where a paper will cannot be made
+self-proved at all.
 
 **Two distinct statutory models exist** — see the tables above. Assuming every
 state follows the Arizona/Florida "prescribed form" pattern would have produced
@@ -158,6 +190,24 @@ Each capture must survive all of these, or it is refused rather than written:
 These caught three real defects during the first run: an amendment-history stub
 captured instead of a section body, undecoded entities corrupting a form, and a
 page of site navigation captured as if it were statute.
+
+### Two known weaknesses in these gates
+
+**An unbounded capture can still swallow site chrome.** A source with no
+`endsBefore` runs to the end of the page. If the section body is long and genuinely
+statutory, none of the gates fire — average line length stays prose-like — and the
+capture quietly picks up the footer. Both MA and MD did exactly this before they
+were bounded, and **VA still does**: its `startsWith: "64.2-452"` matches the page
+title, so the capture opens with the site's nav bar and closes with a sign-in form.
+The VA *form text* is correct and the verbatim test passes, but the capture is
+dirty. **Prefer an `endsBefore` on every source.**
+
+**The drift hash covers chrome, not just statute.** Because the hash is taken over
+the whole capture, a purely cosmetic site change registers as "this statute
+changed". VA fired exactly this false positive on 2026-08-05: a "Helpful Resources"
+footer block disappeared, the hash moved, and the statutory text was byte-identical.
+Anyone acting on `statutes:check` must diff before believing an amendment alert.
+The fix is to hash only the text between the markers once every source is bounded.
 
 ## Adding a state
 

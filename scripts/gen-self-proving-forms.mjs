@@ -40,10 +40,15 @@ const OUT = join(ROOT, "src/lib/documents/clauses/generated/self-proving-forms.t
  * cross-references are excluded.
  */
 //
-// DELIBERATELY ABSENT: DC. Its § 18-908 is the Uniform ELECTRONIC Wills Act and
-// reaches electronic wills only, so it must not be used as the self-proving form
-// for the paper wills this product generates. The capture exists in docs/statutes
-// so counsel can confirm the District offers no paper-will equivalent.
+// DELIBERATELY ABSENT: DC and MD. DC's § 18-908 is the Uniform ELECTRONIC Wills
+// Act and reaches electronic wills only; MD's § 4-102 prescribes affidavit forms
+// only inside its electronic / remotely-witnessed subsections (c)-(d). Neither
+// reaches the paper, wet-signature wills this product generates, so neither may be
+// used as a self-proving form. Both captures exist in docs/statutes so counsel can
+// confirm whether those jurisdictions offer any paper-will equivalent.
+//
+// ALSO ABSENT, for a different reason: IL and WV prescribe no form at all (see
+// docs/STATUTE_SOURCES.md), so they belong with the drafted_from_rule states.
 const EXTRACT = {
   // Most states open the form with the testator's declaration. Note "I," with no
   // following space: several statutes wrap immediately after the comma.
@@ -56,6 +61,7 @@ const EXTRACT = {
   SD: { from: "I,", to: "(b)" },
   UT: { from: "I,", to: "(2)" },
   ME: { from: "I,", to: "2." },
+  MA: { from: "I,", to: "(b) An attested will may be made self-proved" },
   MI: { from: "I,", to: "(2)" },
   WI: { from: "I,", to: "Two-step procedure" },
   // These open with the officer's venue block rather than the testator line.

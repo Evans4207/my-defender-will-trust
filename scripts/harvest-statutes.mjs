@@ -221,11 +221,16 @@ const SOURCES = [
     key: "self_proving_affidavit",
     citation: "W. Va. Code § 41-5-15",
     url: "https://code.wvlegislature.gov/41-5-15/",
-    startsWith: "41-5-15",
-    // WRONG CITATION (inherited from the seed): §41-5-15 is "Proof of will while
-    // testator living", not a self-proving affidavit provision. Needs research to
-    // find West Virginia's actual provision — do not draft against this.
-    blocked: "Inherited citation is wrong: §41-5-15 is 'Proof of will while testator living'. West Virginia's self-proving provision must be identified before capture.",
+    // The section HEADING ("Proof of will while testator living") is misleading and
+    // is what got this citation marked wrong earlier. The BODY is in fact West
+    // Virginia's witness-affidavit provision: attesting witnesses may swear an
+    // affidavit before an officer, and if preserved with the will it carries the
+    // same probative value as their live testimony. Two things counsel must see:
+    // it prescribes NO form ("such facts as would be required of them in testimony
+    // in court"), and the affidavit is INADMISSIBLE if the will is contested —
+    // materially weaker than a UPC self-proving affidavit.
+    startsWith: "41-5-15. Proof of will while testator living.",
+    endsBefore: "Previous",
   },
   // --- Batch 3 ----------------------------------------------------------------
   {
@@ -239,9 +244,15 @@ const SOURCES = [
     state: "IL",
     key: "self_proving_affidavit",
     citation: "755 ILCS 5/6-4",
-    url: "https://www.ilga.gov/legislation/ilcs/documents/075500050K6-4.htm",
-    startsWith: "Sec. 6-4",
-    blocked: "Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). Needs the current ilga.gov deep-link format for 755 ILCS 5/6-4.",
+    // ILGA was rebuilt: the old /legislation/ilcs/documents/*.htm deep links are
+    // gone (they soft-404). Sections are now served a whole article at a time from
+    // /legislation/ILCS/details with a SeqStart/SeqEnd range — this is Article VI.
+    url: "https://www.ilga.gov/legislation/ILCS/details?MajorTopic=&Chapter=&ActName=Probate%20Act%20of%201975.&ActID=2104&ChapterID=60&ChapAct=755+ILCS+5%2F&SeqStart=8200000&SeqEnd=10400000",
+    // NO PRESCRIBED FORM. 6-4(b) lets a witness's statements be made by testimony,
+    // by an attestation clause, or by affidavit, but nowhere prescribes wording —
+    // Illinois belongs with the drafted_from_rule states, not the Arizona pattern.
+    startsWith: "Sec. 6-4.",
+    endsBefore: "(755 ILCS 5/6-5)",
   },
   // --- Batch 4: states that publish their code as PDF ------------------------
   {
@@ -340,10 +351,16 @@ const SOURCES = [
     state: "MA",
     key: "self_proving_affidavit",
     citation: "Mass. G.L. c. 190B § 2-504",
-    url: "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleII/Chapter190B",
-    startsWith: "Section 2-504",
-    endsBefore: "Section 2-505",
-    blocked: "The chapter page is a table of contents only, and every section-level URL tried returns 404. Needs the current malegislature.gov deep-link format for c.190B § 2-504.",
+    // The section URL takes NO separator before the number ("/Section2-504");
+    // "/Section/2-504" and "/Section 2-504" are what 404'd previously.
+    url: "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleII/Chapter190B/Section2-504",
+    // En dashes, not hyphens: the page writes "Section 2&ndash;504. [Self&ndash;Proved
+    // Will.]" in the body while the page heading uses plain hyphens. Anchor on the
+    // body form. The section is last on the page, so the only available end marker
+    // is the start of the site footer — without it the capture swallows the
+    // sign-in/search chrome, which the gates do not catch on a long, real section.
+    startsWith: "Section 2–504. [Self–Proved Will.]",
+    endsBefore: "Site Information & Links",
   },
   {
     state: "DC",
@@ -359,19 +376,45 @@ const SOURCES = [
     render: true,
   },
   {
+    state: "MD",
+    key: "self_proving_affidavit",
+    // Maryland has NO self-proving affidavit for an ordinary paper will. § 4-102 is
+    // the execution provision; the only affidavit forms it prescribes sit inside
+    // subsections (c)/(d), which govern ELECTRONIC and remotely-witnessed wills.
+    // Structurally this is the DC problem again (see § 18-908 below): capture the
+    // governing section so counsel can confirm that a Maryland paper will simply
+    // cannot be made self-proved, rather than leaving Maryland as a silent gap.
+    citation: "Md. Code, Est. & Trusts § 4-102",
+    url: "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=get&section=4-102&enactments=false",
+    // Section numbers on this site are en-dashed: "§4–102." The section is last on
+    // the page, so bound it on the prev/next control that follows subsection (f) —
+    // unbounded, the capture runs on into the site's open-data footer.
+    startsWith: "§4–102.",
+    endsBefore: "PreviousNext",
+  },
+  {
     state: "NJ",
     key: "self_proving_affidavit",
     citation: "N.J.S.A. § 3B:3-4",
-    // PROVENANCE CAVEAT: no official New Jersey publisher was reachable — the
-    // legislature's own statute pages returned empty shells. This reads the
-    // statutory text from a commercial mirror, which is weaker provenance than
-    // every other source here. We take the statute text only, never the
-    // publisher's annotations, but counsel should verify this one against an
-    // official copy.
-    url: "https://law.justia.com/codes/new-jersey/title-3b/section-3b-3-4/",
+    // REVISED DIAGNOSIS (2026-08-05). The earlier note said no official New Jersey
+    // publisher was reachable. That is wrong: the official one is
+    // https://lis.njleg.state.nj.us — "New Jersey Statutes (Unannotated)", current
+    // through P.L.2025, c.346. It loads fine in a real browser.
+    //
+    // The actual blocker is its shape, not its availability. It is a Folio NXT
+    // frameset: content lives in a nested <frame>, there is no per-section URL, and
+    // the table of contents expands one level per server round-trip via JS handlers.
+    // The xhitlist query endpoint 500s and the search box ignores programmatic input.
+    //
+    // So this needs EITHER a puppeteer routine that walks the TOC (Statutes -> Title
+    // 3B -> chapter 3 -> 3B:3-4) and reads the document frame, OR a human to click
+    // through once and paste the resulting frame URL here. Do NOT fall back to the
+    // Justia mirror: it is behind Cloudflare and is weaker provenance than every
+    // other source in this file.
+    url: "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1?f=templates&fn=default.htm&vid=Publish:10.1048/Enu",
     startsWith: "3B:3-4",
     render: true,
-    blocked: "No official New Jersey publisher is reachable (the legislature's own statute pages return empty shells), and the commercial mirror sits behind a Cloudflare bot wall. Needs a hand-sourced capture.",
+    blocked: "Official publisher IS reachable (lis.njleg.state.nj.us, current through P.L.2025 c.346) but is a Folio NXT frameset with no per-section URL — content sits in a nested frame behind a JS-expanded TOC. Needs a TOC-walking fetch mode or a hand-sourced frame URL.",
   },
 ];
 
@@ -520,6 +563,12 @@ function htmlToText(html) {
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&sect;/g, "§")
     .replace(/&mdash;/g, "—")
+    // Massachusetts and Maryland write their section numbers and bracketed form
+    // headings with en dashes ("Section 2&ndash;504", "&sect;4&ndash;102"), and
+    // Massachusetts uses them inside the prescribed form itself. Leaving this
+    // undecoded writes a literal "&ndash;" into text we reproduce verbatim.
+    .replace(/&ndash;/g, "–")
+    .replace(/&lsquo;/g, "‘")
     .replace(/&rsquo;/g, "’")
     .replace(/&ldquo;/g, "“")
     .replace(/&rdquo;/g, "”")

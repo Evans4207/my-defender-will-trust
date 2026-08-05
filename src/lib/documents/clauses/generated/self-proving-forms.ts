@@ -111,6 +111,17 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "The State of ____________ County of ____________ Subscribed, sworn to and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________ and ____________, witnesses, this ____________ day of ____________ (Signed) ____________ ____________ (Official capacity of officer) [PL 2017, c. 402, Pt. A, §2 (NEW); PL 2019, c. 417, Pt. B, §14 (AFF).]"
     ]
   },
+  "MA": {
+    "citation": "Mass. G.L. c. 190B § 2-504",
+    "sourceUrl": "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleII/Chapter190B/Section2-504",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of , and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am 18 years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, , the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as [his] [her] will and that [he] [she] signs it willingly (or willingly directs another to sign for [him] [her]), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.",
+      "The State of ____________ County of ____________ Subscribed, sworn to and acknowledged before me by , the testator, and subscribed and sworn to before me by , and ____________, witness, this ____________ day of .",
+      "(Official capacity of officer)"
+    ]
+  },
   "MI": {
     "citation": "Mich. Comp. Laws § 700.2504",
     "sourceUrl": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-700-2504",
@@ -198,8 +209,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "____________ (OFFICIAL CAPACITY OF OFFICER) The affidavits of any such witnesses taken as provided by this section, whenever made, shall be accepted by the court as if it had been taken ore tenus before such court, notwithstanding that the officer did not attach or affix his official seal thereto. Any codicil that is self-proved under the provisions of this section that, by its terms, expressly confirms, ratifies, and republishes a will except as altered by the codicil shall have the effect of self-proving the will whether or not the will was so executed originally.",
       "1972, c. 116, § 64.1-87.1; 1977, c. 333; 1979, c. 322; 1983, c. 83; 1985, c. 429; 1986, c. 524; 1990, c. 64; 2012, c. 614.",
       "The chapters of the acts of assembly referenced in the historical citation at the end of this section may not constitute a comprehensive list of such chapters and may exclude chapters whose provisions have expired.",
-      "Section Code of Virginia Popular Names 2026 Updates Section Look Up Go Administrative Code Constitution of Virginia Charters Authorities Compacts Uncodified Acts Virginia Law Library The Code of Virginia, Constitution of Virginia, Charters, Authorities, Compacts and Uncodified Acts are available in both PDF and CSV formats.",
-      "Helpful Resources Virginia Code Commission Virginia Register of Regulations U.S. Constitution For Developers The Virginia Law website data is available via a web service.",
+      "Section Code of Virginia Popular Names 2026 Updates Section Look Up Go Administrative Code Constitution of Virginia Charters Authorities Compacts Uncodified Acts Sign In Username:",
       "Cancel LIS Home Lobbyist-in-a-Box Privacy Policy © Copyright Commonwealth of Virginia, ____________. All rights reserved. Site developed by the Division of Legislative Automated Systems (DLAS)."
     ]
   },
