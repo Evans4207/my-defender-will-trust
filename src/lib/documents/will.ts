@@ -2,6 +2,8 @@ import type { AssembledDocument, DocSection } from "./model";
 import { STATE_NAMES } from "@/lib/interview/states";
 import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
 import { perspective, isCouple, type AssembleOpts } from "./couples";
+import { selfProvingAffidavitFor } from "./clauses/self-proving-affidavit";
+import { needsAttorneyReview } from "./clause-provenance";
 
 /*
  * ⚠️ [ATTORNEY REVIEW REQUIRED] — Every clause below is PLACEHOLDER language for
@@ -215,16 +217,34 @@ export function assembleWill(opts: AssembleOpts): AssembledDocument {
   );
   sections.push({ heading: "Attestation", paragraphs: attestation });
 
-  // --- Self-proving affidavit (data-driven) ---
+  // --- Self-proving affidavit (data-driven; researched text where available) ---
+  // Resolved per state from the clause library. States with researched, cited
+  // text (see clauses/self-proving-affidavit.ts) get language drafted against
+  // that state's statute; every other state falls through to the conservative
+  // placeholder. Either way the text stays flagged for counsel until approved.
+  // Signature/notary block contributed by a researched clause, when there is one.
+  let clauseSignatureLines: string[] | null = null;
   if (ruleset.selfProvingAffidavit.available === true) {
-    sections.push({
-      heading: "Self-Proving Affidavit",
-      paragraphs: [
-        ruleset.selfProvingAffidavit.requiresNotary
-          ? `We, the testator and witnesses, being sworn before a notary public, declare that this Will was executed as attested. ${ATTORNEY_REVIEW_REQUIRED} (Notarization required in ${stateName}.)`
-          : `We, the witnesses, declare under penalty of perjury that this Will was executed as attested. ${ATTORNEY_REVIEW_REQUIRED} (${stateName} permits an unsworn declaration in lieu of notarization.)`,
-      ],
+    const clause = selfProvingAffidavitFor(ruleset.state, {
+      testatorName: signerName,
+      stateName,
+      witnessCount: ruleset.witnessesRequired,
+      requiresNotary: ruleset.selfProvingAffidavit.requiresNotary,
     });
+    const paragraphs = [...clause.paragraphs];
+    if (needsAttorneyReview(clause.provenance)) {
+      paragraphs.push(
+        clause.provenance.status === "researched"
+          ? `${ATTORNEY_REVIEW_REQUIRED} This affidavit is drafted to track ${clause.provenance.citation} and has not yet been approved by an attorney.`
+          : `${ATTORNEY_REVIEW_REQUIRED} (${ruleset.selfProvingAffidavit.requiresNotary ? `Notarization required in ${stateName}.` : `${stateName} may permit an unsworn declaration in lieu of notarization.`})`,
+      );
+    }
+    sections.push({ heading: "Self-Proving Affidavit", paragraphs });
+    // A researched clause supplies its own statute-specific execution block
+    // (notary wording, commission line, seal); prefer it over the generic block.
+    if (clause.provenance.status === "researched") {
+      clauseSignatureLines = clause.signatureLines;
+    }
   } else if (ruleset.selfProvingAffidavit.available === "uncertain") {
     sections.push({
       heading: "Self-Proving Affidavit",
@@ -239,7 +259,14 @@ export function assembleWill(opts: AssembleOpts): AssembledDocument {
   for (let i = 1; i <= ruleset.witnessesRequired; i++) {
     signatureLines.push(`Witness ${i} — signature / printed name / address`);
   }
-  if (
+  if (clauseSignatureLines) {
+    // Statute-specific execution block from the researched clause. Skip lines
+    // already emitted above so the testator/witnesses are not duplicated.
+    const seen = new Set(signatureLines);
+    for (const line of clauseSignatureLines) {
+      if (!seen.has(line)) signatureLines.push(line);
+    }
+  } else if (
     ruleset.selfProvingAffidavit.available === true &&
     ruleset.selfProvingAffidavit.requiresNotary
   ) {
