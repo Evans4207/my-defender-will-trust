@@ -29,8 +29,7 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-**32 of 36 registered sources capture cleanly**, covering 32 of the 46 launch
-states. **24 have verbatim clause text generated** (see
+**33 of 37 registered sources capture cleanly**, covering 33 jurisdictions. **24 have verbatim clause text generated** (see
 `docs/CLAUSE_RESEARCH_METHOD.md`).
 
 ### Prescribes a self-proving affidavit form (24 states)
@@ -80,6 +79,12 @@ what such an affidavit should say.
 | VT | 14 V.S.A. § 108 | 4,160ch |
 | WA | RCW § 11.20.020 | 1,879ch |
 
+### Captured but NOT usable as a form
+
+| Jurisdiction | Citation | Why |
+|---|---|---|
+| DC | D.C. Code § 18-908 | This is the Uniform **Electronic** Wills Act. It makes an *electronic* will self-proving and does not reach the paper, wet-signature wills this product generates. Captured so counsel can confirm the District has **no self-proving mechanism for paper wills at all** — which would mean a DC will cannot be self-proved and its witnesses must testify in probate. Deliberately excluded from clause generation. |
+
 ### Blocked (4)
 
 | State | Issue |
@@ -122,6 +127,11 @@ documents tracking the wrong model in eight states so far.
 an already-executed will self-proved. We generate the simultaneous-execution form
 only. Counsel is asked per state whether the after-the-fact variant should also be
 offered.
+
+**The District of Columbia may have no paper-will self-proving mechanism.** The
+only provision found is § 18-908, which is the Uniform Electronic Wills Act.
+If that reading is right, a DC customer's will cannot be made self-proved and the
+execution instructions for DC need to say so. **Please confirm.**
 
 **Statutory forms are being modernised.** Florida's captured form includes
 checkboxes for physical presence vs. online notarization. Any state's form may have

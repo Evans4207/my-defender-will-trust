@@ -39,6 +39,11 @@ const OUT = join(ROOT, "src/lib/documents/clauses/generated/self-proving-forms.t
  * style preamble; `to` bounds the form so trailing subsections, history notes and
  * cross-references are excluded.
  */
+//
+// DELIBERATELY ABSENT: DC. Its § 18-908 is the Uniform ELECTRONIC Wills Act and
+// reaches electronic wills only, so it must not be used as the self-proving form
+// for the paper wills this product generates. The capture exists in docs/statutes
+// so counsel can confirm the District offers no paper-will equivalent.
 const EXTRACT = {
   // Most states open the form with the testator's declaration. Note "I," with no
   // following space: several statutes wrap immediately after the comma.

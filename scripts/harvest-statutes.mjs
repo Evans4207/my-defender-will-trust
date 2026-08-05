@@ -346,6 +346,19 @@ const SOURCES = [
     blocked: "The chapter page is a table of contents only, and every section-level URL tried returns 404. Needs the current malegislature.gov deep-link format for c.190B § 2-504.",
   },
   {
+    state: "DC",
+    key: "self_proving_affidavit",
+    // IMPORTANT: this is the Uniform ELECTRONIC Wills Act. § 18-908 makes an
+    // ELECTRONIC will self-proving; it does not reach the paper, wet-signature
+    // wills this product generates. Captured so counsel can confirm the District
+    // has no self-proving mechanism for paper wills at all — which would mean a
+    // DC will cannot be self-proved and its witnesses must testify in probate.
+    citation: "D.C. Code § 18-908",
+    url: "https://code.dccouncil.gov/us/dc/council/code/sections/18-908",
+    startsWith: "§ 18–908. Electronic will attested",
+    render: true,
+  },
+  {
     state: "NJ",
     key: "self_proving_affidavit",
     citation: "N.J.S.A. § 3B:3-4",
