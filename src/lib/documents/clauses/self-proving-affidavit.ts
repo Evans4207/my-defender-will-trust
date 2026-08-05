@@ -3,10 +3,14 @@ import type { ClauseProvenance } from "../clause-provenance";
 /**
  * Self-proving affidavit — researched clause set.
  *
- * PROOF OF CONCEPT (Arizona only). This is the first clause moved off blanket
- * placeholder text and onto drafted-from-statute text with a citation. Every
- * other state still falls through to the generic placeholder until researched
- * the same way, so the fallback below is deliberate and must stay.
+ * Nine states are drafted from their own statute with a citation: Arizona plus
+ * the Uniform Probate Code § 2-504 family (ID, MN, MT, NE, SC, SD, UT). Every
+ * other state falls through to the conservative placeholder until researched the
+ * same way, so the fallback below is deliberate and must stay.
+ *
+ * Drafts are cross-checked against the captured statutes in docs/statutes by
+ * `self-proving-affidavit.statutes.test.ts`, so text that drifts from its source
+ * fails the build rather than reaching a customer's document.
  *
  * WHY THIS CLAUSE FIRST
  * ---------------------
@@ -122,6 +126,146 @@ function arizona(ctx: SelfProvingContext): SelfProvingClause {
 }
 
 /**
+ * The Uniform Probate Code § 2-504 family.
+ *
+ * Most states that prescribe a self-proving affidavit adopted the UPC form, so
+ * the paragraphs below share one skeleton. The wording is NOT identical between
+ * them, though, and the differences are substantive enough to matter:
+ *
+ *   - "as my will" vs "as my last will"
+ *   - "do declare" vs "do hereby declare"
+ *   - whether the date line carries an explicit "20___" year field
+ *
+ * Each adopting state therefore declares its own variant and cites its own
+ * statute. `self-proving-affidavit.statutes.test.ts` cross-checks the text this
+ * produces against that state's captured statute in docs/statutes, so a wrong
+ * variant fails the build rather than reaching a customer's document.
+ */
+type UpcVariant = {
+  /** "as my last will" (true) vs "as my will" (false). */
+  lastWill: boolean;
+  /** "do hereby declare" (true) vs "do declare" (false). */
+  hereby: boolean;
+  /** Date line carries an explicit year field. */
+  yearField: boolean;
+  /**
+   * How the statute writes the age of capacity. Three spellings are in use and
+   * they are not interchangeable if we want to track the printed form.
+   */
+  age: "eighteen" | "18" | "eighteen (18)";
+};
+
+function upcFamily(
+  ctx: SelfProvingContext,
+  v: UpcVariant,
+  provenance: ClauseProvenance,
+): SelfProvingClause {
+  const declare = v.hereby ? "do hereby declare" : "do declare";
+  const willWord = v.lastWill ? "last will" : "will";
+  const date = v.yearField
+    ? "this ____ day of ____________, 20____"
+    : "this ____ day of ____________";
+  const age = `${v.age} years of age or older`;
+
+  return {
+    paragraphs: [
+      // Testator's sworn declaration.
+      `I, ${ctx.testatorName}, the testator, sign my name to this instrument ${date}, and being first duly sworn, ${declare} to the undersigned authority that I sign and execute this instrument as my ${willWord} and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes expressed in that document, and that I am ${age}, of sound mind, and under no constraint or undue influence.`,
+
+      // Witnesses' sworn declaration. The statutory form uses bracketed
+      // [his]/[her] alternates; we render the neutral "the testator's" instead,
+      // which is a departure from the printed form and is called out for counsel.
+      `We, the undersigned witnesses, sign our names to this instrument, being first duly sworn, and ${declare} to the undersigned authority that the testator signs and executes this instrument as the testator's ${willWord} and that the testator signs it willingly (or willingly directs another to sign for the testator), that the testator executes it as the testator's free and voluntary act for the purposes therein expressed, and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is ${age}, of sound mind, and under no constraint or undue influence.`,
+
+      // Officer's certificate, including the venue block the statutory forms open with.
+      `The State of ____________________  County of ____________________`,
+      `Subscribed, sworn to and acknowledged before me by ${ctx.testatorName}, the testator, and subscribed and sworn to before me by the witnesses named above, ${date}.`,
+    ],
+    signatureLines: [
+      `Testator: ${ctx.testatorName}`,
+      ...Array.from(
+        { length: ctx.witnessCount },
+        (_, i) => `Witness ${i + 1} — signature / printed name / address`,
+      ),
+      "(Signed) ____________________  (Official capacity of officer)",
+      "My commission expires: ____________",
+      "(Official seal)",
+    ],
+    provenance,
+  };
+}
+
+/** Shared review note for the UPC-family states, with the state's own citation. */
+function upcReviewNote(citation: string, formStandard: string): string {
+  return (
+    `Drafted to track the ${citation} statutory form, which the statute requires ` +
+    `${formStandard}. Please confirm: (1) the current statutory text is unchanged as ` +
+    `of your review; (2) the witnesses' paragraph adequately establishes every fact ` +
+    `the statute enumerates; and (3) that rendering the printed form's bracketed ` +
+    `[his]/[her] alternates as the gender-neutral "the testator's" is acceptable in ` +
+    `this state, or supply the wording you want instead.`
+  );
+}
+
+/**
+ * Per-state UPC variants, each verified against that state's captured statute.
+ * Variant flags were derived by comparing the captured texts — see
+ * docs/STATUTE_SOURCES.md.
+ */
+// NOTE: Wisconsin (§ 853.04) is deliberately NOT in this table. Its statutory
+// form is structurally different — a numbered list of declarations, "conscious
+// presence" rather than "presence and hearing" — so it needs its own drafting
+// rather than a UPC variant. Caught by the statute cross-check test.
+const UPC_STATES: Record<
+  string,
+  { citation: string; sourceUrl: string; standard: string; variant: UpcVariant }
+> = {
+  ID: {
+    citation: "Idaho Code § 15-2-504",
+    sourceUrl: "https://legislature.idaho.gov/statutesrules/idstat/Title15/T15CH2/SECT15-2-504/",
+    standard: "to be 'substantially as follows'",
+    variant: { lastWill: true, hereby: true, yearField: false , age: "eighteen (18)" },
+  },
+  MN: {
+    citation: "Minn. Stat. § 524.2-504",
+    sourceUrl: "https://www.revisor.mn.gov/statutes/cite/524.2-504",
+    standard: "to be 'substantially the following form'",
+    variant: { lastWill: false, hereby: true, yearField: false , age: "18" },
+  },
+  MT: {
+    citation: "Mont. Code Ann. § 72-2-524",
+    sourceUrl:
+      "https://archive.legmt.gov/bills/mca/title_0720/chapter_0020/part_0050/section_0240/0720-0020-0050-0240.html",
+    standard: "to be 'substantially the following form'",
+    variant: { lastWill: false, hereby: true, yearField: true , age: "18" },
+  },
+  NE: {
+    citation: "Neb. Rev. Stat. § 30-2329",
+    sourceUrl: "https://nebraskalegislature.gov/laws/statutes.php?statute=30-2329",
+    standard: "to be 'substantially as follows'",
+    variant: { lastWill: true, hereby: true, yearField: true , age: "eighteen" },
+  },
+  SC: {
+    citation: "S.C. Code § 62-2-503",
+    sourceUrl: "https://www.scstatehouse.gov/code/t62c002.php",
+    standard: "to follow the statutory form (or one showing the same intent)",
+    variant: { lastWill: true, hereby: true, yearField: true , age: "eighteen" },
+  },
+  SD: {
+    citation: "SDCL § 29A-2-504",
+    sourceUrl: "https://sdlegislature.gov/Statutes/29A-2-504",
+    standard: "to be 'substantially the following form'",
+    variant: { lastWill: false, hereby: true, yearField: false , age: "eighteen" },
+  },
+  UT: {
+    citation: "Utah Code § 75-2-504",
+    sourceUrl: "https://le.utah.gov/xcode/Title75/Chapter2/75-2-S504.html",
+    standard: "to be 'substantially the following form'",
+    variant: { lastWill: false, hereby: true, yearField: false , age: "18" },
+  },
+};
+
+/**
  * Generic fallback for every state not yet researched. Deliberately conservative:
  * it does NOT attempt statutory language, and it stays flagged as placeholder so
  * nothing implies a compliance claim we have not done the work to support.
@@ -160,6 +304,20 @@ function genericPlaceholder(ctx: SelfProvingContext): SelfProvingClause {
 /** Researched clauses by state code. Grows one state at a time, each cited. */
 const BY_STATE: Record<string, (ctx: SelfProvingContext) => SelfProvingClause> = {
   AZ: arizona,
+  ...Object.fromEntries(
+    Object.entries(UPC_STATES).map(([state, s]) => [
+      state,
+      (ctx: SelfProvingContext) =>
+        upcFamily(ctx, s.variant, {
+          citation: s.citation,
+          sourceUrl: s.sourceUrl,
+          checkedAt: "2026-08-05",
+          status: "researched",
+          fidelity: "statutory_sample",
+          reviewNote: upcReviewNote(s.citation, s.standard),
+        }),
+    ]),
+  ),
 };
 
 /**

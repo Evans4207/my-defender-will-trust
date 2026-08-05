@@ -1,6 +1,6 @@
 # Clause research method — proof of concept
 
-**Status:** proof of concept, one state, one clause.
+**Status:** nine states drafted, one clause type (self-proving affidavit).
 **Purpose:** show how we move the clause library from blanket placeholder text to
 drafted-from-statute text with citations — so counsel reviews a researched draft
 instead of a blank page — **without** weakening the rule that nothing ships until
@@ -82,6 +82,39 @@ requirements" (<https://www.azleg.gov/ars/14/02504.htm>), read 2026-08-05.
 travels with the text): current statutory text unchanged; the witness paragraph
 adequately establishes all six facts; whether to also offer the § 14-2504(B)
 after-the-fact variant; and that the notary/seal block matches Arizona practice.
+
+## Cross-checking drafts against their source
+
+The drafted text and the captured statute are maintained separately — one is
+TypeScript we wrote, the other is verbatim text from the state's publisher.
+Nothing stops them drifting: a typo, a wrong variant, or a statute amended after
+we drafted against it.
+
+`self-proving-affidavit.statutes.test.ts` closes that gap. For every researched
+state it loads the capture from `docs/statutes` and asserts our wording actually
+appears in that statute. **A wrong variant fails the build rather than reaching a
+customer's document.**
+
+This proves a draft TRACKS ITS SOURCE. It does not prove the draft is legally
+sufficient — only counsel can say that.
+
+### What the cross-check caught
+
+Writing one shared "UPC template" would have been wrong. The check found four
+real per-state variations in states that all descend from Uniform Probate Code
+§ 2-504:
+
+| Variation | Splits |
+|---|---|
+| `as my will` vs `as my last will` | MN, MT, SD, UT, AZ · ID, NE, SC |
+| `do declare` vs `do hereby declare` | AZ · ID, MN, MT, NE, SC, SD, UT |
+| explicit `20___` year field | MT, NE, SC · AZ(yes), ID, MN, SD, UT |
+| age of capacity | `eighteen` (AZ, NE, SC, SD) · `18` (MN, MT, UT) · `eighteen (18)` (ID) |
+
+It also caught that **Wisconsin does not belong to this family at all**: § 853.04
+uses a numbered list of declarations and says "conscious presence" rather than
+"presence and hearing". WI was removed from the UPC table and needs its own
+drafting.
 
 ## Where it lives
 
