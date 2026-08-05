@@ -88,6 +88,9 @@ function arizona(ctx: SelfProvingContext): SelfProvingClause {
       `We, the undersigned ${witnessWord} witnesses, sign our names to this instrument and, being first duly sworn, do declare to the undersigned authority that the testator signs and executes this instrument as the testator's will, that the testator signs it willingly (or willingly directs another to sign for the testator), that each of us, in the presence and hearing of the testator, signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.`,
 
       // Officer's certificate — "substantially the following form" per § 14-2504(A).
+      // The statutory form opens with a venue block; omitting it is a defect a
+      // notary would catch, so it is reproduced here.
+      `The State of ____________________  County of ____________________`,
       `Subscribed, sworn to and acknowledged before me by ${ctx.testatorName}, the testator, and subscribed and sworn to before me by the witnesses named above, this ____ day of ____________, 20____.`,
     ],
     signatureLines: [
@@ -96,7 +99,7 @@ function arizona(ctx: SelfProvingContext): SelfProvingClause {
         { length: ctx.witnessCount },
         (_, i) => `Witness ${i + 1} — signature / printed name / address`,
       ),
-      "Officer (Notary Public) — signature and title",
+      "(Signed) ____________________  (Official capacity of officer)",
       "My commission expires: ____________",
       "(Official seal)",
     ],

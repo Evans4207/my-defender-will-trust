@@ -33,6 +33,7 @@ describe("self-proving affidavit clause library", () => {
     const c = selfProvingAffidavitFor("AZ", ctx);
     expect(c.paragraphs.join(" ")).toContain("Subscribed, sworn to and acknowledged");
     expect(c.signatureLines.join(" ")).toContain("Official seal");
+    expect(c.paragraphs.join(" ")).toContain("The State of");
   });
 
   it("scales the witness block to the state's required witness count", () => {
