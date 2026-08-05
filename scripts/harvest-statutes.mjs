@@ -80,7 +80,8 @@ const SOURCES = [
     citation: "Utah Code § 75-2-504",
     url: "https://le.utah.gov/xcode/Title75/Chapter2/75-2-S504.html",
     startsWith: "75-2-504",
-    blocked: "Statute text is rendered client-side; a plain fetch returns only the site nav. A PDF edition exists at le.utah.gov (…/C75-2-S504_*.pdf) and needs a PDF text extractor.",
+    // Statute text is rendered client-side; needs a real browser.
+    render: true,
   },
   {
     state: "SD",
@@ -88,7 +89,8 @@ const SOURCES = [
     citation: "SDCL § 29A-2-504",
     url: "https://sdlegislature.gov/Statutes/29A-2-504",
     startsWith: "29A-2-504",
-    blocked: "Single-page app — the server returns a JavaScript shell for both the page and the API path. Needs a headless browser.",
+    // Single-page app: the server returns a JS shell for page and API alike.
+    render: true,
   },
   {
     state: "MT",
@@ -110,13 +112,68 @@ const SOURCES = [
     key: "self_proving_affidavit",
     citation: "RCW § 11.20.020",
     url: "https://app.leg.wa.gov/rcw/default.aspx?cite=11.20.020",
-    startsWith: "RCW 11.20.020",
+    // Anchored on the section title: the bare section number also appears in
+    // breadcrumbs and link markup, which yields a capture of the site nav.
+    startsWith: "Application for probate",
     endsBefore: "[ ",
-    blocked: "Section body is rendered client-side; a plain fetch returns only the site navigation. Needs a headless browser.",
+    // Section body is rendered client-side.
+    render: true,
   },
 ];
 
 const UA = "Mozilla/5.0 (compatible; MDWT statute research; +legal form verification)";
+
+/** Chrome used only for sources that render their statute text client-side. */
+const CHROME_PATH =
+  process.env.CHROME_PATH ||
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+
+let browserPromise = null;
+/**
+ * Launch Chrome once and share it across all rendered sources. Started lazily so
+ * a run with no JS-gated sources never pays the startup cost.
+ */
+async function getBrowser() {
+  if (!browserPromise) {
+    browserPromise = (async () => {
+      const { default: puppeteer } = await import("puppeteer-core");
+      return puppeteer.launch({
+        executablePath: CHROME_PATH,
+        headless: "new",
+        args: ["--no-sandbox", "--disable-gpu"],
+      });
+    })();
+  }
+  return browserPromise;
+}
+
+/**
+ * Fetch a page with a real browser, for sites that ship a JavaScript shell and
+ * render the statute client-side. Slower and heavier than a plain fetch, so it
+ * is opt-in per source via `render: true` rather than the default.
+ */
+async function fetchRendered(url, waitForText) {
+  const browser = await getBrowser();
+  const page = await browser.newPage();
+  try {
+    await page.setUserAgent(UA);
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 45000 });
+    // The shell paints before the statute arrives, so wait for the section text
+    // itself rather than trusting a load event.
+    if (waitForText) {
+      await page
+        .waitForFunction(
+          (needle) => document.body.innerText.includes(needle),
+          { timeout: 20000 },
+          waitForText,
+        )
+        .catch(() => {}); // fall through — the content check will catch a miss
+    }
+    return await page.content();
+  } finally {
+    await page.close();
+  }
+}
 
 /**
  * Fetch a page as text, following redirects and honouring the page's charset.
@@ -313,7 +370,9 @@ async function harvest(src, { checkOnly }) {
 
   let raw;
   try {
-    raw = await fetchPage(src.url);
+    raw = src.render
+      ? await fetchRendered(src.url, src.startsWith)
+      : await fetchPage(src.url);
   } catch (err) {
     return { ...src, status: "FETCH_FAILED", detail: err.message };
   }
@@ -397,6 +456,8 @@ for (const src of targets) {
   results.push(r);
   console.log(`${r.state}  ${r.citation.padEnd(28)}  ${r.status}${r.detail ? "  — " + r.detail : ""}`);
 }
+
+if (browserPromise) await (await browserPromise).close();
 
 const blocked = results.filter((r) => r.status === "BLOCKED");
 const bad = results.filter(

@@ -29,34 +29,43 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
+All eight registered sources capture cleanly.
+
 | State | Citation | Status | Notes |
 |---|---|---|---|
-| AZ | A.R.S. § 14-2504 | ✅ captured | Sample form, substantial compliance. Clause drafted — see `clauses/self-proving-affidavit.ts` |
-| FL | Fla. Stat. § 732.503 | ✅ captured | Prescribed form captured in full, including the physical-presence / online-notarization checkboxes |
-| MT | Mont. Code Ann. § 72-2-524 | ✅ captured | Not yet drafted |
-| NV | NRS § 133.050 | ✅ captured | Declaration **or** affidavit variants; not yet drafted |
-| OR | ORS § 113.055 | ⚠️ captured, flagged | See finding below |
-| UT | Utah Code § 75-2-504 | ⛔ blocked | Text rendered client-side. A PDF edition exists and needs a PDF extractor |
-| SD | SDCL § 29A-2-504 | ⛔ blocked | Single-page app; server returns a JS shell for the page and the API path |
-| WA | RCW § 11.20.020 | ⛔ blocked | Section body rendered client-side |
+| AZ | A.R.S. § 14-2504 | ✅ | Sample form, substantial compliance. **Clause drafted** — see `clauses/self-proving-affidavit.ts` |
+| FL | Fla. Stat. § 732.503 | ✅ | Prescribed form captured in full, including physical-presence / online-notarization checkboxes |
+| MT | Mont. Code Ann. § 72-2-524 | ✅ | Prescribed form. Not yet drafted |
+| NV | NRS § 133.050 | ✅ | Declaration **or** affidavit variants. Not yet drafted |
+| SD | SDCL § 29A-2-504 | ✅ | Prescribed form (rendered). Not yet drafted |
+| UT | Utah Code § 75-2-504 | ✅ | Prescribed form (rendered). Not yet drafted |
+| OR | ORS § 113.055 | ⚠️ | No prescribed form — see finding |
+| WA | RCW § 11.20.020 | ⚠️ | No prescribed form — see finding |
 
-Blocked states are deliberately kept in the registry. A state we cannot capture is
-a **visible gap**, not one quietly dropped from the list.
+Three sources (UT, SD, WA) render their statute client-side and are captured with
+a headless browser (`render: true`). Chrome is launched lazily and shared, so runs
+with no JS-gated sources pay nothing for it.
 
 ## Findings worth counsel's attention
 
-**Oregon may not prescribe a form at all.** ORS 113.055 is headed *"Testimony of
-attesting witnesses to will"* and provides that an attesting witness's affidavit
-may be used **instead of the witness appearing in court**. It does not appear to
-prescribe a form on a "substantially the following form" basis the way Arizona and
-Florida do. If that reading is right, Oregon is `drafted_from_rule` rather than
-`statutory_sample`, and the drafting approach differs accordingly. **Flagged for
-counsel — do not assume the Arizona pattern transfers.**
+**Two distinct statutory models — the Arizona pattern does not transfer.**
+Arizona, Florida, Montana, South Dakota and Utah all prescribe a self-proving
+affidavit *form*. Oregon and Washington do not:
+
+- **ORS 113.055** — *"Testimony of attesting witnesses to will"*: an attesting
+  witness's affidavit may be used **instead of the witness appearing in court**.
+- **RCW 11.20.020** — *"Application for probate … Affidavits of attesting
+  witnesses"*: same shape, framed around the probate application.
+
+Both are affidavit-**in-lieu-of-testimony** provisions rather than prescribed
+forms. Under our model they are `drafted_from_rule`, not `statutory_sample`, and
+need a different drafting approach. **Flagged for counsel — please confirm this
+reading and advise what such an affidavit should say in each state.**
 
 **Statutory forms are being modernised.** Florida's captured form includes
 checkboxes for physical presence vs. online notarization. Any state's form may
-have been amended more recently than the citation we inherited, which is exactly
-what the content hash is for.
+have been amended since the citation we inherited — which is what the content hash
+is for.
 
 ## Quality gates in the harvester
 
