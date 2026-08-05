@@ -29,15 +29,17 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-**21 of 22 registered sources capture cleanly.** 46 states are available for
-launch, so this covers roughly half; the rest still need source URLs.
+**25 of 28 registered sources capture cleanly.** 46 states are available for
+launch, so this is a bit over half.
 
-### Prescribes a self-proving affidavit form (16 states)
+### Prescribes a self-proving affidavit form (18 states)
 
-These supply statutory form text a clause can be drafted against.
+Clause text for these is generated verbatim from the capture — see
+`docs/CLAUSE_RESEARCH_METHOD.md`.
 
 | State | Citation | Captured |
 |---|---|---|
+| AK | AS § 13.12.504 | 3,897ch |
 | AZ | A.R.S. § 14-2504 | 3,776ch |
 | DE | 12 Del. C. § 1305 | 2,238ch |
 | FL | Fla. Stat. § 732.503 | 2,105ch |
@@ -49,54 +51,53 @@ These supply statutory form text a clause can be drafted against.
 | MT | Mont. Code Ann. § 72-2-524 | 4,356ch |
 | NE | Neb. Rev. Stat. § 30-2329 | 4,756ch |
 | NV | NRS § 133.050 | 3,859ch |
+| PA | 20 Pa.C.S. § 3132.1 | 4,795ch |
 | SC | S.C. Code § 62-2-503 | 3,569ch |
 | SD | SDCL § 29A-2-504 | 4,875ch |
 | UT | Utah Code § 75-2-504 | 4,557ch |
 | VA | Va. Code § 64.2-452 | 5,131ch |
 | WI | Wis. Stat. § 853.04 | 6,702ch |
 
-### Different model — no prescribed form (5 states)
+### Different model — no prescribed form (7 states)
 
 **The Arizona pattern does not transfer to these.** Each provides for proving a
 will by witness affidavit *without* prescribing the affidavit's wording, so they
-are `drafted_from_rule`, not `statutory_sample`.
+are `drafted_from_rule`, not `statutory_sample`, and still need counsel's input on
+what such an affidavit should say.
 
 | State | Citation | Captured |
 |---|---|---|
 | CA | Cal. Prob. Code § 8220 | 897ch |
+| CT | Conn. Gen. Stat. § 45a-285 | 1,370ch |
 | NH | N.H. RSA § 551:2-a | 1,259ch |
 | OR | ORS § 113.055 | 1,663ch |
 | RI | R.I. Gen. Laws § 33-7-26 | 2,265ch |
+| VT | 14 V.S.A. § 108 | 4,160ch |
 | WA | RCW § 11.20.020 | 1,879ch |
 
-- **ORS 113.055** — witness affidavit used *instead of* the witness appearing in court
-- **RCW 11.20.020** — same shape, framed around the probate application
-- **Cal. Prob. Code § 8220** — how a will may be proved; no form prescribed
-- **N.H. RSA 551:2-a** — states what a self-proved signature block must establish
-- **R.I. Gen. Laws § 33-7-26** — proof of a purported will
-
-**Flagged for counsel: please confirm this reading, and advise what such an
-affidavit should say in each of these states.**
-
-### Blocked
+### Blocked (3)
 
 | State | Issue |
 |---|---|
-| WV | **Inherited citation is wrong.** W. Va. Code § 41-5-15 is *"Proof of will while testator living"* — not a self-proving provision. West Virginia's actual provision must be identified before capture. |
+| WV | **Inherited citation is wrong.** § 41-5-15 is *"Proof of will while testator living"*. West Virginia's actual provision must be identified. |
+| ND | **Inherited citation was wrong** — corrected here from § 30.1-08-03 (*Holographic will*) to **§ 30.1-08-04** (*Self-proved will*). The chapter page is a table of contents only; the text is PDF, so capture needs a PDF extractor. |
+| IL | Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). Needs the current ilga.gov deep-link format. |
 
-Three sources (UT, SD, WA) render their statute client-side and are captured with
-a headless browser (`render: true`). Chrome launches lazily and is shared, so runs
-with no JS-gated sources pay nothing for it.
+Six sources (UT, SD, WA, AK, VT, CT) render their statute client-side and are
+captured with a headless browser (`render: true`). Chrome launches lazily and is
+shared, so runs with no JS-gated sources pay nothing for it.
 
 ## Findings worth counsel's attention
 
-**One inherited citation was simply wrong** (WV, above). The citations in
-`supabase/seed.sql` came from earlier desk research and have not all been verified;
-capture is the first step that actually tests them against the published code.
+**Two inherited citations were wrong.** WV § 41-5-15 points at "Proof of will
+while testator living"; ND § 30.1-08-03 points at "Holographic will". Both came
+from earlier desk research in `supabase/seed.sql`. **Capture is the first step
+that actually tests a citation against the published code** — expect more of these
+as coverage grows, and treat the seed's remaining citations as unverified.
 
 **Two distinct statutory models exist** — see the tables above. Assuming every
 state follows the Arizona/Florida "prescribed form" pattern would have produced
-documents tracking the wrong model in five states so far.
+documents tracking the wrong model in seven states so far.
 
 **Statutory forms are being modernised.** Florida's captured form includes
 checkboxes for physical presence vs. online notarization. Any state's form may have

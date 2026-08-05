@@ -227,6 +227,60 @@ const SOURCES = [
     // find West Virginia's actual provision — do not draft against this.
     blocked: "Inherited citation is wrong: §41-5-15 is 'Proof of will while testator living'. West Virginia's self-proving provision must be identified before capture.",
   },
+  // --- Batch 3 ----------------------------------------------------------------
+  {
+    state: "PA",
+    key: "self_proving_affidavit",
+    citation: "20 Pa.C.S. § 3132.1",
+    url: "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/20/00.031.032.001..HTM",
+    startsWith: "3132.1",
+  },
+  {
+    state: "IL",
+    key: "self_proving_affidavit",
+    citation: "755 ILCS 5/6-4",
+    url: "https://www.ilga.gov/legislation/ilcs/documents/075500050K6-4.htm",
+    startsWith: "Sec. 6-4",
+    blocked: "Every ILGA URL tried returns a soft 404 (HTTP 404 with a full page body). Needs the current ilga.gov deep-link format for 755 ILCS 5/6-4.",
+  },
+  {
+    state: "ND",
+    key: "self_proving_affidavit",
+    // CORRECTED CITATION. The seed carried § 30.1-08-03, which is "Holographic
+    // will". North Dakota's self-proved will provision is § 30.1-08-04 (2-504).
+    citation: "N.D. Cent. Code § 30.1-08-04",
+    url: "https://ndlegis.gov/cencode/t30-1c08.html",
+    startsWith: "30.1-08-04",
+    endsBefore: "30.1-08-05",
+    blocked: "Citation corrected from the seed's § 30.1-08-03 (Holographic will) to § 30.1-08-04 (Self-proved will). The chapter page is a table of contents only; the section text is published as PDF, so capture needs a PDF extractor.",
+  },
+  {
+    state: "AK",
+    key: "self_proving_affidavit",
+    citation: "AS § 13.12.504",
+    url: "https://www.akleg.gov/basis/statutes.asp#13.12.504",
+    startsWith: "Sec. 13.12.504",
+    endsBefore: "Sec. 13.12.505",
+    render: true,
+  },
+  {
+    state: "VT",
+    key: "self_proving_affidavit",
+    citation: "14 V.S.A. § 108",
+    url: "https://legislature.vermont.gov/statutes/section/14/003/00108",
+    startsWith: "108.",
+    render: true,
+  },
+  {
+    state: "CT",
+    key: "self_proving_affidavit",
+    citation: "Conn. Gen. Stat. § 45a-285",
+    // § 45a-285 lives in chapter 802b (probate/administration), not 802a (wills).
+    url: "https://www.cga.ct.gov/current/pub/chap_802b.htm",
+    startsWith: "Sec. 45a-285",
+    endsBefore: "Sec. 45a-286",
+    render: true,
+  },
 ];
 
 const UA = "Mozilla/5.0 (compatible; MDWT statute research; +legal form verification)";

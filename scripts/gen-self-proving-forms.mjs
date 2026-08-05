@@ -59,6 +59,8 @@ const EXTRACT = {
   KS: { from: "State of", to: "History:" },
   NV: { from: "State of Nevada", to: "NRS 133.055" },
   VA: { from: "STATE OF VIRGINIA", to: "B." },
+  PA: { from: "I,", to: "(b)" },
+  AK: { from: "I,", to: "(b)" },
 };
 
 /**

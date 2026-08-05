@@ -202,5 +202,28 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "Helpful Resources Virginia Code Commission Virginia Register of Regulations U.S. Constitution For Developers The Virginia Law website data is available via a web service.",
       "Cancel LIS Home Lobbyist-in-a-Box Privacy Policy © Copyright Commonwealth of Virginia, ____________. All rights reserved. Site developed by the Division of Legislative Automated Systems (DLAS)."
     ]
+  },
+  "PA": {
+    "citation": "20 Pa.C.S. § 3132.1",
+    "sourceUrl": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/20/00.031.032.001..HTM",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator whose name is signed to the attached or foregoing instrument, having been duly qualified according to law, do hereby acknowledge that I signed and executed the instrument as my Last Will; and that I signed it willingly and as my free and voluntary act for the purposes therein expressed.",
+      "Sworn to or affirmed and acknowledged before me by ____________, the testator, this ____________ day of ____________, 19____________ ____________",
+      "____________ (Signature of officer or attorney) (Seal and official capacity of officer or state of admission of attorney) Affidavit Commonwealth of Pennsylvania (or State of ____________) County of ____________ We (or I), ____________ and ____________, the witness(es) whose name(s) are (is) signed to the attached or foregoing instrument, being duly qualified according to law, do depose and say that we were (I was) present and saw the testator sign and execute the instrument as his Last Will; that the testator signed willingly and executed it as his free and voluntary act for the purposes therein expressed; that each subscribing witness in the hearing and sight of the testator signed the will as a witness; and that to the best of our (my) knowledge the testator was at that time 18 or more years of age, of sound mind and under no constraint or undue influence.",
+      "Sworn to or affirmed and subscribed to before me by ____________ and ____________, witness(es), this ____________ day of ____________, 19____________ ____________",
+      "____________ ____________ (Signature of officer or attorney) (Seal and official capacity of officer or state of admission of attorney) (c) Acknowledgment and affidavit taken before an attorney at law.--The acknowledgment of the testator and the affidavit of a witness required by subsection"
+    ]
+  },
+  "AK": {
+    "citation": "AS § 13.12.504",
+    "sourceUrl": "https://www.akleg.gov/basis/statutes.asp#13.12.504",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes expressed in the will, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly (or willingly directs another to sign for the testator), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "State of ____________ Judicial DistrictSubscribed, sworn to, and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________, and ____________, witness, this ____________ day of ____________(Seal)",
+      "(Official capacity of officer)"
+    ]
   }
 };
