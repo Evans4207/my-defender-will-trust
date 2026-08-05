@@ -29,43 +29,78 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-All eight registered sources capture cleanly.
+**21 of 22 registered sources capture cleanly.** 46 states are available for
+launch, so this covers roughly half; the rest still need source URLs.
 
-| State | Citation | Status | Notes |
-|---|---|---|---|
-| AZ | A.R.S. § 14-2504 | ✅ | Sample form, substantial compliance. **Clause drafted** — see `clauses/self-proving-affidavit.ts` |
-| FL | Fla. Stat. § 732.503 | ✅ | Prescribed form captured in full, including physical-presence / online-notarization checkboxes |
-| MT | Mont. Code Ann. § 72-2-524 | ✅ | Prescribed form. Not yet drafted |
-| NV | NRS § 133.050 | ✅ | Declaration **or** affidavit variants. Not yet drafted |
-| SD | SDCL § 29A-2-504 | ✅ | Prescribed form (rendered). Not yet drafted |
-| UT | Utah Code § 75-2-504 | ✅ | Prescribed form (rendered). Not yet drafted |
-| OR | ORS § 113.055 | ⚠️ | No prescribed form — see finding |
-| WA | RCW § 11.20.020 | ⚠️ | No prescribed form — see finding |
+### Prescribes a self-proving affidavit form (16 states)
+
+These supply statutory form text a clause can be drafted against.
+
+| State | Citation | Captured |
+|---|---|---|
+| AZ | A.R.S. § 14-2504 | 3,776ch |
+| DE | 12 Del. C. § 1305 | 2,238ch |
+| FL | Fla. Stat. § 732.503 | 2,105ch |
+| ID | Idaho Code § 15-2-504 | 4,020ch |
+| KS | K.S.A. § 59-606 | 3,509ch |
+| ME | 18-C M.R.S. § 2-503 | 5,340ch |
+| MI | Mich. Comp. Laws § 700.2504 | 8,848ch |
+| MN | Minn. Stat. § 524.2-504 | 4,188ch |
+| MT | Mont. Code Ann. § 72-2-524 | 4,356ch |
+| NE | Neb. Rev. Stat. § 30-2329 | 4,756ch |
+| NV | NRS § 133.050 | 3,859ch |
+| SC | S.C. Code § 62-2-503 | 3,569ch |
+| SD | SDCL § 29A-2-504 | 4,875ch |
+| UT | Utah Code § 75-2-504 | 4,557ch |
+| VA | Va. Code § 64.2-452 | 5,131ch |
+| WI | Wis. Stat. § 853.04 | 6,702ch |
+
+### Different model — no prescribed form (5 states)
+
+**The Arizona pattern does not transfer to these.** Each provides for proving a
+will by witness affidavit *without* prescribing the affidavit's wording, so they
+are `drafted_from_rule`, not `statutory_sample`.
+
+| State | Citation | Captured |
+|---|---|---|
+| CA | Cal. Prob. Code § 8220 | 897ch |
+| NH | N.H. RSA § 551:2-a | 1,259ch |
+| OR | ORS § 113.055 | 1,663ch |
+| RI | R.I. Gen. Laws § 33-7-26 | 2,265ch |
+| WA | RCW § 11.20.020 | 1,879ch |
+
+- **ORS 113.055** — witness affidavit used *instead of* the witness appearing in court
+- **RCW 11.20.020** — same shape, framed around the probate application
+- **Cal. Prob. Code § 8220** — how a will may be proved; no form prescribed
+- **N.H. RSA 551:2-a** — states what a self-proved signature block must establish
+- **R.I. Gen. Laws § 33-7-26** — proof of a purported will
+
+**Flagged for counsel: please confirm this reading, and advise what such an
+affidavit should say in each of these states.**
+
+### Blocked
+
+| State | Issue |
+|---|---|
+| WV | **Inherited citation is wrong.** W. Va. Code § 41-5-15 is *"Proof of will while testator living"* — not a self-proving provision. West Virginia's actual provision must be identified before capture. |
 
 Three sources (UT, SD, WA) render their statute client-side and are captured with
-a headless browser (`render: true`). Chrome is launched lazily and shared, so runs
+a headless browser (`render: true`). Chrome launches lazily and is shared, so runs
 with no JS-gated sources pay nothing for it.
 
 ## Findings worth counsel's attention
 
-**Two distinct statutory models — the Arizona pattern does not transfer.**
-Arizona, Florida, Montana, South Dakota and Utah all prescribe a self-proving
-affidavit *form*. Oregon and Washington do not:
+**One inherited citation was simply wrong** (WV, above). The citations in
+`supabase/seed.sql` came from earlier desk research and have not all been verified;
+capture is the first step that actually tests them against the published code.
 
-- **ORS 113.055** — *"Testimony of attesting witnesses to will"*: an attesting
-  witness's affidavit may be used **instead of the witness appearing in court**.
-- **RCW 11.20.020** — *"Application for probate … Affidavits of attesting
-  witnesses"*: same shape, framed around the probate application.
-
-Both are affidavit-**in-lieu-of-testimony** provisions rather than prescribed
-forms. Under our model they are `drafted_from_rule`, not `statutory_sample`, and
-need a different drafting approach. **Flagged for counsel — please confirm this
-reading and advise what such an affidavit should say in each state.**
+**Two distinct statutory models exist** — see the tables above. Assuming every
+state follows the Arizona/Florida "prescribed form" pattern would have produced
+documents tracking the wrong model in five states so far.
 
 **Statutory forms are being modernised.** Florida's captured form includes
-checkboxes for physical presence vs. online notarization. Any state's form may
-have been amended since the citation we inherited — which is what the content hash
-is for.
+checkboxes for physical presence vs. online notarization. Any state's form may have
+been amended since the citation we inherited — which is what the content hash is for.
 
 ## Quality gates in the harvester
 

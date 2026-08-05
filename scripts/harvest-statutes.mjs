@@ -119,6 +119,114 @@ const SOURCES = [
     // Section body is rendered client-side.
     render: true,
   },
+  // --- Batch 2: launch states verified reachable + section marker present -----
+  {
+    state: "CA",
+    key: "self_proving_affidavit",
+    citation: "Cal. Prob. Code § 8220",
+    url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=8220",
+    startsWith: "8220.",
+  },
+  {
+    state: "DE",
+    key: "self_proving_affidavit",
+    citation: "12 Del. C. § 1305",
+    url: "https://delcode.delaware.gov/title12/c013/index.html",
+    // The page renders "§" on its own line, so anchor on the numbered title.
+    startsWith: "1305. Self-proved will.",
+    endsBefore: "1306.",
+  },
+  {
+    state: "ID",
+    key: "self_proving_affidavit",
+    citation: "Idaho Code § 15-2-504",
+    url: "https://legislature.idaho.gov/statutesrules/idstat/Title15/T15CH2/SECT15-2-504/",
+    startsWith: "15-2-504.",
+  },
+  {
+    state: "KS",
+    key: "self_proving_affidavit",
+    citation: "K.S.A. § 59-606",
+    url: "https://www.ksrevisor.org/statutes/chapters/ch59/059_006_0006.html",
+    // Anchored on the title: the bare number also appears in the nav breadcrumb.
+    startsWith: "Execution and attestation; self-proved wills",
+    endsBefore: "History:",
+  },
+  {
+    state: "ME",
+    key: "self_proving_affidavit",
+    citation: "18-C M.R.S. § 2-503",
+    url: "https://legislature.maine.gov/statutes/18-C/title18-Csec2-503.html",
+    startsWith: "2-503.",
+  },
+  {
+    state: "MI",
+    key: "self_proving_affidavit",
+    citation: "Mich. Comp. Laws § 700.2504",
+    url: "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-700-2504",
+    startsWith: "700.2504",
+  },
+  {
+    state: "MN",
+    key: "self_proving_affidavit",
+    citation: "Minn. Stat. § 524.2-504",
+    url: "https://www.revisor.mn.gov/statutes/cite/524.2-504",
+    startsWith: "524.2-504",
+  },
+  {
+    state: "NE",
+    key: "self_proving_affidavit",
+    citation: "Neb. Rev. Stat. § 30-2329",
+    url: "https://nebraskalegislature.gov/laws/statutes.php?statute=30-2329",
+    startsWith: "30-2329",
+  },
+  {
+    state: "NH",
+    key: "self_proving_affidavit",
+    citation: "N.H. RSA § 551:2-a",
+    url: "https://www.gencourt.state.nh.us/rsa/html/LVI/551/551-2-a.htm",
+    startsWith: "551:2-a",
+  },
+  {
+    state: "RI",
+    key: "self_proving_affidavit",
+    citation: "R.I. Gen. Laws § 33-7-26",
+    url: "https://webserver.rilegislature.gov/Statutes/TITLE33/33-7/33-7-26.htm",
+    startsWith: "33-7-26",
+  },
+  {
+    state: "SC",
+    key: "self_proving_affidavit",
+    citation: "S.C. Code § 62-2-503",
+    url: "https://www.scstatehouse.gov/code/t62c002.php",
+    startsWith: "62-2-503",
+    endsBefore: "SECTION 62-2-504",
+  },
+  {
+    state: "VA",
+    key: "self_proving_affidavit",
+    citation: "Va. Code § 64.2-452",
+    url: "https://law.lis.virginia.gov/vacode/title64.2/chapter4/section64.2-452/",
+    startsWith: "64.2-452",
+  },
+  {
+    state: "WI",
+    key: "self_proving_affidavit",
+    citation: "Wis. Stat. § 853.04",
+    url: "https://docs.legis.wisconsin.gov/statutes/statutes/853/i/04",
+    startsWith: "853.04",
+  },
+  {
+    state: "WV",
+    key: "self_proving_affidavit",
+    citation: "W. Va. Code § 41-5-15",
+    url: "https://code.wvlegislature.gov/41-5-15/",
+    startsWith: "41-5-15",
+    // WRONG CITATION (inherited from the seed): §41-5-15 is "Proof of will while
+    // testator living", not a self-proving affidavit provision. Needs research to
+    // find West Virginia's actual provision — do not draft against this.
+    blocked: "Inherited citation is wrong: §41-5-15 is 'Proof of will while testator living'. West Virginia's self-proving provision must be identified before capture.",
+  },
 ];
 
 const UA = "Mozilla/5.0 (compatible; MDWT statute research; +legal form verification)";

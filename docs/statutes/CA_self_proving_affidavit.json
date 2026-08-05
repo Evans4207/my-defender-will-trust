@@ -1,0 +1,13 @@
+{
+  "state": "CA",
+  "key": "self_proving_affidavit",
+  "citation": "Cal. Prob. Code § 8220",
+  "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PROB&sectionNum=8220",
+  "retrievedAt": "2026-08-05",
+  "hash": "df141e073a3682c6",
+  "chars": 897,
+  "warnings": [
+    "prescribed form"
+  ],
+  "text": "8220.\nUnless there is a contest of a will:\n(a) The will may be proved on the evidence of one of the subscribing witnesses only, if the evidence shows that the will was executed in all particulars as prescribed by law.\n(b) Evidence of execution of a will may be received by an affidavit of a subscribing witness to which there is attached a photographic copy of the will, or by an affidavit in the original will that includes or incorporates the attestation clause.\n(c) If no subscribing witness resides in the county, but the deposition of a witness can be taken elsewhere, the court may direct the deposition to be taken. On the examination, the court may authorize a photographic copy of the will to be made and presented to the witness, and the witness may be asked the same questions with respect to the photographic copy as if the original will were present.\n(Enacted by Stats. 1990, Ch. 79.)"
+}

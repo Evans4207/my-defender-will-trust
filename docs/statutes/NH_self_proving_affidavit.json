@@ -1,0 +1,13 @@
+{
+  "state": "NH",
+  "key": "self_proving_affidavit",
+  "citation": "N.H. RSA § 551:2-a",
+  "sourceUrl": "https://www.gencourt.state.nh.us/rsa/html/LVI/551/551-2-a.htm",
+  "retrievedAt": "2026-08-05",
+  "hash": "67a1eb020be39cd3",
+  "chars": 1259,
+  "warnings": [
+    "prescribed form"
+  ],
+  "text": "551:2-a Self-Proved Wills. \nI. To qualify as self-proved, the signatures of the testator and witnesses shall be followed by a sworn acknowledgment made before a notary public or justice of the peace or other official authorized to administer oaths in the place of execution, as follows:\nThe foregoing instrument was acknowledged before me this __________ (day) by ___ , the testator; ___ and ___ , the witnesses, who under oath do swear as follows:\n1. The testator signed the instrument as the testator's will or expressly directed another to sign for the testator.\n2. This was the testator's free and voluntary act for the purposes expressed in the will.\n3. Each witness signed at the request of the testator, in the testator's presence, and in the presence of the other witness.\n4. To the best of my knowledge, at the time of the signing the testator was at least 18 years of age, or if under 18 years was a married person, and was of sane mind and under no constraint or undue influence.\n__________________\nSignature\n__________________\nOfficial Capacity\nII. Any will meeting the requirements of RSA 551-A shall also qualify as self-proved and shall be allowed as such by the probate court.\nSource. 1983, 255:2. 1985, 200:2. 1999, 100:3, eff. Jan. 1, 2000."
+}
