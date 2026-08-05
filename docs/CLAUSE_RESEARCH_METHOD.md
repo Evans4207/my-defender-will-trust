@@ -1,6 +1,6 @@
 # Clause research method — proof of concept
 
-**Status:** nine states drafted, one clause type (self-proving affidavit).
+**Status:** 16 states, one clause type (self-proving affidavit), generated verbatim.
 **Purpose:** show how we move the clause library from blanket placeholder text to
 drafted-from-statute text with citations — so counsel reviews a researched draft
 instead of a blank page — **without** weakening the rule that nothing ships until
@@ -83,38 +83,53 @@ travels with the text): current statutory text unchanged; the witness paragraph
 adequately establishes all six facts; whether to also offer the § 14-2504(B)
 after-the-fact variant; and that the notary/seal block matches Arizona practice.
 
-## Cross-checking drafts against their source
+## Generated verbatim, not templated
 
-The drafted text and the captured statute are maintained separately — one is
-TypeScript we wrote, the other is verbatim text from the state's publisher.
-Nothing stops them drifting: a typo, a wrong variant, or a statute amended after
-we drafted against it.
-
-`self-proving-affidavit.statutes.test.ts` closes that gap. For every researched
-state it loads the capture from `docs/statutes` and asserts our wording actually
-appears in that statute. **A wrong variant fails the build rather than reaching a
-customer's document.**
-
-This proves a draft TRACKS ITS SOURCE. It does not prove the draft is legally
-sufficient — only counsel can say that.
-
-### What the cross-check caught
-
-Writing one shared "UPC template" would have been wrong. The check found four
-real per-state variations in states that all descend from Uniform Probate Code
-§ 2-504:
+The first pass hand-drafted these with per-state "variant" flags. Each new state
+added another flag and the cross-check kept finding more:
 
 | Variation | Splits |
 |---|---|
-| `as my will` vs `as my last will` | MN, MT, SD, UT, AZ · ID, NE, SC |
+| `as my will` vs `as my last will` | AZ, MN, MT, SD, UT · ID, NE, SC |
 | `do declare` vs `do hereby declare` | AZ · ID, MN, MT, NE, SC, SD, UT |
-| explicit `20___` year field | MT, NE, SC · AZ(yes), ID, MN, SD, UT |
-| age of capacity | `eighteen` (AZ, NE, SC, SD) · `18` (MN, MT, UT) · `eighteen (18)` (ID) |
+| explicit `20___` year field | AZ, MT, NE, SC · ID, MN, SD, UT |
+| age of capacity | `eighteen` · `18` · `eighteen (18)` (ID) |
+| purposes clause | `therein expressed` · `expressed in that document` (AZ) · `expressed in it` (MT) |
+| connector after "as my will" | `and that` · `, that` |
+| alternates | `(or willingly direct…)` vs `, or willingly direct…,` |
 
-It also caught that **Wisconsin does not belong to this family at all**: § 853.04
-uses a numbered list of declarations and says "conscious presence" rather than
-"presence and hearing". WI was removed from the UPC table and needs its own
-drafting.
+Plus bespoke clauses templating cannot express: South Carolina's
+under-eighteen-if-married provision, Maine's emancipated-minor provision,
+Wisconsin's numbered-list format, Michigan's plain-English rewrite.
+
+**Templating was fighting the data.** For a prescribed form the compliant text
+simply IS the statute's text, so `scripts/gen-self-proving-forms.mjs` now slices
+the form out of each captured statute and emits it as data
+(`clauses/generated/self-proving-forms.ts`). Differences between states stop being
+something we model — they are carried through.
+
+The only substitution is the testator's name into the form's first blank. Every
+other blank stays as the statute prints it: those are filled in by hand at signing.
+
+```bash
+npm run statutes:harvest    # refresh captures from the state publishers
+npm run statutes:forms      # regenerate clause text from those captures
+```
+
+## Cross-checking drafts against their source
+
+The generated text and the captured statute could still drift — a bad extraction
+boundary, or a statute amended after generation.
+`self-proving-affidavit.statutes.test.ts` guards that: for every state it loads
+the capture and requires **every fixed run of drafted prose to appear verbatim in
+the statute.** Anything invented shows up as a run that is not in the source.
+
+Spot-checking known phrases was not enough; that weaker version missed the
+"therein expressed" divergence entirely. The run-based check caught it, plus four
+more in states already believed correct.
+
+This proves the text TRACKS ITS SOURCE. It does not prove legal sufficiency —
+only counsel can say that.
 
 ## Where it lives
 

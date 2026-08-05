@@ -42,6 +42,12 @@ function loadStatute(state: string): string | null {
   return normalize(JSON.parse(readFileSync(p, "utf8")).text);
 }
 
+function loadCitation(state: string): string | null {
+  const p = join(STATUTES_DIR, `${state}_self_proving_affidavit.json`);
+  if (!existsSync(p)) return null;
+  return JSON.parse(readFileSync(p, "utf8")).citation;
+}
+
 const ctx = {
   testatorName: "Jane Doe",
   stateName: "Test State",
@@ -78,10 +84,13 @@ describe("researched clauses track their source statute", () => {
       const statute = loadStatute(state);
       if (!statute) return; // reported by the test above
 
-      it("cites a statute whose text we actually captured", () => {
+      it("cites the same statute the capture records", () => {
+        // Compare against the capture's own citation rather than hunting the
+        // section number in the body: some captures are anchored on the section
+        // TITLE (the bare number also appears in site navigation), so the number
+        // legitimately does not appear in the captured text.
         const clause = selfProvingAffidavitFor(state, ctx);
-        const section = clause.provenance.citation.replace(/^.*§\s*/, "").split("(")[0];
-        expect(normalize(statute)).toContain(normalize(section));
+        expect(clause.provenance.citation).toBe(loadCitation(state));
       });
 
       it("uses only wording that appears in the statute", () => {
@@ -95,6 +104,38 @@ describe("researched clauses track their source statute", () => {
             phrase,
           );
         }
+      });
+
+      /**
+       * The strong check. Spot-checking known phrases only catches wording we
+       * thought to list; it missed, for example, that most states close with "for
+       * the purposes THEREIN EXPRESSED" while our template said "expressed in that
+       * document".
+       *
+       * So instead: take the drafted testator paragraph, cut it at the variable
+       * parts (the testator's name and the date blanks), and require every
+       * remaining run of prose to appear verbatim in the statute. Any wording we
+       * invented shows up as a run that is not in the source.
+       */
+      it("every fixed run of drafted prose appears verbatim in the statute", () => {
+        const clause = selfProvingAffidavitFor(state, ctx);
+        const testatorPara = normalize(clause.paragraphs[0]);
+
+        const runs = testatorPara
+          // Cut at the values we substitute in: the name and the blanks.
+          .split(/jane doe|\b20\b|\bthis\b\s+\bday of\b/)
+          .map((r) => r.replace(/^[\s,.;:]+|[\s,.;:]+$/g, "").trim())
+          // Ignore fragments too short to be meaningful evidence.
+          .filter((r) => r.length >= 25);
+
+        expect(runs.length, `${state}: no comparable prose runs`).toBeGreaterThan(0);
+
+        const missing = runs.filter((r) => !statute.includes(r));
+        expect(
+          missing,
+          `${state}: drafted wording not found in ${clause.provenance.citation}:\n` +
+            missing.map((m) => `  • "${m}"`).join("\n"),
+        ).toEqual([]);
       });
 
       it("matches the statute on the will / last will variant", () => {

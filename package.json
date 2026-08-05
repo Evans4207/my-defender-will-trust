@@ -16,7 +16,8 @@
     "db:seed": "psql \"$SUPABASE_DB_URL\" -f supabase/seed.sql",
     "db:types": "supabase gen types typescript --linked > src/lib/supabase/types.ts",
     "statutes:harvest": "node scripts/harvest-statutes.mjs",
-    "statutes:check": "node scripts/harvest-statutes.mjs --check"
+    "statutes:check": "node scripts/harvest-statutes.mjs --check",
+    "statutes:forms": "node scripts/gen-self-proving-forms.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
