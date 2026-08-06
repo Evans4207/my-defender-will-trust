@@ -60,16 +60,37 @@ describe("assembleWill — conditional clauses", () => {
     expect(headings(noMinor.sections).some((h) => h.includes("Guardian"))).toBe(false);
   });
 
+  // These two cover the GENERIC fallback, which is used only by states that have
+  // no verbatim statutory form of their own. They must therefore name such a
+  // state: California prescribes no form (Cal. Prob. Code § 8220 provides for
+  // proof by affidavit without prescribing its wording), so it stays on the
+  // fallback permanently. Previously these used the TX fixture and passed only
+  // because Texas had not been researched yet — once § 251.1045 was captured, its
+  // verbatim form correctly took precedence and these silently stopped testing
+  // the fallback at all.
   it("renders the notarized self-proving affidavit when required", () => {
-    const d = assembleWill({ answers, ruleset: ruleset({ selfProvingAffidavit: { available: true, requiresNotary: true } }) });
+    const d = assembleWill({
+      answers,
+      ruleset: ruleset({ state: "CA", selfProvingAffidavit: { available: true, requiresNotary: true } }),
+    });
     const sp = d.sections.find((s) => s.heading.includes("Self-Proving"));
     expect(sp?.paragraphs.join(" ")).toContain("notary");
   });
 
   it("renders the unsworn declaration when notary is not required", () => {
-    const d = assembleWill({ answers, ruleset: ruleset({ selfProvingAffidavit: { available: true, requiresNotary: false } }) });
+    const d = assembleWill({
+      answers,
+      ruleset: ruleset({ state: "CA", selfProvingAffidavit: { available: true, requiresNotary: false } }),
+    });
     const sp = d.sections.find((s) => s.heading.includes("Self-Proving"));
     expect(sp?.paragraphs.join(" ")).toContain("penalty of perjury");
+  });
+
+  it("prefers a state's own verbatim statutory form over the generic fallback", () => {
+    const d = assembleWill({ answers, ruleset: ruleset({ state: "TX" }) });
+    const sp = d.sections.find((s) => s.heading.includes("Self-Proving"));
+    // § 251.1045's own opening words, which the generic fallback never produces.
+    expect(sp?.paragraphs.join(" ")).toContain("as testator, after being duly sworn");
   });
 
   it("scales the number of witness signature lines with the ruleset", () => {

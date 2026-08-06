@@ -57,7 +57,13 @@ describe("self-proving affidavit clause library", () => {
 
   it("reports researched states and renders an audit line", () => {
     expect(researchedStates()).toContain("AZ");
-    const line = provenanceLine(selfProvingAffidavitFor("AZ", ctx).provenance);
-    expect(line).toMatch(/14-2504.*researched.*statutory sample.*2026-08-05/);
+    const prov = selfProvingAffidavitFor("AZ", ctx).provenance;
+    const line = provenanceLine(prov);
+    // The retrieval date is asserted against the capture's own value, not a
+    // literal. Hardcoding it made this test fail every time the harvester ran.
+    expect(prov.checkedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(line).toMatch(
+      new RegExp(`14-2504.*researched.*statutory sample.*${prov.checkedAt}`),
+    );
   });
 });

@@ -29,15 +29,20 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-**37 of 38 registered sources capture cleanly**, covering 37 jurisdictions. **25 have verbatim clause text generated** (see
+**42 of 43 registered sources capture cleanly**, covering 42 jurisdictions. **29 have verbatim clause text generated** (see
 `docs/CLAUSE_RESEARCH_METHOD.md`).
 
-Still entirely unregistered — no capture attempted yet: **AL, AR, GA, IN, KY, MS,
-NM, TN** (official sites render client-side with no stable per-section URL) and
-**LA, MO, NC, OH, TX** (the five states not offered for sale). Coverage is not
-complete until those are resolved or consciously scoped out.
+**Target is 50 jurisdictions** — 50 states + DC, less Louisiana (owner decision,
+2026-08-05: LA's civil-law will formalities need their own treatment rather than
+being forced through this pipeline). MO/NC/OH/TX are researched even though they
+are not currently offered for sale, so switching a state on later is a config
+change rather than a fresh research project.
 
-### Prescribes a self-proving affidavit form (25 states)
+Still entirely unregistered — no capture attempted yet: **AL, AR, GA, IN, MS, NM,
+TN** (official sites render client-side with no stable per-section URL).
+With NJ blocked, that is **8 jurisdictions short of the target.**
+
+### Prescribes a self-proving affidavit form (29 states)
 
 | State | Citation | Captured |
 |---|---|---|
@@ -50,11 +55,14 @@ complete until those are resolved or consciously scoped out.
 | IA | Iowa Code § 633.279 | 4,694ch |
 | ID | Idaho Code § 15-2-504 | 4,020ch |
 | KS | K.S.A. § 59-606 | 3,509ch |
+| KY | KRS § 394.225 | 4,648ch |
 | MA | Mass. G.L. c. 190B § 2-504 | 3,283ch |
 | ME | 18-C M.R.S. § 2-503 | 5,340ch |
 | MI | Mich. Comp. Laws § 700.2504 | 8,848ch |
 | MN | Minn. Stat. § 524.2-504 | 4,188ch |
+| MO | Mo. Rev. Stat. § 474.337 | 2,173ch |
 | MT | Mont. Code Ann. § 72-2-524 | 4,356ch |
+| NC | N.C.G.S. § 31-11.6 | 4,675ch |
 | ND | N.D. Cent. Code § 30.1-08-04 | 3,910ch |
 | NE | Neb. Rev. Stat. § 30-2329 | 4,756ch |
 | NV | NRS § 133.050 | 3,859ch |
@@ -62,6 +70,7 @@ complete until those are resolved or consciously scoped out.
 | PA | 20 Pa.C.S. § 3132.1 | 4,795ch |
 | SC | S.C. Code § 62-2-503 | 3,569ch |
 | SD | SDCL § 29A-2-504 | 4,875ch |
+| TX | Tex. Est. Code § 251.1045 | 2,475ch |
 | UT | Utah Code § 75-2-504 | 4,557ch |
 | VA | Va. Code § 64.2-452 | 5,131ch |
 | WI | Wis. Stat. § 853.04 | 6,702ch |
@@ -93,6 +102,7 @@ what such an affidavit should say.
 |---|---|---|
 | DC | D.C. Code § 18-908 | This is the Uniform **Electronic** Wills Act. It makes an *electronic* will self-proving and does not reach the paper, wet-signature wills this product generates. Captured so counsel can confirm the District has **no self-proving mechanism for paper wills at all** — which would mean a DC will cannot be self-proved and its witnesses must testify in probate. Deliberately excluded from clause generation. |
 | MD | Md. Code, Est. & Trusts § 4-102 | **The same shape as DC.** § 4-102 is the execution provision; the only affidavit forms it prescribes sit inside subsections (c)–(d), which govern **electronic and remotely-witnessed** wills. Maryland appears to have **no self-proving affidavit for an ordinary paper will**. Captured and deliberately excluded from clause generation. **Please confirm.** |
+| OH | Ohio Rev. Code § 2107.18 | **Ohio has no self-proving affidavit at all** — ORC ch. 2107 (Wills) contains not one occurrence of "affidavit" or "self-prov". It appears not to need one: § 2107.18 directs the probate court to admit a will **"if it appears from the face of the will"**, taking witness testimony only "in its discretion". Captured as the provision that does the work a self-proving affidavit does elsewhere. This is the only capture carrying an `absentProvision` waiver (see below). **Please confirm that no affidavit should be produced for Ohio.** |
 
 ### Blocked (1)
 
@@ -113,8 +123,23 @@ what such an affidavit should say.
 | Method | States |
 |---|---|
 | Plain fetch | most |
-| Headless browser (`render: true`) | UT, SD, WA, AK, VT, CT, HI, NY |
-| PDF text extraction (`pdf: true`) | CO, IA, ND, OK, WY |
+| Headless browser (`render: true`) | UT, SD, WA, AK, VT, CT, HI, NY, TX |
+| PDF text extraction (`pdf: true`) | CO, IA, KY, ND, OK, WY |
+
+Kentucky is worth a note: it serves every section as a **PDF behind an opaque
+numeric id**, with no section-number URL at all. KRS 394.225 is `id=36262`, found
+by reading the chapter-394 listing at `chapter.aspx?id=39195`. Guessing ids is
+useless — a nearby id returned the agritourism statute.
+
+### The `absentProvision` escape hatch
+
+The content smoke test assumes a capture for `self_proving_affidavit` will *look*
+like a self-proving affidavit statute. For Ohio that assumption is false in a way
+that matters: the absence **is** the finding. A source may therefore set
+`absentProvision: "<reason>"`, which waives the `WRONG_CONTENT` refusal and writes
+the reason into the capture, so the exception is recorded rather than silent. The
+missing-hallmark `warnings` are still stored. **Use it only where a jurisdiction
+genuinely has no such provision — never to force through a bad capture.**
 
 PDF text arrives as positioned glyph runs, not words, so joining it naively yields
 "PROBA TE CODE" and "F ormal". Lines are rebuilt from glyph positions: a new line
@@ -146,10 +171,18 @@ the will."* A UPC self-proving affidavit is worth the most precisely when the wi
 **Counsel should confirm what, if anything, we should tell a West Virginia customer
 about it.**
 
-**Maryland may be a second District-of-Columbia problem.** See the table above:
-its only prescribed affidavit forms live in the electronic / remotely-witnessed
-subsections. That would make two jurisdictions where a paper will cannot be made
-self-proved at all.
+**Three jurisdictions may offer no paper-will self-proving mechanism at all — for
+two different reasons.** DC and MD prescribe affidavit forms only for *electronic*
+or remotely-witnessed wills, so a paper will appears to fall through the gap. Ohio
+is different in kind: it has no affidavit provision because § 2107.18 lets the
+probate court admit a will on its face, making one largely unnecessary. **The
+execution instructions for these three need to say something different from every
+other state, and counsel should confirm what.**
+
+**Texas prints two forms and we take the second.** § 251.104 is the affidavit
+annexed to an already-executed will; § 251.1045 is the simultaneous
+execution/attestation/self-proving form. We generate § 251.1045, consistent with
+the simultaneous-execution convention used for every other state.
 
 **Two distinct statutory models exist** — see the tables above. Assuming every
 state follows the Arizona/Florida "prescribed form" pattern would have produced

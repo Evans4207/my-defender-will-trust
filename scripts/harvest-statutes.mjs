@@ -375,6 +375,76 @@ const SOURCES = [
     startsWith: "§ 18–908. Electronic will attested",
     render: true,
   },
+  // --- Batch 6: four of the five states not offered for sale, plus KY ----------
+  // Owner decision 2026-08-05: research all 50 jurisdictions except Louisiana,
+  // whose civil-law will formalities need their own treatment. MO/NC/OH/TX are
+  // researched here even though they are not currently sold, so that turning a
+  // state on later is a config change rather than a fresh research project.
+  {
+    state: "NC",
+    key: "self_proving_affidavit",
+    citation: "N.C.G.S. § 31-11.6",
+    url: "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_31/GS_31-11.6.html",
+    startsWith: "§ 31-11.6.",
+    // Bound before the trailing session-law history note.
+    endsBefore: "(1977, c. 795",
+  },
+  {
+    state: "MO",
+    key: "self_proving_affidavit",
+    citation: "Mo. Rev. Stat. § 474.337",
+    url: "https://revisor.mo.gov/main/OneSection.aspx?section=474.337",
+    startsWith: "474.337.",
+    endsBefore: "(L. 1980",
+  },
+  {
+    state: "TX",
+    key: "self_proving_affidavit",
+    // TWO FORMS, and we take the second. § 251.104 is the affidavit annexed to an
+    // already-executed will; § 251.1045 is the simultaneous execution/attestation/
+    // self-proving form, which matches what this product generates and is the
+    // convention used for every other state here.
+    citation: "Tex. Est. Code § 251.1045",
+    // /Docs/ES/htm/ES.251.htm 302s to a client-rendered chapter view, so a plain
+    // fetch gets the site shell and nothing else.
+    url: "https://statutes.capitol.texas.gov/Docs/ES/htm/ES.251.htm",
+    startsWith: "Sec. 251.1045.",
+    endsBefore: "Added by Acts",
+    render: true,
+  },
+  {
+    state: "OH",
+    key: "self_proving_affidavit",
+    // OHIO HAS NO SELF-PROVING AFFIDAVIT — and appears not to need one. Chapter
+    // 2107 (Wills) contains ZERO occurrences of "affidavit" or "self-prov".
+    // Instead § 2107.18 lets the probate court admit a will "if it appears from the
+    // face of the will", taking witness testimony only "in its discretion". So the
+    // provision that does the work a self-proving affidavit does elsewhere is the
+    // probate-admission section, which is what we capture.
+    // (A web search asserted Ohio's provision was "ORC 2107.24". It is not —
+    // 2107.24 is the harmless-error / document-treated-as-a-will section.)
+    citation: "Ohio Rev. Code § 2107.18",
+    url: "https://codes.ohio.gov/ohio-revised-code/section-2107.18",
+    startsWith: "The probate court shall admit a will to probate",
+    endsBefore: "Available Versions",
+    // The smoke test looks for the hallmarks of a self-proving affidavit statute
+    // and would refuse this capture as WRONG_CONTENT. Here their absence IS the
+    // finding, so the refusal is waived — with the reason recorded in the capture.
+    absentProvision:
+      "Ohio has no self-proving affidavit statute; ORC ch. 2107 contains no 'affidavit' or 'self-prov' text. § 2107.18 admits a will on the face of the will, with witness testimony only at the court's discretion.",
+  },
+  {
+    state: "KY",
+    key: "self_proving_affidavit",
+    citation: "KRS § 394.225",
+    // Kentucky serves each section as a PDF behind an opaque numeric id; there is
+    // no section-number URL. 394.225 ("Self-proved will") is id=36262, found from
+    // the chapter 394 listing at chapter.aspx?id=39195.
+    url: "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=36262",
+    startsWith: "394.225",
+    endsBefore: "Effective:",
+    pdf: true,
+  },
   {
     state: "MD",
     key: "self_proving_affidavit",
@@ -712,6 +782,20 @@ function looksLikeNavigation(text) {
 
 const sha = (s) => createHash("sha256").update(s, "utf8").digest("hex").slice(0, 16);
 
+/**
+ * Today's date on the LOCAL calendar, as YYYY-MM-DD.
+ *
+ * Deliberately not `toISOString().slice(0, 10)`, which is UTC: run after ~17:00
+ * Pacific and every capture gets stamped with TOMORROW's date. "Retrieved on" is a
+ * provenance fact an attorney reads off the packet, and a statute captured on a
+ * date that has not happened yet is indefensible.
+ */
+function localDate() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
 async function harvest(src, { checkOnly }) {
   if (src.blocked) return { ...src, status: "BLOCKED", detail: src.blocked };
 
@@ -743,7 +827,7 @@ async function harvest(src, { checkOnly }) {
     return { ...src, status: "NAVIGATION", detail: "captured site menu, not statute — fix markers" };
   }
   const warnings = contentWarnings(src.key, text);
-  if (warnings.length >= 2) {
+  if (warnings.length >= 2 && !src.absentProvision) {
     // Missing most of the hallmarks means this is very likely the wrong section
     // or a page of navigation. Refuse it rather than write a bad source file.
     return {
@@ -773,12 +857,16 @@ async function harvest(src, { checkOnly }) {
         key: src.key,
         citation: src.citation,
         sourceUrl: src.url,
-        retrievedAt: new Date().toISOString().slice(0, 10),
+        retrievedAt: localDate(),
         hash,
         chars: text.length,
         // Non-empty means a hallmark of this statute type was not found; a human
         // must confirm the capture is the right section before drafting from it.
         warnings,
+        // Set only where the jurisdiction has NO provision of this type at all, so
+        // the capture is deliberately of the section that governs instead. Carries
+        // the reason into the capture so the exception is never silent.
+        ...(src.absentProvision ? { absentProvision: src.absentProvision } : {}),
         // Verbatim statutory text. Do not hand-edit — re-run the harvester.
         text,
       },

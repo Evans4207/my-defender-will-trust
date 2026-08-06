@@ -101,6 +101,17 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "____________ (Official capacity of officer)"
     ]
   },
+  "KY": {
+    "citation": "KRS § 394.225",
+    "sourceUrl": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=36262",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, 19____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his last will and that he signs it willingly (or willingly directs another to sign for him), and that each of us, in the presence and hearing of the testator and in the presence of the other subscribing witness, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.",
+      "THE STATE OF ____________ COUNTY OF ____________ Subscribed, sworn to and acknowledged before me by ____________, the testator and subscribed and sworn to before me by ____________, and ____________, witnesses, this ____________ day of ____________",
+      "(OFFICIAL CAPACITY OF OFFICER)"
+    ]
+  },
   "ME": {
     "citation": "18-C M.R.S. § 2-503",
     "sourceUrl": "https://legislature.maine.gov/statutes/18-C/title18-Csec2-503.html",
@@ -133,6 +144,28 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "and, to the best of our knowledge, the testator is 18 years of age or older, is under no constraint or undue influence, and has sufficient mental capacity to make this will.",
       "The State of ____________ County of ____________ Sworn to and signed in my presence by ____________, the testator, and sworn to and signed in my presence by ____________ and ____________, witnesses, on ____________, ____________ month/day year ____________",
       "____________ (official capacity of officer)"
+    ]
+  },
+  "NC": {
+    "citation": "N.C.G.S. § 31-11.6",
+    "sourceUrl": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_31/GS_31-11.6.html",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, ____________ and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "We ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his last will and that he signs it willingly (or willingly directs another to sign for him), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
+      "THE STATE OF ____________ COUNTY OF ____________ Subscribed, sworn to and acknowledged before me by ____________ the testator and subscribed and sworn to before me by ____________ and ____________, witnesses, this ____________ day of ____________",
+      "(OFFICIAL CAPACITY OF OFFICER)\""
+    ]
+  },
+  "TX": {
+    "citation": "Tex. Est. Code § 251.1045",
+    "sourceUrl": "https://statutes.capitol.texas.gov/Docs/ES/htm/ES.251.htm",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "I, ____________, as testator, after being duly sworn, declare to the undersigned witnesses and to the undersigned authority that this instrument is my will, that I willingly make and execute it in the presence of the undersigned witnesses, all of whom are present at the same time, as my free act and deed, and that I request each of the undersigned witnesses to sign this will in my presence and in the presence of each other. I now sign this will in the presence of the attesting witnesses and the undersigned authority on this ____________ day of ____________, 20____________ ____________",
+      "The undersigned, ____________ and ____________, each being at least fourteen years of age, after being duly sworn, declare to the testator and to the undersigned authority that the testator declared to us that this instrument is the testator's will and that the testator requested us to act as witnesses to the testator's will and signature. The testator then signed this will in our presence, all of us being present at the same time. The testator is eighteen years of age or over (or being under such age, is or has been lawfully married, or is a member of the armed forces of the United States or of an auxiliary of the armed forces of the United States or of the United States Maritime Service), and we believe the testator to be of sound mind. We now sign our names as attesting witnesses in the presence of the testator, each other, and the undersigned authority on this ____________ day of ____________, 20____________ ____________",
+      "Subscribed and sworn to before me by the said ____________, testator, and by the said ____________ and ____________, witnesses, this ____________ day of ____________, 20____________",
+      "(Official Capacity of Officer)"
     ]
   },
   "WI": {
@@ -186,6 +219,16 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "A self-proved will, unless contested, shall be admitted to probate without the testimony of any subscribing witness, but otherwise it shall be treated no differently than a will not self-proved. A self-proved will may be contested or be revoked, or be amended by a codicil in the same fashion as a will not self-proved. A codicil or the consent to take under the will by the spouse may be self-proved in the same manner as a will may be self-proved."
     ]
   },
+  "MO": {
+    "citation": "Mo. Rev. Stat. § 474.337",
+    "sourceUrl": "https://revisor.mo.gov/main/OneSection.aspx?section=474.337",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "STATE OF ____________ COUNTY OF ____________ I, the undersigned, an officer authorized to administer oaths, certify that ____________, the testator, and the witnesses, whose names are signed to the attached or foregoing instrument, having appeared together before me and having been first duly sworn, each then declared to me that the testator signed and executed the instrument as his last will, and that he had willingly signed or willingly directed another to sign for him, and that he executed it as his free and voluntary act for the purposes therein expressed; and that each of the witnesses, in the presence and hearing of the testator, signed the will as witness and that to the best of his knowledge the testator was at that time eighteen or more years of age, of sound mind, and under no constraint or undue influence.",
+      "In witness whereof I have hereunto subscribed my name and affixed my official seal this ____________ day of ____________, 20____________",
+      "____________ (Official capacity of officer) ­"
+    ]
+  },
   "NV": {
     "citation": "NRS § 133.050",
     "sourceUrl": "https://www.leg.state.nv.us/nrs/nrs-133.html",
@@ -209,7 +252,8 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "____________ (OFFICIAL CAPACITY OF OFFICER) The affidavits of any such witnesses taken as provided by this section, whenever made, shall be accepted by the court as if it had been taken ore tenus before such court, notwithstanding that the officer did not attach or affix his official seal thereto. Any codicil that is self-proved under the provisions of this section that, by its terms, expressly confirms, ratifies, and republishes a will except as altered by the codicil shall have the effect of self-proving the will whether or not the will was so executed originally.",
       "1972, c. 116, § 64.1-87.1; 1977, c. 333; 1979, c. 322; 1983, c. 83; 1985, c. 429; 1986, c. 524; 1990, c. 64; 2012, c. 614.",
       "The chapters of the acts of assembly referenced in the historical citation at the end of this section may not constitute a comprehensive list of such chapters and may exclude chapters whose provisions have expired.",
-      "Section Code of Virginia Popular Names 2026 Updates Section Look Up Go Administrative Code Constitution of Virginia Charters Authorities Compacts Uncodified Acts Sign In Username:",
+      "Section Code of Virginia Popular Names 2026 Updates Section Look Up Go Administrative Code Constitution of Virginia Charters Authorities Compacts Uncodified Acts Virginia Law Library The Code of Virginia, Constitution of Virginia, Charters, Authorities, Compacts and Uncodified Acts are available in both PDF and CSV formats.",
+      "Helpful Resources Virginia Code Commission Virginia Register of Regulations U.S. Constitution For Developers The Virginia Law website data is available via a web service.",
       "Cancel LIS Home Lobbyist-in-a-Box Privacy Policy © Copyright Commonwealth of Virginia, ____________. All rights reserved. Site developed by the Division of Legislative Automated Systems (DLAS)."
     ]
   },
