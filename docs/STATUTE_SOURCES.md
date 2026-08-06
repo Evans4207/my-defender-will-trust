@@ -242,6 +242,32 @@ footer block disappeared, the hash moved, and the statutory text was byte-identi
 Anyone acting on `statutes:check` must diff before believing an amendment alert.
 The fix is to hash only the text between the markers once every source is bounded.
 
+## Keeping the legal review checklist current
+
+`docs/LEGAL_REVIEW_CHECKLIST.docx` is what actually goes to counsel, and several of
+its items are downstream of this research. **It is a binary file that cannot be
+diffed, so nothing will warn you when it goes stale — it has to be updated
+deliberately, in the same commit as the finding that changed it.**
+
+| Checklist item | Update it when |
+|---|---|
+| **A7** Self-proving affidavit | The count of states with verbatim form text changes, or a new state prints two forms and we pick one. |
+| **B1** Execution formalities | Capture proves another seed citation wrong (or wrongly condemned). Keep the running tally honest. |
+| **B2** Self-proving affidavit exceptions | Any state moves between the three buckets: prescribes a form / prescribes none / has no mechanism at all. This is the item most likely to go stale. |
+| **B4** Excluded states | A not-for-sale state gets captured, or an exclusion is cleared. |
+| **B5** Louisiana | The decision to leave LA out of this pipeline changes. |
+| **B8** Provenance of the statutory text | **Every time the capture count changes.** It states "42 of a target 50" and names the outstanding jurisdictions; that sentence is wrong the moment another state lands. |
+
+The counsel-facing framing lives in B8 and must stay exactly this honest: reproduced
+from the state's own published statute, cited, dated, automatically verified against
+the source — **desk research by a non-lawyer, not legal review, and no claim that
+anything is compliant or current.**
+
+**Owner instruction (Dave, 2026-08-05): nothing goes to the attorney until the
+research is complete.** Updating the checklist as we go is preparation, not a
+trigger to send it. B8 deliberately says the section is not yet complete so that a
+partial version cannot be mistaken for a final one.
+
 ## Adding a state
 
 Add an entry to `SOURCES` in `scripts/harvest-statutes.mjs` with the state, key,
