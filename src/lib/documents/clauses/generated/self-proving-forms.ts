@@ -312,6 +312,29 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "____________ Subscribed, sworn and acknowledged before me by ____________, the testator; and subscribed and sworn before me by ____________ and ____________, witnesses, this ____________ day of ____________ (month), ____________ (year) ____________ Signature of notarial officer (Stamp) [____________] Title of office Fri Dec 12 23:51:43 2025 Iowa Code 2026, Section 63"
     ]
   },
+  "NH": {
+    "citation": "N.H. RSA § 551:2-a",
+    "sourceUrl": "https://www.gencourt.state.nh.us/rsa/html/LVI/551/551-2-a.htm",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "The foregoing instrument was acknowledged before me this ____________ (day) by ____________ , the testator; ____________ and ____________ , the witnesses, who under oath do swear as follows:",
+      "1. The testator signed the instrument as the testator's will or expressly directed another to sign for the testator.",
+      "2. This was the testator's free and voluntary act for the purposes expressed in the will.",
+      "3. Each witness signed at the request of the testator, in the testator's presence, and in the presence of the other witness.",
+      "4. To the best of my knowledge, at the time of the signing the testator was at least 18 years of age, or if under 18 years was a married person, and was of sane mind and under no constraint or undue influence."
+    ]
+  },
+  "RI": {
+    "citation": "R.I. Gen. Laws § 33-7-26",
+    "sourceUrl": "https://webserver.rilegislature.gov/Statutes/TITLE33/33-7/33-7-26.htm",
+    "retrievedAt": "2026-08-05",
+    "paragraphs": [
+      "STATE OF COUNTY OF In ____________ on this ____________ day of ____________ , 20 ____________ , before me personally appeared the undersigned, who, being duly sworn, depose and say that: they witnessed the execution of the will (codicil) of ____________ ; that the signature to the will (codicil) is in the handwriting of the testator or was made by some other person for the testator, in the testator's presence and by the testator's express direction; that the testator so subscribed the will (codicil) and declared the same to be his last will (a codicil to his last will) in their presence;",
+      "that they thereafter subscribed the same as witnesses in the presence of the testator and in the presence of each other; that at the time of execution of the will (codicil) the testator appeared to be of sound mind and eighteen (18) years of age or over;",
+      "and that the signatures of the witnesses on the will are genuine.",
+      "____________ ____________ Subscribed and sworn to before me on the day and date first above written, ____________ Notary public"
+    ]
+  },
   "ND": {
     "citation": "N.D. Cent. Code § 30.1-08-04",
     "sourceUrl": "https://ndlegis.gov/cencode/t30-1c08.pdf",

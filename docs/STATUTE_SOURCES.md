@@ -95,25 +95,71 @@ right even though the section body is behind the CAPTCHA.
 | WI | Wis. Stat. § 853.04 | 6,702ch |
 | WY | Wyo. Stat. § 2-6-114 | 4,074ch |
 
-### Different model — no prescribed form (10 states)
+### Different model — no prescribed form (8 states)
 
 **The Arizona pattern does not transfer to these.** Each provides for proving a
 will by witness affidavit *without* prescribing the affidavit's wording, so they
-are `drafted_from_rule`, not `statutory_sample`, and still need counsel's input on
-what such an affidavit should say.
+are `drafted_from_rule`, not `statutory_sample`.
 
-| State | Citation | Captured |
-|---|---|---|
-| CA | Cal. Prob. Code § 8220 | 897ch |
-| CT | Conn. Gen. Stat. § 45a-285 | 1,370ch |
-| IL | 755 ILCS 5/6-4 | 1,545ch |
-| NH | N.H. RSA § 551:2-a | 1,259ch |
-| NY | N.Y. SCPA § 1406 | 1,645ch |
-| OR | ORS § 113.055 | 1,663ch |
-| RI | R.I. Gen. Laws § 33-7-26 | 2,265ch |
-| VT | 14 V.S.A. § 108 | 4,160ch |
-| WA | RCW § 11.20.020 | 1,879ch |
-| WV | W. Va. Code § 41-5-15 | 810ch |
+Since 2026-08-07 each of these carries a DRAFTED affidavit rather than the generic
+placeholder — see `src/lib/documents/clauses/drafted-forms.ts`. The text is ours,
+not the legislature's, and is flagged `[ATTORNEY REVIEW REQUIRED]`; the point is to
+give counsel something to redline instead of a blank page. Because there is no
+source text to match, the verbatim test cannot apply — `drafted-forms.test.ts`
+instead records the ELEMENTS each statute requires, with the subsection they come
+from, and asserts the draft covers every one. **That proves coverage, not
+sufficiency.**
+
+They split into two families, which matters for how much weight the draft carries:
+
+- **Enumerated-element (IL, VT, and NY in substance).** The statute lists exactly
+  what must be established, so drafting is close to mechanical. Vermont is really a
+  self-proving statute that omitted to print a form — note it requires the sworn
+  acknowledgment of the **testator as well as the witnesses**, unlike every other
+  state here.
+- **Testify-standard (CT, WA, WV, OR, CA).** The statute defines content by
+  reference — "such facts as they would be required to testify to in court to prove
+  such will" — so the draft tracks the elements of due execution. Weaker footing.
+
+| State | Citation | Captured | Note |
+|---|---|---|---|
+| CA | Cal. Prob. Code § 8220 | 897ch | Weakest fit — see below |
+| CT | Conn. Gen. Stat. § 45a-285 | 1,370ch | Affidavit must be written ON the will or attached |
+| IL | 755 ILCS 5/6-4 | 1,545ch | 6-4(a) enumerates 3 elements; 6-4(b)(3) blesses the instrument |
+| NY | N.Y. SCPA § 1406 | 1,388ch | Names competence + absence of restraint expressly |
+| OR | ORS § 113.055 | 1,663ch | Ex parte only; contestable within 30 days |
+| VT | 14 V.S.A. § 108 | 927ch | Testator must swear too |
+| WA | RCW § 11.20.020 | 1,879ch | |
+| WV | W. Va. Code § 41-5-15 | 810ch | **Inadmissible if the will is contested** |
+
+**California is the weakest of the eight and counsel should be told so plainly.**
+§ 8220 is a rule of evidence applied at probate, not a self-proving mechanism —
+California has no self-proving procedure of the UPC kind. The draft leans on
+§ 8220(b)'s reference to "an affidavit in the original will that includes or
+incorporates the attestation clause". Whether that carries the intended effect
+when executed contemporaneously is a legal judgment we cannot make, and the
+threshold question — whether California documents should carry an affidavit at
+all, or only a strong attestation clause with form DE-131 handled at probate — is
+put to counsel directly.
+
+### NH and RI were misclassified — both DO prescribe a form (corrected 2026-08-07)
+
+Both sat in the list above as "no prescribed form". Reading the captured **body**
+rather than the section heading shows otherwise, and both now generate verbatim:
+
+- **NH RSA 551:2-a(I)** — "the signatures of the testator and witnesses **shall be
+  followed by** a sworn acknowledgment ... **as follows:**", then prints the
+  acknowledgment with its four numbered oath items. Note "shall ... as follows"
+  reads **mandatory**, which is a stronger standard than the "substantially the
+  following form" language most states use. Flagged for counsel.
+- **RI § 33-7-26(3)** — "An affidavit **substantially in the form that follows**
+  shall be deemed to meet the requirements of subdivision (2)": an express safe
+  harbour. Its preamble uses neither "following form" nor "as follows", so the
+  generator's shared preamble regex does not fire on it.
+
+This is the *Arizona/West Virginia* lesson again in a new costume: **a heading is
+not the provision, and an earlier classification is not evidence.** Both states had
+been carried as needing counsel to draft from scratch for two passes.
 
 ### Captured but NOT usable as a form
 

@@ -41,8 +41,12 @@ describe("self-proving affidavit clause library", () => {
     expect(c.signatureLines.filter((l) => l.startsWith("Witness"))).toHaveLength(3);
   });
 
+  // Must name a state that will never gain a clause at ANY tier — not merely one
+  // without a prescribed form. NY was used here and stopped testing the fallback
+  // the moment New York got a drafted clause (the same trap that caught TX, then
+  // CA, in will.test.ts). Louisiana is out of the pipeline by owner decision.
   it("falls back to a conservative placeholder for unresearched states", () => {
-    const c = selfProvingAffidavitFor("NY", { ...ctx, stateName: "New York" });
+    const c = selfProvingAffidavitFor("LA", { ...ctx, stateName: "Louisiana" });
     expect(c.provenance.status).toBe("placeholder");
     // Must NOT invent statutory language for a state we have not researched.
     expect(c.paragraphs.join(" ")).not.toMatch(/duly sworn|undersigned authority/i);

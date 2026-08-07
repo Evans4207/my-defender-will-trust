@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { selfProvingAffidavitFor, researchedStates } from "./self-proving-affidavit";
+import { selfProvingAffidavitFor, verbatimStates } from "./self-proving-affidavit";
 
 /**
  * Cross-check every researched clause against the statute it claims to track.
@@ -72,7 +72,10 @@ const MUST_APPEAR = [
 ];
 
 describe("researched clauses track their source statute", () => {
-  const states = researchedStates();
+  // ONLY the verbatim tier. States that prescribe no form are covered instead by
+  // drafted-forms.test.ts, which asserts element coverage — see the note on
+  // verbatimStates() for why the two must not be merged.
+  const states = verbatimStates();
 
   it("has captured a statute for every researched state", () => {
     const missing = states.filter((s) => loadStatute(s) === null);

@@ -92,6 +92,20 @@ const EXTRACT = {
   WY: { from: "I,", to: "(b)" },
   OK: { from: "STATE OF", to: "b. the written declaration" },
   IA: { from: "Affidavit", to: "3." },
+  // NH and RI were both previously filed as "prescribes no form". Reading the
+  // captured BODY (not the heading) shows both do prescribe one:
+  //   RSA 551:2-a(I) — "the signatures ... shall be followed by a sworn
+  //   acknowledgment ... as follows:", then prints the acknowledgment with its
+  //   four numbered oath items. Note "shall ... as follows" reads MANDATORY,
+  //   which is stronger than the "substantially the following form" standard
+  //   most states use — flagged for counsel.
+  NH: { from: "The foregoing instrument was acknowledged", to: "II. Any will meeting the requirements" },
+  //   § 33-7-26(3) — "An affidavit substantially in the form that follows shall
+  //   be deemed to meet the requirements of subdivision (2)": an express safe
+  //   harbour. Its preamble does not use the words "following form"/"as follows",
+  //   so the shared preamble regex does not fire here; "STATE OF" appears only
+  //   once in the section, so starting from character 0 is unambiguous.
+  RI: { from: "STATE OF", to: "History of Section." },
   ND: { from: "I,", to: "2." },
   HI: { from: "I,", to: "(b)" },
   AL: { from: "I,", to: "(b) An attested will may at any time" },

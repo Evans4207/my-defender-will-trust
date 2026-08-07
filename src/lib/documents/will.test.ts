@@ -60,18 +60,27 @@ describe("assembleWill — conditional clauses", () => {
     expect(headings(noMinor.sections).some((h) => h.includes("Guardian"))).toBe(false);
   });
 
-  // These two cover the GENERIC fallback, which is used only by states that have
-  // no verbatim statutory form of their own. They must therefore name such a
-  // state: California prescribes no form (Cal. Prob. Code § 8220 provides for
-  // proof by affidavit without prescribing its wording), so it stays on the
-  // fallback permanently. Previously these used the TX fixture and passed only
-  // because Texas had not been researched yet — once § 251.1045 was captured, its
-  // verbatim form correctly took precedence and these silently stopped testing
-  // the fallback at all.
+  // These two cover the GENERIC fallback, which is used only by states with no
+  // clause of their own at any tier. Choosing that state is the whole difficulty,
+  // and we have now got it wrong TWICE the same way:
+  //
+  //   1. Originally TX — passed only because Texas was unresearched. Capturing
+  //      § 251.1045 gave Texas a verbatim form, which correctly won, and these
+  //      tests silently stopped exercising the fallback.
+  //   2. Then CA, on the reasoning that California prescribes no form and so
+  //      would stay on the fallback "permanently". That was wrong too: a state
+  //      with no prescribed form is exactly the kind that later gets a DRAFTED
+  //      clause, and when the drafted tier landed California got one.
+  //
+  // So the state named here must be one that will never have a clause at all —
+  // not merely one without a statutory form. LOUISIANA is that state by owner
+  // decision: its civil-law execution formalities are deliberately outside this
+  // pipeline (docs/STATUTE_SOURCES.md), so it is never drafted and never
+  // captured. If Louisiana is ever brought in, these tests must move again.
   it("renders the notarized self-proving affidavit when required", () => {
     const d = assembleWill({
       answers,
-      ruleset: ruleset({ state: "CA", selfProvingAffidavit: { available: true, requiresNotary: true } }),
+      ruleset: ruleset({ state: "LA", selfProvingAffidavit: { available: true, requiresNotary: true } }),
     });
     const sp = d.sections.find((s) => s.heading.includes("Self-Proving"));
     expect(sp?.paragraphs.join(" ")).toContain("notary");
@@ -80,7 +89,7 @@ describe("assembleWill — conditional clauses", () => {
   it("renders the unsworn declaration when notary is not required", () => {
     const d = assembleWill({
       answers,
-      ruleset: ruleset({ state: "CA", selfProvingAffidavit: { available: true, requiresNotary: false } }),
+      ruleset: ruleset({ state: "LA", selfProvingAffidavit: { available: true, requiresNotary: false } }),
     });
     const sp = d.sections.find((s) => s.heading.includes("Self-Proving"));
     expect(sp?.paragraphs.join(" ")).toContain("penalty of perjury");
