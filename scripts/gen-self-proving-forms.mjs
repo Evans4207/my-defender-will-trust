@@ -73,11 +73,19 @@ const EXTRACT = {
   WI: { from: "I,", to: "Two-step procedure" },
   // These open with the officer's venue block rather than the testator line.
   FL: { from: "STATE OF", to: "(2)" },
-  DE: { from: "STATE OF", to: "(b)" },
-  KS: { from: "State of", to: "History:" },
+  // Delaware's section has no lettered subsections, so the old "(b)" bound never
+  // matched and the form ran on into the session-law history.
+  DE: { from: "STATE OF", to: "59 Del. Laws" },
+  // Kansas prints no "History:" heading; without this the form swept in two
+  // paragraphs of operative statute addressed to the COURT, not to the signer.
+  KS: { from: "State of", to: "If an affidavit substantially in conformance" },
   MO: { from: "STATE OF", to: "2. An officer authorized" },
   NV: { from: "State of Nevada", to: "NRS 133.055" },
-  VA: { from: "STATE OF VIRGINIA", to: "B." },
+  // § 64.2-452 is a single unlettered section, so the old "B." bound never matched
+  // and VA ran to the end of the capture — printing the Virginia Law website's
+  // footer and sign-in labels INSIDE the affidavit. The form ends at the officer's
+  // capacity line; what follows addresses the court's acceptance of the affidavit.
+  VA: { from: "STATE OF VIRGINIA", to: "The affidavits of any such witnesses" },
   PA: { from: "I,", to: "(b)" },
   AK: { from: "I,", to: "(b)" },
   CO: { from: "I,", to: "(2)" },
@@ -127,8 +135,21 @@ function extractForm(text, { from, to }) {
   const start = text.indexOf(from, searchFrom);
   if (start === -1) return { form: null, reason: `start "${from}" not found` };
 
-  let end = to ? text.indexOf(to, start + 1) : -1;
-  if (end === -1) end = text.length;
+  // A `to` that does not match must NEVER degrade to "take the rest of the
+  // capture". That silent fallback is how Virginia shipped the Virginia Law
+  // website's footer — and Kansas two paragraphs of court-facing statute — inside
+  // the affidavit a signer swears to. The verbatim test cannot catch it: the
+  // swept-in text really does appear in the source page, so it is verbatim. It is
+  // the WRONG EXCERPT, which is a different failure mode. Refuse the state and say
+  // so, so a stale bound shows up as a missing form rather than a padded one.
+  let end = text.length;
+  if (to) {
+    const at = text.indexOf(to, start + 1);
+    if (at === -1) {
+      return { form: null, reason: `end bound "${to}" not found — refusing to run to end of capture` };
+    }
+    end = at;
+  }
 
   const form = normalizeBlanks(text.slice(start, end));
   if (form.length < 200) return { form: null, reason: `only ${form.length} chars` };

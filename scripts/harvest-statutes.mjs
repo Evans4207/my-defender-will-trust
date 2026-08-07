@@ -80,6 +80,9 @@ const SOURCES = [
     citation: "Utah Code § 75-2-504",
     url: "https://le.utah.gov/xcode/Title75/Chapter2/75-2-S504.html",
     startsWith: "75-2-504",
+    // Bound: the page continues into a prev/next section strip and the
+    // legislature's address block. Without this the capture ran to "Utah.gov".
+    endsBefore: "<< Previous Section",
     // Statute text is rendered client-side; needs a real browser.
     render: true,
   },
@@ -89,6 +92,9 @@ const SOURCES = [
     citation: "SDCL § 29A-2-504",
     url: "https://sdlegislature.gov/Statutes/29A-2-504",
     startsWith: "29A-2-504",
+    // Bound: what follows is the site's cross-reference catchline table and
+    // the LRC footer, neither of which is statutory text.
+    endsBefore: "\nReferences\n",
     // Single-page app: the server returns a JS shell for page and API alike.
     render: true,
   },
@@ -98,6 +104,9 @@ const SOURCES = [
     citation: "Mont. Code Ann. § 72-2-524",
     url: "https://archive.legmt.gov/bills/mca/title_0720/chapter_0020/part_0050/section_0240/0720-0020-0050-0240.html",
     startsWith: "72-2-524",
+    // Bound: cuts the MCA "Internet version ... printed version will prevail"
+    // disclaimer that trails every section.
+    endsBefore: "Disclaimer: The Internet version",
   },
   {
     state: "OR",
@@ -142,6 +151,8 @@ const SOURCES = [
     citation: "Idaho Code § 15-2-504",
     url: "https://legislature.idaho.gov/statutesrules/idstat/Title15/T15CH2/SECT15-2-504/",
     startsWith: "15-2-504.",
+    // Bound: cuts the LSO contact/footer block that follows the History note.
+    endsBefore: "How current is this law?",
   },
   {
     state: "KS",
@@ -158,6 +169,10 @@ const SOURCES = [
     citation: "18-C M.R.S. § 2-503",
     url: "https://legislature.maine.gov/statutes/18-C/title18-Csec2-503.html",
     startsWith: "2-503.",
+    // Bound: cuts the Revisor's disclaimer AND, importantly, a
+    // "Data for this page extracted on <timestamp>" line — that timestamp moves
+    // on republication and would fire a false drift alert every time.
+    endsBefore: "The Revisor\'s Office cannot provide legal advice",
   },
   {
     state: "MI",
@@ -165,6 +180,9 @@ const SOURCES = [
     citation: "Mich. Comp. Laws § 700.2504",
     url: "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-700-2504",
     startsWith: "700.2504",
+    // Bound: cuts the policy links and the Legislature's warranty disclaimer.
+    // Keeps the History note and "Popular Name: EPIC", which are statutory apparatus.
+    endsBefore: "Acceptable Use Policy",
   },
   {
     state: "MN",
@@ -172,6 +190,8 @@ const SOURCES = [
     citation: "Minn. Stat. § 524.2-504",
     url: "https://www.revisor.mn.gov/statutes/cite/524.2-504",
     startsWith: "524.2-504",
+    // Bound: cuts the Revisor's site footer.
+    endsBefore: "Official Publication of the State of Minnesota",
   },
   {
     state: "NE",
@@ -179,6 +199,9 @@ const SOURCES = [
     citation: "Neb. Rev. Stat. § 30-2329",
     url: "https://nebraskalegislature.gov/laws/statutes.php?statute=30-2329",
     startsWith: "30-2329",
+    // Bound: Nebraska prints CASE ANNOTATIONS under the section. Those are
+    // editorial matter, not statute — the same reason NM bounds on ANNOTATIONS.
+    endsBefore: "\nAnnotations\n",
   },
   {
     state: "NH",
@@ -208,6 +231,10 @@ const SOURCES = [
     citation: "Va. Code § 64.2-452",
     url: "https://law.lis.virginia.gov/vacode/title64.2/chapter4/section64.2-452/",
     startsWith: "64.2-452",
+    // Bound at last. This was the known-dirty capture: it ran through the
+    // site's own caveat, the nav column and a literal sign-in form ("Username:",
+    // "Password:") plus a "© Copyright ... <year>" line that moves every January.
+    endsBefore: "The chapters of the acts of assembly referenced",
   },
   {
     state: "WI",
@@ -215,6 +242,10 @@ const SOURCES = [
     citation: "Wis. Stat. § 853.04",
     url: "https://docs.legis.wisconsin.gov/statutes/statutes/853/i/04",
     startsWith: "853.04",
+    // Bound: NOT just chrome — unbounded, 853.04 ran on through 853.05 and
+    // 853.07, so half the capture was NEIGHBOURING SECTIONS. The first "853.05"
+    // hit is the section boundary (it follows 853.04's own History line).
+    endsBefore: "853.05",
   },
   {
     state: "WV",
@@ -261,6 +292,9 @@ const SOURCES = [
     citation: "Iowa Code § 633.279",
     url: "https://www.legis.iowa.gov/docs/code/633.279.pdf",
     startsWith: "633.279 Signed and witnessed",
+    // Bound: cuts an editorial cross-reference and the PDF page footer, which
+    // carries a generation timestamp that changes on every Iowa Code run.
+    endsBefore: "Referred to in §622.1",
     pdf: true,
   },
   {
@@ -318,6 +352,9 @@ const SOURCES = [
     citation: "14 V.S.A. § 108",
     url: "https://legislature.vermont.gov/statutes/section/14/003/00108",
     startsWith: "108.",
+    // Bound: 78% of this capture was chrome — the whole site footer plus a
+    // Google Translate language list. The section itself is short (no prescribed form).
+    endsBefore: "\nStatutes\nVermont Statutes Online",
     render: true,
   },
   {
@@ -337,6 +374,8 @@ const SOURCES = [
     citation: "Haw. Rev. Stat. § 560:2-504",
     url: "https://www.capitol.hawaii.gov/hrscurrent/Vol12_Ch0501-0588/HRS0560/HRS_0560-0002-0504.htm",
     startsWith: "560:2-504",
+    // Bound: cuts the volume prev/next navigation.
+    endsBefore: "\nPrevious\n",
     render: true,
   },
   {
@@ -345,6 +384,8 @@ const SOURCES = [
     citation: "N.Y. SCPA § 1406",
     url: "https://www.nysenate.gov/legislation/laws/SCP/1406",
     startsWith: "1406",
+    // Bound: cuts the Senate site footer.
+    endsBefore: "NYSenate.gov",
     render: true,
   },
   {
@@ -373,6 +414,8 @@ const SOURCES = [
     citation: "D.C. Code § 18-908",
     url: "https://code.dccouncil.gov/us/dc/council/code/sections/18-908",
     startsWith: "§ 18–908. Electronic will attested",
+    // Bound: cuts prev/next nav and the Open Law Library footer.
+    endsBefore: "\nPrevious\n",
     render: true,
   },
   // --- Batch 6: four of the five states not offered for sale, plus KY ----------

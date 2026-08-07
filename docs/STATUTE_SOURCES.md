@@ -333,23 +333,43 @@ These caught three real defects during the first run: an amendment-history stub
 captured instead of a section body, undecoded entities corrupting a form, and a
 page of site navigation captured as if it were statute.
 
-### Two known weaknesses in these gates
+### Two former weaknesses in these gates — both CLOSED 2026-08-07
 
 **An unbounded capture can still swallow site chrome.** A source with no
 `endsBefore` runs to the end of the page. If the section body is long and genuinely
 statutory, none of the gates fire — average line length stays prose-like — and the
-capture quietly picks up the footer. Both MA and MD did exactly this before they
-were bounded, and **VA still does**: its `startsWith: "64.2-452"` matches the page
-title, so the capture opens with the site's nav bar and closes with a sign-in form.
-The VA *form text* is correct and the verbatim test passes, but the capture is
-dirty. **Prefer an `endsBefore` on every source.**
+capture quietly picks up the footer.
+
+This was far more widespread than the earlier note admitted. A sweep on 2026-08-07
+found **22 of 46 sources unbounded**, and `endsBefore` was added to 15 of them
+(UT SD MT ID ME MI MN NE VA WI IA VT HI NY DC). What that removed was not cosmetic:
+
+- **VT** was 78% chrome — the entire site footer plus a Google Translate language list.
+- **WI** was not merely dirty, it was capturing the **wrong range**: `853.04` ran on
+  through §§ 853.05 and 853.07, so half the capture was neighbouring sections.
+- **ME, WI, IA, SD, ID, VA** all trailed content carrying a **date or timestamp**
+  (ME "Data for this page extracted on <time>", WI "(Published 8-5-26)", VA
+  "© Copyright ... <year>"). Those move on republication, so these sources were
+  *guaranteed* to raise a false amendment alert sooner or later.
+
+The five that remain unbounded (AZ CA NH RI PA) end naturally at the statute — their
+pages carry no trailing chrome, so there is nothing to bound on. AL is bounded by
+construction (its GraphQL response *is* the section). NJ is not yet captured.
+
+> **Correction.** The previous version of this section said the VA *form text* was
+> correct and only the capture was dirty. **That was wrong.** VA's generated clause
+> was carrying four paragraphs of the Virginia Law website — including
+> `"Cancel LIS Home Lobbyist-in-a-Box Privacy Policy © Copyright Commonwealth of
+> Virginia..."` — inside the affidavit. See "the wrong excerpt" below.
 
 **The drift hash covers chrome, not just statute.** Because the hash is taken over
 the whole capture, a purely cosmetic site change registers as "this statute
 changed". VA fired exactly this false positive on 2026-08-05: a "Helpful Resources"
 footer block disappeared, the hash moved, and the statutory text was byte-identical.
-Anyone acting on `statutes:check` must diff before believing an amendment alert.
-The fix is to hash only the text between the markers once every source is bounded.
+This is now closed by the bounding above rather than by changing the hash: the hash
+is taken over the isolated text, so once a source is bounded the hash covers
+statutory text only. Anyone acting on `statutes:check` should still diff before
+believing an amendment alert.
 
 **A third gap, found and fixed on 2026-08-07: line structure was only recovered
 from HTML tags, and not every publisher uses HTML ones.** Alabama lays its
@@ -366,6 +386,37 @@ Whitespace damage has to be eyeballed in the generated file. When a state's
 `gen-self-proving-forms` output shows a paragraph count far below its neighbours'
 (Alabama reported `1 paragraph(s)` where comparable states report 4), that is the
 tell.
+
+### The wrong excerpt: a silent fallback in the clause generator (fixed 2026-08-07)
+
+Bounding the captures exposed a worse defect one layer down, in
+`gen-self-proving-forms.mjs`. Each state's form is cut out of its capture with a
+`{ from, to }` pair. When the `to` marker did not match, the code did this:
+
+```js
+let end = to ? text.indexOf(to, start + 1) : -1;
+if (end === -1) end = text.length;      // <-- silently takes the whole capture
+```
+
+So a *stale bound* did not fail — it quietly widened the form to everything after
+`from`. Three states were affected, and none of them failed a single test:
+
+| State | Bound that never matched | What was printed inside the affidavit |
+|-------|--------------------------|----------------------------------------|
+| VA | `"B."` — § 64.2-452 has no lettered subsections | operative statute, the amendment history, **and four paragraphs of website chrome** |
+| KS | `"History:"` — the Kansas page prints no such heading | two paragraphs of statute addressed to the **court**, not the signer |
+| DE | `"(b)"` — the Delaware section is unlettered | the session-law citation `59 Del. Laws, c. 384, § 1;` |
+
+**Why nothing caught it.** The verbatim test asks whether our text appears in the
+source statute. All of this text *did* appear there, so it was verbatim — it was
+simply not the form. This is the same failure mode as the Idaho wrong-subsection
+bug: **verbatim fidelity is not the same property as taking the right excerpt.**
+
+The fallback is now removed. An unmatched `to` refuses the state with
+`end bound "..." not found — refusing to run to end of capture`, so a stale bound
+shows up as a *missing* form (loud, and caught by the count of generated states)
+rather than a *padded* one. Any VA, KS or DE document generated before 2026-08-07
+carries the old text.
 
 ## Keeping the legal review checklist current
 

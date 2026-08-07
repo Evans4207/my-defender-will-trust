@@ -28,7 +28,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "ID": {
     "citation": "Idaho Code § 15-2-504",
     "sourceUrl": "https://legislature.idaho.gov/statutesrules/idstat/Title15/T15CH2/SECT15-2-504/",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I,____________, the testator, sign my name to this instrument this____________ day of____________,…., and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.",
       "We,____________,____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his last will and that he signs it willingly (or willingly directs another to sign for him), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator’s signing, and that to the best of his knowledge the testator is eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.",
@@ -38,7 +38,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "MN": {
     "citation": "Minn. Stat. § 524.2-504",
     "sourceUrl": "https://www.revisor.mn.gov/statutes/cite/524.2-504",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am 18 years of age or older, of sound mind, and under no constraint or undue influence.",
       "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly (or willingly directs another to sign for the testator), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.",
@@ -49,7 +49,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "MT": {
     "citation": "Mont. Code Ann. § 72-2-524",
     "sourceUrl": "https://archive.legmt.gov/bills/mca/title_0720/chapter_0020/part_0050/section_0240/0720-0020-0050-0240.html",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, 20____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will, that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes expressed in it, and that I am 18 years of age or older, of sound mind, and under no constraint or undue influence.",
       "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as the testator's will, that the testator signs it willingly (or willingly directs another to sign for the testator), that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.",
@@ -59,7 +59,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "NE": {
     "citation": "Neb. Rev. Stat. § 30-2329",
     "sourceUrl": "https://nebraskalegislature.gov/laws/statutes.php?statute=30-2329",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________ the testator, sign my name to this instrument this ____________ day of ____________ 20____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly or willingly direct another to sign for me, that I execute it as my free and voluntary act for the purposes therein expressed and that I am eighteen years of age or older or am not at this time a minor, and am of sound mind and under no constraint or undue influence.",
       "We, ____________ and ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his or her last will and that he or she signs it willingly or willingly directs another to sign for him or her, and that he or she executes it as his or her free and voluntary act for the purposes therein expressed, and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of his or her knowledge the testator is eighteen years of age or older or is not at this time a minor, and is of sound mind and under no constraint or undue influence.",
@@ -79,7 +79,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "SD": {
     "citation": "SDCL § 29A-2-504",
     "sourceUrl": "https://sdlegislature.gov/Statutes/29A-2-504",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
       "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as [his] [her] will and that [he] [she] signs it willingly (or willingly directs another to sign for [him] [her]), that [he] [she] executes it as [his] [her] free and voluntary act for the purposes therein expressed, and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
@@ -90,7 +90,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "UT": {
     "citation": "Utah Code § 75-2-504",
     "sourceUrl": "https://le.utah.gov/xcode/Title75/Chapter2/75-2-S504.html",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am 18 years of age or older, of sound mind, and under no constraint or undue influence.",
       "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as [his] [her] will and that [he] [she] signs it willingly (or willingly directs another to sign for [him] [her] ), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.",
@@ -112,7 +112,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "ME": {
     "citation": "18-C M.R.S. § 2-503",
     "sourceUrl": "https://legislature.maine.gov/statutes/18-C/title18-Csec2-503.html",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, on this ____________ day of ____________, 20.., being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), as my free and voluntary act and that I am eighteen years of age or older or am a legally emancipated minor, of sound mind, and under no constraint or undue influence. ____________",
       "We, ____________, ____________, the witnesses, being first duly sworn, do hereby declare to the undersigned authority that the testator has signed and executed this instrument as (his) (her) last will and that (he) (she) signed it willingly (or willingly directed another to sign for (him) (her)), and that each of us, in the presence and hearing of the testator, signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older or is a legally emancipated minor, of sound mind and under no constraint or undue influence____________",
@@ -133,7 +133,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "MI": {
     "citation": "Mich. Comp. Laws § 700.2504",
     "sourceUrl": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-700-2504",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this document on ____________, ____________ I have taken an oath, administered by the officer whose signature and seal appear on this document, swearing that the statements in this document are true. I declare to that officer that this document is my will;",
       "that I sign it willingly or willingly direct another to sign for me; that I execute it as my voluntary act for the purposes expressed in this will; that I am 18 years of age or older and under no constraint or undue influence; and that I have sufficient mental capacity to make this will.",
@@ -168,7 +168,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "WI": {
     "citation": "Wis. Stat. § 853.04",
     "sourceUrl": "https://docs.legis.wisconsin.gov/statutes/statutes/853/i/04",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, declare to the undersigned authority all of the following:",
       "1. I execute this instrument as my will.",
@@ -202,7 +202,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
     "paragraphs": [
       "STATE OF SS COUNTY OF Before me, the subscriber, on this day personally appeared, and known to me to be the testator and the witnesses, respectively, whose names are signed to the attached or foregoing instrument and, all of these persons being by me first duly sworn the testator, declared to me and to the witnesses in my presence that the instrument is the testator’s last will and that had willingly signed or directed another to sign for the testator, and that the testator executed it as a free and voluntary act for the purposes therein expressed; and each of the witnesses stated to me, in the presence and hearing of the testator, that the witness signed the will as witness and that to the best of the witness’ knowledge the testator was eighteen years of age or over, of sound mind and under no constraint or undue influence.",
       "____________ ____________ Testator ____________ ____________ Witness ____________ ____________ Witness Subscribed, sworn and acknowledged before me by ____________ , the testator, subscribed and sworn before me by ____________ and ____________ witnesses, this ____________ day of ____________ , A.D., ____________",
-      "____________ (OFFICIAL CAPACITY OF OFFICER) 59 Del. Laws, c. 384, § 1;"
+      "____________ (OFFICIAL CAPACITY OF OFFICER)"
     ]
   },
   "KS": {
@@ -212,8 +212,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
     "paragraphs": [
       "Before me, the undersigned authority, on this day personally appeared ____________, ____________, and ____________, known to me to be the testator and the witnesses, respectively, whose names are subscribed to the annexed or foregoing instrument in their respective capacities, and, all of such persons being by me first duly sworn, such ____________, testator, declared to me and to the witnesses in my presence that such instrument is the testator's last will and testament, and that the testator had willingly made and executed it as the testator's free and voluntary act and deed for the purposes therein expressed. Such witnesses, each on the witness' oath stated to me, in the presence and hearing of the testator, that the testator had declared to them that such instrument is the testator's last will and testament, and that the testator executed same as such and wanted each witness to sign it as a witness. Upon their oaths each witness stated further that they did sign the will as witnesses in the presence of each other and in the presence of the testator and at the testator's request, and that the testator at that time possessed the rights of majority, was of sound mind and under no restraint.",
       "Subscribed, acknowledged and sworn to before me by ____________, testator, and ____________ and ____________, witnesses, this ____________ day of ____________, A.D. ____________",
-      "____________ (Official capacity of officer) If an affidavit substantially in conformance with the affidavit described in this section is executed at the time of the execution of the will, no other signatures of the witnesses or any other attestation clause is required.",
-      "A self-proved will, unless contested, shall be admitted to probate without the testimony of any subscribing witness, but otherwise it shall be treated no differently than a will not self-proved. A self-proved will may be contested or be revoked, or be amended by a codicil in the same fashion as a will not self-proved. A codicil or the consent to take under the will by the spouse may be self-proved in the same manner as a will may be self-proved."
+      "____________ (Official capacity of officer)"
     ]
   },
   "MO": {
@@ -242,16 +241,11 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "VA": {
     "citation": "Va. Code § 64.2-452",
     "sourceUrl": "https://law.lis.virginia.gov/vacode/title64.2/chapter4/section64.2-452/",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "STATE OF VIRGINIA COUNTY/CITY OF ____________ Before me, the undersigned authority, on this day personally appeared ____________, ____________, and ____________, known to me to be the testator and the witnesses, respectively, whose names are signed to the attached or foregoing instrument and, all of these persons being by me first duly sworn, ____________, the testator, declared to me and to the witnesses in my presence that said instrument is his last will and testament and that he had willingly signed or directed another to sign the same for him, and executed it in the presence of said witnesses as his free and voluntary act for the purposes therein expressed; that said witnesses stated before me that the foregoing will was executed and acknowledged by the testator as his last will and testament in the presence of said witnesses who, in his presence and at his request, and in the presence of each other, did subscribe their names thereto as attesting witnesses on the day of the date of said will, and that the testator, at the time of the execution of said will, was over the age of eighteen years and of sound and disposing mind and memory.",
       "Subscribed, sworn and acknowledged before me by____________, the testator, and subscribed and sworn before me by____________ and ____________, witnesses, this ____________ day of ____________, A.D., ____________",
-      "____________ (OFFICIAL CAPACITY OF OFFICER) The affidavits of any such witnesses taken as provided by this section, whenever made, shall be accepted by the court as if it had been taken ore tenus before such court, notwithstanding that the officer did not attach or affix his official seal thereto. Any codicil that is self-proved under the provisions of this section that, by its terms, expressly confirms, ratifies, and republishes a will except as altered by the codicil shall have the effect of self-proving the will whether or not the will was so executed originally.",
-      "1972, c. 116, § 64.1-87.1; 1977, c. 333; 1979, c. 322; 1983, c. 83; 1985, c. 429; 1986, c. 524; 1990, c. 64; 2012, c. 614.",
-      "The chapters of the acts of assembly referenced in the historical citation at the end of this section may not constitute a comprehensive list of such chapters and may exclude chapters whose provisions have expired.",
-      "Section Code of Virginia Popular Names 2026 Updates Section Look Up Go Administrative Code Constitution of Virginia Charters Authorities Compacts Uncodified Acts Virginia Law Library The Code of Virginia, Constitution of Virginia, Charters, Authorities, Compacts and Uncodified Acts are available in both PDF and CSV formats.",
-      "Helpful Resources Virginia Code Commission Virginia Register of Regulations U.S. Constitution For Developers The Virginia Law website data is available via a web service.",
-      "Cancel LIS Home Lobbyist-in-a-Box Privacy Policy © Copyright Commonwealth of Virginia, ____________. All rights reserved. Site developed by the Division of Legislative Automated Systems (DLAS)."
+      "____________ (OFFICIAL CAPACITY OF OFFICER)"
     ]
   },
   "PA": {
@@ -311,7 +305,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "IA": {
     "citation": "Iowa Code § 633.279",
     "sourceUrl": "https://www.legis.iowa.gov/docs/code/633.279.pdf",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "Affidavit State of____________ ) County of____________ ) ss We, the undersigned, ____________, ____________ and ____________, the testator and the witnesses, respectively, whose names are signed to the attached or foregoing instrument, being first duly sworn, declare to the undersigned authority that at the date of the instrument, we all knew the identity of each other; the instrument was exhibited to the witnesses by the testator, who declared it to be the testator’s last will and testament and was signed by the testator or by another at the direction of the testator at ____________, in the County of ____________, State of ____________, on the date shown in the instrument, and in the presence of each other as subscribing witnesses; that we, as witnesses, declare to the undersigned authority that in our presence the testator executed and acknowledged such will as the testator’s will and that we, in the testator’s presence, at the testator’s request, and in the presence of each other, did subscribe our names thereto as attesting witnesses on the date of such will;",
       "and that the witnesses were sixteen years of age or older.",
@@ -331,7 +325,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
   "HI": {
     "citation": "Haw. Rev. Stat. § 560:2-504",
     "sourceUrl": "https://www.capitol.hawaii.gov/hrscurrent/Vol12_Ch0501-0588/HRS0560/HRS_0560-0002-0504.htm",
-    "retrievedAt": "2026-08-05",
+    "retrievedAt": "2026-08-07",
     "paragraphs": [
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
       "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly (or willingly directs another to sign for the testator), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
