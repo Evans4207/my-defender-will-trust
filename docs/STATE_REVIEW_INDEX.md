@@ -1,8 +1,10 @@
 # State-by-state review index
 
-**Companion to `LEGAL_REVIEW_CHECKLIST.docx`.** The checklist says what needs
-deciding; this says where to look. Every citation below is a **live link to that
-state's own official publisher** — click it to read the statute at source.
+**Companion to the legal review checklist** — [read it here](LEGAL_REVIEW_CHECKLIST.md)
+(no download) or [download the Word version](LEGAL_REVIEW_CHECKLIST.docx). The
+checklist says what needs deciding; this says where to look. Every citation below
+is a **live link to that state's own official publisher** — click it to read the
+statute at source.
 
 *Generated from the captures by `scripts/gen-state-review-index.mjs`; do not edit
 by hand.* *Code links track **`main`**, so they always show the current text — which means the code may change under you while you review. Ask for a pinned copy if you want a frozen snapshot to annotate.*

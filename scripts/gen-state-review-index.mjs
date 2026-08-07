@@ -24,7 +24,7 @@
  * index — the same rule applied to the clause generator.
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -204,9 +204,11 @@ const section = (tier, states) => {
 
 const md = `# State-by-state review index
 
-**Companion to \`LEGAL_REVIEW_CHECKLIST.docx\`.** The checklist says what needs
-deciding; this says where to look. Every citation below is a **live link to that
-state's own official publisher** — click it to read the statute at source.
+**Companion to the legal review checklist** — [read it here](LEGAL_REVIEW_CHECKLIST.md)
+(no download) or [download the Word version](LEGAL_REVIEW_CHECKLIST.docx). The
+checklist says what needs deciding; this says where to look. Every citation below
+is a **live link to that state's own official publisher** — click it to read the
+statute at source.
 
 *Generated from the captures by \`scripts/gen-state-review-index.mjs\`; do not edit
 by hand.* ${
