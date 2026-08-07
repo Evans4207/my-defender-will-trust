@@ -53,7 +53,10 @@ const EXTRACT = {
   // Most states open the form with the testator's declaration. Note "I," with no
   // following space: several statutes wrap immediately after the comma.
   AZ: { from: "I,", to: "B. An attested will may be made self-proved" },
-  ID: { from: "I,", to: "(3)" },
+  // Bounded on subsection (2), NOT (3): (2) is Idaho's after-the-fact form, and
+  // stopping at (3) swept it — plus its statutory preamble — into the generated
+  // clause as if it were text for the signer.
+  ID: { from: "I,", to: "(2) An attested will may at any time" },
   MN: { from: "I,", to: "(b)" },
   MT: { from: "I,", to: "(2)" },
   NE: { from: "I,", to: "(2) An attested will may at any time" },
@@ -83,6 +86,15 @@ const EXTRACT = {
   IA: { from: "Affidavit", to: "3." },
   ND: { from: "I,", to: "2." },
   HI: { from: "I,", to: "(b)" },
+  AL: { from: "I,", to: "(b) An attested will may at any time" },
+  NM: { from: "I,", to: "B. An attested will may be made self-proved" },
+  // Indiana's clause is an UNSWORN declaration under penalties for perjury — no
+  // notary and no officer's certificate — so it opens on the joint "We," line
+  // rather than a testator affidavit. It also prints two clauses: (c) for an
+  // ordinary in-person signing and (d) for remote witnessing of separate paper
+  // counterparts. We take (c); (d) describes a signing ceremony this product
+  // does not walk a user through.
+  IN: { from: "We,", to: "(d) A will is attested and self-proved" },
 };
 
 /**

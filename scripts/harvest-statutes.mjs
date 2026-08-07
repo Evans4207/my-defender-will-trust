@@ -463,6 +463,73 @@ const SOURCES = [
     endsBefore: "PreviousNext",
   },
   {
+    state: "AL",
+    key: "self_proving_affidavit",
+    citation: "Ala. Code § 43-8-132",
+    // Alabama's official publisher (alison.legislature.state.al.us) has no HTML
+    // page for a section — the site is a client-side app over a GraphQL API, which
+    // is why every plain fetch of it has come back empty. This is the same query
+    // the site's own "Code of Alabama" browser issues; the human-readable deep
+    // link for the same section is
+    //   https://alison.legislature.state.al.us/code-of-alabama?section=43-8-132
+    // Because the response IS the section, there is nothing after it to bound
+    // against — the usual endsBefore is genuinely unnecessary here, and the drift
+    // hash covers statutory text only, with no site chrome to churn.
+    url: "https://alison.legislature.state.al.us/graphql",
+    graphql: {
+      operationName: "codeOfAlabamaSection",
+      query:
+        "query codeOfAlabamaSection($displayId: String!) {\n" +
+        "  codesOfAlabama(where: {type: {eq: Section}, displayId: {eq: $displayId}}, versions: true) {\n" +
+        "    data { displayId title content history effectiveDate }\n" +
+        "  }\n" +
+        "}",
+      variables: { displayId: "43-8-132" },
+      pick: (json) => {
+        const s = json?.data?.codesOfAlabama?.data?.[0];
+        if (!s?.content) return null;
+        return `<p>${s.title}</p>${s.content}<p>${s.history ?? ""}</p>`;
+      },
+    },
+    startsWith: "Section 43-8-132",
+  },
+  {
+    state: "IN",
+    key: "self_proving_affidavit",
+    citation: "Ind. Code § 29-1-5-3.1",
+    // iga.in.gov is a React app that renders the code into a SHADOW DOM, so a
+    // plain fetch AND an ordinary rendered-page scrape both come back empty —
+    // document.body.innerText sees only site chrome. What the app actually loads
+    // is this static per-title HTML file, which a plain fetch reads fine (no
+    // Referer or API key needed; api.iga.in.gov, by contrast, demands one).
+    //
+    // The file is the whole of Title 29, so bounding matters. The "IC " prefix is
+    // what separates the section heading from its table-of-contents entry, which
+    // is otherwise the identical string.
+    url: "https://iga.in.gov/ic/2025/Title_29.html",
+    startsWith: "IC 29-1-5-3.1",
+    endsBefore: "IC 29-1-5-3.2",
+  },
+  {
+    state: "NM",
+    key: "self_proving_affidavit",
+    citation: "NMSA 1978, § 45-2-504",
+    // New Mexico's official publisher is the NM Compilation Commission
+    // (nmonesource.com, a Lexum/Decisia install), NOT a legislature site. It has
+    // no per-section URL: the smallest unit it serves is a whole chapter, as a
+    // PDF at /nmos/nmsa/en/<itemId>/1/document.do. Chapter 45 (Uniform Probate
+    // Code) is item 4393, found by walking the paginated chapter list at
+    // nav_date.do — the ids are opaque and NOT guessable (same trap as KY).
+    //
+    // This is "New Mexico Statutes ANNOTATED", and the annotations are editorial
+    // matter we must not reproduce. Bounding on the ANNOTATIONS heading that
+    // follows every section keeps the capture to the statutory text alone.
+    url: "https://nmonesource.com/nmos/nmsa/en/4393/1/document.do",
+    startsWith: "45-2-504. Self-proved will.",
+    endsBefore: "ANNOTATIONS",
+    pdf: true,
+  },
+  {
     state: "NJ",
     key: "self_proving_affidavit",
     citation: "N.J.S.A. § 3B:3-4",
@@ -550,6 +617,41 @@ async function fetchRendered(url, waitForText) {
  * instead: start a new line when the baseline moves, and insert a space only when
  * there is a real horizontal gap between one run and the next.
  */
+/**
+ * Fetch a statute from a GraphQL endpoint.
+ *
+ * Alabama publishes its code only through a GraphQL API: alison.legislature.state.al.us
+ * renders every section client-side from a POST to /graphql, so there is no HTML
+ * page to fetch and no per-section document to download. Driving a headless
+ * browser would work but is slower and far more fragile than asking the same API
+ * the site itself asks — and the API returns exactly the section, with no site
+ * chrome to strip and nothing to bound.
+ *
+ * `spec.pick` walks the response to the field holding the statute's HTML, so the
+ * shape of one state's schema stays in that state's source entry.
+ */
+async function fetchGraphql(url, spec) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "User-Agent": UA, "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      operationName: spec.operationName,
+      query: spec.query,
+      variables: spec.variables,
+    }),
+    redirect: "follow",
+    signal: AbortSignal.timeout(30000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const json = await res.json();
+  if (json.errors?.length) throw new Error(`GraphQL: ${json.errors[0].message}`);
+
+  const picked = spec.pick(json);
+  if (!picked) throw new Error("GraphQL response had no content at the expected path");
+  return picked;
+}
+
 async function fetchPdfText(url) {
   const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
   const res = await fetch(url, {
@@ -622,7 +724,10 @@ function htmlToText(html) {
   let s = html
     .replace(/<(script|style)[\s\S]*?<\/\1>/gi, "")
     .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/(p|div|tr|li|h\d)>/gi, "\n")
+    // `entry`/`row` are DocBook table tags, not HTML ones. Alabama's publisher
+    // lays the signature block out as a DocBook table, so without these the
+    // cells run together — "Witness" + "State of" became "WitnessState of".
+    .replace(/<\/(p|div|tr|li|h\d|entry|row)>/gi, "\n")
     .replace(/<[^>]+>/g, "");
   s = s
     .replace(/&nbsp;/g, " ")
@@ -804,11 +909,13 @@ async function harvest(src, { checkOnly }) {
 
   let raw;
   try {
-    raw = src.pdf
-      ? await fetchPdfText(src.url)
-      : src.render
-        ? await fetchRendered(src.url, src.startsWith)
-        : await fetchPage(src.url);
+    raw = src.graphql
+      ? await fetchGraphql(src.url, src.graphql)
+      : src.pdf
+        ? await fetchPdfText(src.url)
+        : src.render
+          ? await fetchRendered(src.url, src.startsWith)
+          : await fetchPage(src.url);
   } catch (err) {
     return { ...src, status: "FETCH_FAILED", detail: err.message };
   }

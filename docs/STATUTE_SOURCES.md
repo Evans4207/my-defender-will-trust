@@ -29,7 +29,7 @@ crude version of the first for free: each capture stores a content hash, so
 
 ## Current status — self-proving affidavit
 
-**42 of 43 registered sources capture cleanly**, covering 42 jurisdictions. **29 have verbatim clause text generated** (see
+**45 of 46 registered sources capture cleanly**, covering 45 jurisdictions. **32 have verbatim clause text generated** (see
 `docs/CLAUSE_RESEARCH_METHOD.md`).
 
 **Target is 50 jurisdictions** — 50 states + DC, less Louisiana (owner decision,
@@ -38,15 +38,32 @@ being forced through this pipeline). MO/NC/OH/TX are researched even though they
 are not currently offered for sale, so switching a state on later is a config
 change rather than a fresh research project.
 
-Still entirely unregistered — no capture attempted yet: **AL, AR, GA, IN, MS, NM,
-TN** (official sites render client-side with no stable per-section URL).
-With NJ blocked, that is **8 jurisdictions short of the target.**
+Nothing is unregistered any more. **5 jurisdictions short of the target**, and the
+remainder split into two groups with very different prospects (2026-08-07):
 
-### Prescribes a self-proving affidavit form (29 states)
+- **AR, GA, MS, TN — blocked on a CAPTCHA, and not solvable by more engineering.**
+  All four publish their official code *only* through a LexisNexis public-access
+  site under contract with the state (`lexisnexis.com/hottopics/{arcode,gacode,
+  mscode,tncode}`, all of which land on `advance.lexis.com`). The table of
+  contents is session-scoped (`/r/tocprovider/<session>/toc/<session>`), so there
+  is no stable per-section URL; and requesting the document page directly returns
+  a **CAPTCHA validation page**. Defeating that is out of bounds, so no fetch
+  mode — plain, rendered, or otherwise — will reach these. They need either a
+  hand-sourced capture or counsel to supply the form. See "Findings worth
+  counsel's attention".
+- **NJ — blocked today by an unresponsive server, not by design.** See "Blocked".
+
+Citations verified along the way even where the text could not be captured:
+**O.C.G.A. § 53-4-24 is "Self-proved will or codicil"** — confirmed against the
+official Georgia Code Research Tool's own search results, so the seed citation is
+right even though the section body is behind the CAPTCHA.
+
+### Prescribes a self-proving affidavit form (32 states)
 
 | State | Citation | Captured |
 |---|---|---|
 | AK | AS § 13.12.504 | 3,897ch |
+| AL | Ala. Code § 43-8-132 | 3,918ch |
 | AZ | A.R.S. § 14-2504 | 3,776ch |
 | CO | C.R.S. § 15-11-504 | 4,580ch |
 | DE | 12 Del. C. § 1305 | 2,238ch |
@@ -54,6 +71,7 @@ With NJ blocked, that is **8 jurisdictions short of the target.**
 | HI | Haw. Rev. Stat. § 560:2-504 | 3,844ch |
 | IA | Iowa Code § 633.279 | 4,694ch |
 | ID | Idaho Code § 15-2-504 | 4,020ch |
+| IN | Ind. Code § 29-1-5-3.1 | 5,204ch |
 | KS | K.S.A. § 59-606 | 3,509ch |
 | KY | KRS § 394.225 | 4,648ch |
 | MA | Mass. G.L. c. 190B § 2-504 | 3,283ch |
@@ -65,6 +83,7 @@ With NJ blocked, that is **8 jurisdictions short of the target.**
 | NC | N.C.G.S. § 31-11.6 | 4,675ch |
 | ND | N.D. Cent. Code § 30.1-08-04 | 3,910ch |
 | NE | Neb. Rev. Stat. § 30-2329 | 4,756ch |
+| NM | NMSA 1978, § 45-2-504 | 6,000ch |
 | NV | NRS § 133.050 | 3,859ch |
 | OK | 84 O.S. § 55 | 5,963ch |
 | PA | 20 Pa.C.S. § 3132.1 | 4,795ch |
@@ -104,11 +123,38 @@ what such an affidavit should say.
 | MD | Md. Code, Est. & Trusts § 4-102 | **The same shape as DC.** § 4-102 is the execution provision; the only affidavit forms it prescribes sit inside subsections (c)–(d), which govern **electronic and remotely-witnessed** wills. Maryland appears to have **no self-proving affidavit for an ordinary paper will**. Captured and deliberately excluded from clause generation. **Please confirm.** |
 | OH | Ohio Rev. Code § 2107.18 | **Ohio has no self-proving affidavit at all** — ORC ch. 2107 (Wills) contains not one occurrence of "affidavit" or "self-prov". It appears not to need one: § 2107.18 directs the probate court to admit a will **"if it appears from the face of the will"**, taking witness testimony only "in its discretion". Captured as the provision that does the work a self-proving affidavit does elsewhere. This is the only capture carrying an `absentProvision` waiver (see below). **Please confirm that no affidavit should be produced for Ohio.** |
 
-### Blocked (1)
+### Blocked (5)
 
 | State | Issue |
 |---|---|
-| NJ | Official publisher **is** reachable — `lis.njleg.state.nj.us`, "New Jersey Statutes (Unannotated)", current through P.L.2025 c.346. But it is a Folio NXT frameset: content sits in a nested frame, there is no per-section URL, the TOC expands one level per round-trip via JS, the `xhitlist` query endpoint 500s, and the search box ignores programmatic input. Needs a TOC-walking fetch mode or one hand-sourced frame URL. **Do not fall back to the Justia mirror.** |
+| NJ | Folio NXT frameset: content sits in a nested frame, there is no per-section URL, the TOC expands one level per round-trip via JS, the `xhitlist` query endpoint 500s, and the search box ignores programmatic input. Needs a TOC-walking fetch mode or one hand-sourced frame URL. **Do not fall back to the Justia mirror.** **On 2026-08-07 the server stopped answering entirely** — `lis.njleg.state.nj.us` accepts the TLS connection then never responds (120s timeout, HTTP/1.1 and HTTP/2 alike), while `njleg.state.nj.us` serves fine from the same machine, so this is their Folio host and not our network. njleg.state.nj.us still links to the same Folio URL, so nothing has moved. **Retry before doing any engineering.** |
+| AR | Official code published only via LexisNexis (`lexisnexis.com/hottopics/arcode/`, reached through an interstitial on arkleg.state.ar.us). CAPTCHA — see below. |
+| GA | Official code published only via LexisNexis (`lexisnexis.com/hottopics/gacode`), styled the "Georgia Code Research Tool" and provided by the Georgia Code Revision Commission. CAPTCHA — see below. |
+| MS | Official code published only via LexisNexis (`lexisnexis.com/hottopics/mscode/`, linked as "Mississippi Code" from legislature.ms.gov). CAPTCHA — see below. |
+| TN | LexisNexis is the Tennessee Code Commission's contracted official publisher; the free unannotated code is on the same platform. CAPTCHA — see below. |
+
+**The LexisNexis wall (AR, GA, MS, TN).** These four are blocked for the same
+reason, and it is a wall rather than a puzzle:
+
+1. The TOC is session-scoped — expanding it calls `/r/tocprovider/<session>/toc/<session>`,
+   so there is no stable per-section URL to register.
+2. A search URL *is* reproducible (`…/container/?pdmfid=…&pdtocsearchterm=53-4-24&…&config=…`
+   works with the per-request `crid` stripped), but the results page shows only a
+   **truncated snippet** — it cuts off precisely at the prescribed form — and mixes
+   in Lexis's copyrighted case annotations.
+3. Following the result to the document page (whose URL does carry a stable
+   `urn:contentItem:` id) returns a **CAPTCHA validation page**.
+
+Working around a CAPTCHA is not something this pipeline will do. So these four
+cannot be harvested at all, and no amount of additional fetch modes changes that.
+The options are a hand-sourced capture with its provenance honestly downgraded,
+or leaving the form to counsel. **Owner decision required.**
+
+Note for the record: the Supreme Court held in *Georgia v. Public.Resource.Org*,
+590 U.S. 255 (2020), that the OCGA — annotations included — is an uncopyrightable
+government edict. The obstacle here is purely technical access control, not
+copyright. Public.Resource.Org does publish the OCGA, but its newest release is
+from 2019, which cannot support a "most current" claim.
 
 ### Resolved since the last pass (3)
 
@@ -122,14 +168,51 @@ what such an affidavit should say.
 
 | Method | States |
 |---|---|
-| Plain fetch | most |
+| Plain fetch | most, incl. IN |
 | Headless browser (`render: true`) | UT, SD, WA, AK, VT, CT, HI, NY, TX |
-| PDF text extraction (`pdf: true`) | CO, IA, KY, ND, OK, WY |
+| PDF text extraction (`pdf: true`) | CO, IA, KY, ND, OK, WY, NM |
+| GraphQL POST (`graphql: {…}`) | AL |
 
 Kentucky is worth a note: it serves every section as a **PDF behind an opaque
 numeric id**, with no section-number URL at all. KRS 394.225 is `id=36262`, found
 by reading the chapter-394 listing at `chapter.aspx?id=39195`. Guessing ids is
 useless — a nearby id returned the agritourism statute.
+
+**New Mexico repeats the Kentucky trap at chapter scale.** The official publisher
+is the NM Compilation Commission (`nmonesource.com`, a Lexum/Decisia install), not
+a legislature site, and the smallest unit it will serve is a whole chapter as a
+PDF: `/nmos/nmsa/en/<itemId>/1/document.do`. Chapter 45 is item **4393**, found by
+walking the *paginated* chapter list at `nav_date.do` (chapter 45 is on page 2).
+The ids are opaque and not guessable. Because it is the *Annotated* statutes,
+the capture is bounded on the `ANNOTATIONS` heading that follows every section, so
+only statutory text is taken.
+
+**Alabama needed a new fetch mode, and Indiana needed none after all.** Both sites
+had been written off as "client-side rendering, no stable URL"; both were wrong in
+instructive ways.
+
+- *Alabama* (`alison.legislature.state.al.us`) genuinely has no HTML page for a
+  section — the site is a React app over a **GraphQL** API. Rather than drive a
+  browser, the harvester now issues the same `codeOfAlabamaSection` query the site
+  itself issues. This is the best-behaved source in the whole registry: the
+  response **is** the section, so there is no chrome to strip, no markers to bound,
+  and the drift hash covers statutory text only. The human-readable equivalent is
+  `…/code-of-alabama?section=43-8-132`. Adding a state here is a one-line change
+  to `variables.displayId`.
+- *Indiana* (`iga.in.gov`) renders the code into a **shadow DOM**. That is why it
+  defeated both a plain fetch *and* an ordinary rendered scrape — `document.body.innerText`
+  returns only site chrome, so a `render: true` source would have failed too and
+  looked like a marker bug. What the app actually loads is a static per-title HTML
+  file, `/ic/2025/Title_29.html`, which a **plain fetch** reads fine. (Its sibling
+  `api.iga.in.gov` demands an API key; the static file does not.) The `IC ` prefix
+  is what distinguishes a section heading from its identically-worded table-of-
+  contents entry.
+
+**Lesson worth generalising:** when a site "renders client-side", find what its
+front end fetches before reaching for a browser. Three of the four states cracked
+this pass (AL, IN, NM) were solved by reading the network panel, and the resulting
+sources are faster and more stable than `render: true` ones. A browser was needed
+only to *discover* the endpoint, never to harvest it.
 
 ### The `absentProvision` escape hatch
 
@@ -179,6 +262,19 @@ probate court admit a will on its face, making one largely unnecessary. **The
 execution instructions for these three need to say something different from every
 other state, and counsel should confirm what.**
 
+**Idaho was printing the wrong form as well as the right one (found and fixed
+2026-08-07).** Its extraction was bounded on subsection **(3)** rather than (2), so
+the generated clause ran straight through Idaho's *after-the-fact* form and
+included that subsection's statutory preamble — "(2) An attested will may at any
+time subsequent to its execution be made self-proved by the acknowledgment
+thereof…" — as though it were a paragraph for the signer to sign. Idaho now
+generates the same three paragraphs as its neighbours. **This is a live state, so
+any Idaho document generated before 2026-08-07 carries the defect.** A sweep of
+every other generated clause for leaked subsection preambles found no second
+instance. Note what did *not* catch this: the verbatim test passed throughout,
+because the extra paragraphs really are in the statute — they are simply the wrong
+part of it. **Verbatim fidelity is not the same as taking the right excerpt.**
+
 **Texas prints two forms and we take the second.** § 251.104 is the affidavit
 annexed to an already-executed will; § 251.1045 is the simultaneous
 execution/attestation/self-proving form. We generate § 251.1045, consistent with
@@ -192,6 +288,19 @@ documents tracking the wrong model in eight states so far.
 an already-executed will self-proved. We generate the simultaneous-execution form
 only. Counsel is asked per state whether the after-the-fact variant should also be
 offered.
+
+**Indiana splits its two forms on a different axis, and needs its own question.**
+IC 29-1-5-3.1 prints a clause at (c) for an ordinary in-person signing and a second
+at (d) for **remote witnessing of separate paper counterparts** — not the usual
+simultaneous / after-the-fact pair. We generate (c). **Please confirm that a
+product which does not walk a user through a remote signing ceremony should never
+offer (d).**
+
+**Indiana also requires no notary at all.** Its clause is an **unsworn declaration
+under the penalties for perjury** — no officer, no oath, no seal, no certificate —
+so an Indiana document must not print the notary block every other state's form
+ends with. This corroborates the seeded `selfProving.requiresNotary: false` for
+Indiana, which until now was unverified. **Please confirm.**
 
 **The District of Columbia may have no paper-will self-proving mechanism.** The
 only provision found is § 18-908, which is the Uniform Electronic Wills Act.
@@ -242,6 +351,22 @@ footer block disappeared, the hash moved, and the statutory text was byte-identi
 Anyone acting on `statutes:check` must diff before believing an amendment alert.
 The fix is to hash only the text between the markers once every source is bounded.
 
+**A third gap, found and fixed on 2026-08-07: line structure was only recovered
+from HTML tags, and not every publisher uses HTML ones.** Alabama lays its
+signature block out in **DocBook** table markup (`<row>`, `<entry>`), which the
+text converter did not treat as line breaks. The capture passed every gate and the
+verbatim test — the words were all correct and all in order — but the cells ran
+together (`"Witness" + "State of"` → `"WitnessState of"`), and the clause generator
+then emitted Alabama's whole form as a single run-on paragraph instead of four.
+`</entry>` and `</row>` now break lines.
+
+The general point is that **the verbatim test cannot catch a formatting defect**:
+it asks whether our text appears in the statute, and a run-on paragraph still does.
+Whitespace damage has to be eyeballed in the generated file. When a state's
+`gen-self-proving-forms` output shows a paragraph count far below its neighbours'
+(Alabama reported `1 paragraph(s)` where comparable states report 4), that is the
+tell.
+
 ## Keeping the legal review checklist current
 
 `docs/LEGAL_REVIEW_CHECKLIST.docx` is what actually goes to counsel, and several of
@@ -256,7 +381,7 @@ deliberately, in the same commit as the finding that changed it.**
 | **B2** Self-proving affidavit exceptions | Any state moves between the three buckets: prescribes a form / prescribes none / has no mechanism at all. This is the item most likely to go stale. |
 | **B4** Excluded states | A not-for-sale state gets captured, or an exclusion is cleared. |
 | **B5** Louisiana | The decision to leave LA out of this pipeline changes. |
-| **B8** Provenance of the statutory text | **Every time the capture count changes.** It states "42 of a target 50" and names the outstanding jurisdictions; that sentence is wrong the moment another state lands. |
+| **B8** Provenance of the statutory text | **Every time the capture count changes.** It states "45 of a target 50" and names the outstanding jurisdictions; that sentence is wrong the moment another state lands. |
 
 The counsel-facing framing lives in B8 and must stay exactly this honest: reproduced
 from the state's own published statute, cited, dated, automatically verified against

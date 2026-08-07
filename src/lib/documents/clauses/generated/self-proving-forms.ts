@@ -32,10 +32,7 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
     "paragraphs": [
       "I,____________, the testator, sign my name to this instrument this____________ day of____________,…., and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.",
       "We,____________,____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his last will and that he signs it willingly (or willingly directs another to sign for him), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator’s signing, and that to the best of his knowledge the testator is eighteen (18) years of age or older, of sound mind, and under no constraint or undue influence.",
-      "The State of____________ County of____________ Subscribed, sworn to and acknowledged before me by____________, the testator and subscribed and sworn to before me by____________, and____________, witnesses, this____________ day of____________",
-      "(2) An attested will may at any time subsequent to its execution be made self-proved by the acknowledgment thereof by the testator and the affidavits of the witnesses, each made before an officer authorized to administer oaths under the laws of the state where the acknowledgment occurs and evidenced by the officer’s certificate, under the official seal, attached or annexed to the will in form and content substantially as follows:",
-      "The State of____________ County of____________ We,____________,____________, and____________, the testator and the witnesses, respectively, whose names are signed to the attached or foregoing instrument, being first duly sworn do hereby declare to the undersigned authority that the testator signed and executed the instrument as his last will and that he had signed willingly (or willingly directed another to sign for him), and that he executed it as his free and voluntary act for the purposes therein expressed, and that each of the witnesses, in the presence and hearing of the testator, signed the will as witness and that to the best of his knowledge the testator was at that time eighteen (18) years of age or older, of sound mind and under no constraint or undue influence.",
-      "Subscribed, sworn to and acknowledged before me by____________, the testator, and subscribed and sworn to before me by____________, and____________, witnesses, this____________ day of____________"
+      "The State of____________ County of____________ Subscribed, sworn to and acknowledged before me by____________, the testator and subscribed and sworn to before me by____________, and____________, witnesses, this____________ day of____________"
     ]
   },
   "MN": {
@@ -339,6 +336,44 @@ export const SELF_PROVING_FORMS: Record<string, StatutoryForm> = {
       "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
       "We, ____________, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as the testator's will and that the testator signs it willingly (or willingly directs another to sign for the testator), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator's signing, and that to the best of our knowledge the testator is eighteen years of age or older, of sound mind, and under no constraint or undue influence.",
       "The State of ____________ County of ____________ Subscribed, sworn to and acknowledged before me by ____________, the testator, and subscribed and sworn to before me by ____________, and ____________, witness, this ____________ day of ____________"
+    ]
+  },
+  "AL": {
+    "citation": "Ala. Code § 43-8-132",
+    "sourceUrl": "https://alison.legislature.state.al.us/graphql",
+    "retrievedAt": "2026-08-07",
+    "paragraphs": [
+      "I, ____________, the testator, sign my name to this instrument this ____________ day of ____________, 20__, and being first duly sworn, do hereby declare to the undersigned authority that I sign and execute this instrument as my last will and that I sign it willingly (or willingly direct another to sign for me), that I execute it as my free and voluntary act for the purposes therein expressed, and that I am 18 years of age or older, of sound mind, and under no constraint or undue influence.” ____________",
+      "“We, ____________, the witnesses, sign our names to this instrument, being first duly sworn, and do hereby declare to the undersigned authority that the testator signs and executes this instrument as his/her last will and that he/she signs it willingly (or willingly directs another to sign for him or her), and that each of us, in the presence and hearing of the testator, hereby signs this will as witness to the testator’s signing, and that to the best of our knowledge the testator is 18 years of age or older, of sound mind, and under no constraint or undue influence.” ____________",
+      "State of ____________ County of ____________ Subscribed, sworn to and acknowledged before me by ____________, the testator and subscribed and sworn to before me by ____________, and ____________, witnesses, this ____________ day of ____________, 20____________",
+      "____________ (Official Capacity of Officer)"
+    ]
+  },
+  "NM": {
+    "citation": "NMSA 1978, § 45-2-504",
+    "sourceUrl": "https://nmonesource.com/nmos/nmsa/en/4393/1/document.do",
+    "retrievedAt": "2026-08-07",
+    "paragraphs": [
+      "I, ____________, the testator, swear or affirm under penalty of perjury on this ____________ day of ____________, that I request ____________ and ____________ to act as witnesses to my will;",
+      "that I declare to them and the undersigned authority that this document is my will; that I sign this will in the presence of both witnesses; that they sign the will as witnesses in my presence and in the presence of each other; that the will was read by me (or read and explained to me) after being prepared and before I sign it; that it clearly and accurately expresses my wishes; that I sign it willingly (or willingly directed another to sign for me);",
+      "that I make and sign the will as my free and voluntary act for the purposes expressed in the will; that I am eighteen years of age or older; that I am mentally capable of disposing of my estate by will; and that I am not acting under duress, menace, fraud or undue influence of any person.",
+      "We, ____________ and ____________, the witnesses, do hereby swear or affirm under penalty of perjury on this ____________ day of ____________ to the undersigned authority that the testator, ____________, declares that the attached document is his or her will; that the testator signs it willingly (or willingly directs another to sign for him or her); that the testator signs it in the presence of both of us and requests both of us to sign as witnesses; that each of us, in the presence of the testator and in the presence of each other, signs this will as witness to the testator's signing; that so far as we can determine, the testator is eighteen years of age or older; that the testator is not acting under duress, menace, fraud or undue influence of any person;",
+      "and that the testator, in our opinion, is mentally capable of disposing of his or her estate by will.",
+      "State of ____________ County of ____________ Subscribed and sworn to, or affirmed under penalty of perjury, and acknowledged before me by ____________, the testator, and subscribed and sworn to, or affirmed under penalty of perjury, before me by ____________ and ____________, witnesses, this ____________ day of ____________",
+      "____________ (Official capacity of officer)\"."
+    ]
+  },
+  "IN": {
+    "citation": "Ind. Code § 29-1-5-3.1",
+    "sourceUrl": "https://iga.in.gov/ic/2025/Title_29.html",
+    "retrievedAt": "2026-08-07",
+    "paragraphs": [
+      "We, the undersigned testator and the undersigned witnesses, respectively, whose names are signed to the attached or foregoing instrument declare:",
+      "(1) that the testator executed the instrument as the testator's will;",
+      "(2) that, in the presence of both witnesses, the testator signed or acknowledged the signature already made or directed another to sign for the testator in the testator's presence;",
+      "(3) that the testator executed the will as a free and voluntary act for the purposes expressed in it;",
+      "(4) that each of the witnesses, in the presence of the testator and of each other, signed the will as a witness;",
+      "(5) that the testator was of sound mind when the will was executed; and (6) that to the best knowledge of each of the witnesses the testator was, at the time the will was executed, at least eighteen (18) years of age or was a member of the armed forces or of the merchant marine of the United States or its allies."
     ]
   }
 };
