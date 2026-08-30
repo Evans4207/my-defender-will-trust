@@ -9,6 +9,12 @@ import {
   jointTrustName,
   type AssembleOpts,
 } from "./couples";
+import {
+  selfProvingAffidavitSection,
+  testamentarySignatureLines,
+  unresearchedExecutionNotice,
+  unresearchedSignatureLines,
+} from "./execution-block";
 
 /*
  * ⚠️ [ATTORNEY REVIEW REQUIRED] — PLACEHOLDER language. Conditional inclusion is
@@ -155,9 +161,23 @@ export function assembleTrust(opts: AssembleOpts): AssembledDocument {
     ],
   });
 
-  const signatureLines = couple
-    ? [`Grantor: ${primary}`, `Grantor: ${spouse}`, "Date", "Notary Public"]
-    : [`Grantor: ${signerName}`, `Trustee: ${trustee}`, "Date", "Notary Public"];
+  sections.push({
+    heading: "Execution",
+    paragraphs: [unresearchedExecutionNotice("trust", stateName)],
+  });
+
+  // Trust execution formalities are NOT in state_rules — every seeded row is
+  // doc_type = 'will'. This block therefore fails closed rather than asserting a
+  // notary requirement in all 51 jurisdictions, which is what it used to do.
+  //
+  // Getting this wrong is not hypothetical: Fla. Stat. § 736.0403(2)(b) requires
+  // a Florida-domiciled settlor's revocable trust to be executed with WILL
+  // formalities — two witnesses and signature at the end — and the previous
+  // block printed neither. See docs/STATE_COMPLIANCE_DOSSIER.md §3.
+  const roleLines = couple
+    ? [`Grantor: ${primary}`, `Grantor: ${spouse}`]
+    : [`Grantor: ${signerName}`, `Trustee: ${trustee}`];
+  const signatureLines = unresearchedSignatureLines(roleLines);
 
   return {
     kind: "trust",
@@ -231,10 +251,22 @@ export function assemblePouroverWill(opts: AssembleOpts): AssembledDocument {
     ],
   });
 
-  const signatureLines = [`Testator: ${signerName}`, "Date"];
-  for (let i = 1; i <= ruleset.witnessesRequired; i++) {
-    signatureLines.push(`Witness ${i}`);
-  }
+  // A pour-over will is a will. It previously emitted NO self-proving affidavit
+  // and no notary line in any state, so a trust customer's will was silently
+  // less provable at probate than an identical will-package customer's in the
+  // same jurisdiction. Both now run through the same helper.
+  const affidavit = selfProvingAffidavitSection({
+    ruleset,
+    signerName,
+    stateName,
+  });
+  if (affidavit) sections.push(affidavit.section);
+
+  const signatureLines = testamentarySignatureLines({
+    ruleset,
+    signerRole: `Testator: ${signerName}`,
+    clauseSignatureLines: affidavit?.clauseSignatureLines ?? null,
+  });
 
   return {
     kind: "pourover",

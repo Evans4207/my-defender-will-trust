@@ -3,6 +3,10 @@ import { STATE_NAMES } from "@/lib/interview/states";
 import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
 import { s } from "./answers";
 import { perspective, isCouple, type AssembleOpts } from "./couples";
+import {
+  unresearchedExecutionNotice,
+  unresearchedSignatureLines,
+} from "./execution-block";
 
 /*
  * ⚠️ [ATTORNEY REVIEW REQUIRED] — PLACEHOLDER ancillary documents. Where a state
@@ -14,8 +18,18 @@ import { perspective, isCouple, type AssembleOpts } from "./couples";
  * agent, with the person named in the interview serving as the shared successor.
  */
 
+/**
+ * Notice printed at the head of each ancillary document.
+ *
+ * This previously read "Where [State] provides a statutory [kind] form, that
+ * form is used verbatim" — a statement the document could not support. No
+ * statutory form text exists for any state in this codebase, and no data records
+ * which states publish one. docs/STATE_COMPLIANCE_DOSSIER.md §4 flags it: "The
+ * document is making a false statement about itself." Corrected to describe what
+ * the draft actually is.
+ */
 function statutoryNote(kind: string, stateName: string): string {
-  return `${ATTORNEY_REVIEW_REQUIRED} Where ${stateName} provides a statutory ${kind} form, that form is used verbatim. This draft is a general placeholder pending state-specific statutory text.`;
+  return `${ATTORNEY_REVIEW_REQUIRED} This is a general placeholder ${kind}. It is NOT ${stateName}'s statutory form, and no statutory form text has been incorporated. Where ${stateName} publishes or prescribes a form, that form must replace this draft before use.`;
 }
 
 export function assemblePoa(opts: AssembleOpts): AssembledDocument {
@@ -43,7 +57,13 @@ export function assemblePoa(opts: AssembleOpts): AssembledDocument {
     signerName,
     attorneyReviewRequired: true,
     sections: [
-      { heading: "Notice", paragraphs: [statutoryNote("power of attorney", stateName)] },
+      {
+        heading: "Notice",
+        paragraphs: [
+          statutoryNote("power of attorney", stateName),
+          unresearchedExecutionNotice("poa", stateName),
+        ],
+      },
       { heading: "Appointment", paragraphs: appointment },
       {
         heading: "Durability",
@@ -58,7 +78,13 @@ export function assemblePoa(opts: AssembleOpts): AssembledDocument {
         ],
       },
     ],
-    signatureLines: [`Principal: ${signerName}`, "Date", "Notary Public"],
+    // Fails closed. The previous block printed "Notary Public" in all 51
+    // jurisdictions. Per docs/STATE_COMPLIANCE_DOSSIER.md §4 the real
+    // requirements diverge sharply — Florida needs two witnesses AND a notary,
+    // Arizona one witness AND a notary plus a mandatory notarial certificate
+    // (§ 14-5501(D)(4)), California a notary OR two witnesses — and none of it
+    // is in state_rules.
+    signatureLines: unresearchedSignatureLines([`Principal: ${signerName}`]),
   };
 }
 
@@ -87,7 +113,13 @@ export function assembleHealthcare(opts: AssembleOpts): AssembledDocument {
     signerName,
     attorneyReviewRequired: true,
     sections: [
-      { heading: "Notice", paragraphs: [statutoryNote("advance healthcare directive", stateName)] },
+      {
+        heading: "Notice",
+        paragraphs: [
+          statutoryNote("advance healthcare directive", stateName),
+          unresearchedExecutionNotice("healthcare", stateName),
+        ],
+      },
       { heading: "Healthcare Agent", paragraphs: agentParas },
       {
         heading: "Living Will",
@@ -96,7 +128,13 @@ export function assembleHealthcare(opts: AssembleOpts): AssembledDocument {
         ],
       },
     ],
-    signatureLines: [`Principal: ${signerName}`, "Date", "Witness 1", "Witness 2"],
+    // Fails closed. The previous block always printed exactly two witness lines
+    // and never a notary line — but Arizona requires a notary, and California
+    // Prob. Code § 4675 additionally requires a patient advocate or ombudsman to
+    // witness when the patient is in a skilled nursing facility, without which
+    // the directive is not effective. Witness counts are not recorded per state
+    // for this instrument.
+    signatureLines: unresearchedSignatureLines([`Principal: ${signerName}`]),
   };
 }
 
@@ -129,6 +167,18 @@ export function assembleHipaa(opts: AssembleOpts): AssembledDocument {
         ],
       },
     ],
+    // Deliberately NOT routed through unresearchedSignatureLines. A HIPAA
+    // authorization is governed by 45 CFR 164.508, which regulates content and
+    // requires the individual's signature and date — no witnesses, no notary.
+    // This block asserts nothing that is not federally required, so there is no
+    // false claim to fail closed on.
+    //
+    // Note for the state-rules work that follows: state law can still add
+    // requirements this assembler does not model. Cal. Civ. Code § 56.11 requires
+    // a CMIA authorization to be in 14-point type minimum, "clearly separate from
+    // any other language on the same page," and signed by a signature "that
+    // serves no other purpose" — a formatting and layout constraint rather than a
+    // signature-block one, and out of scope here.
     signatureLines: [`Individual: ${signerName}`, "Date"],
   };
 }

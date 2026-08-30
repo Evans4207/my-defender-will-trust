@@ -1,0 +1,199 @@
+/**
+ * Execution blocks — the signature / witness / notary lines printed at the foot
+ * of a generated document.
+ *
+ * WHY THIS MODULE EXISTS
+ * ----------------------
+ * Execution formalities are set state by state, and the platform is data-driven
+ * (Instructions #5): an assembler must never branch on a state code, and must
+ * never assert a formality the rules layer does not record.
+ *
+ * Before this module, only `assembleWill` honoured that. Every other assembler
+ * hardcoded its block — the trust printed "Notary Public" in all 51
+ * jurisdictions, the POA did the same, the healthcare directive always printed
+ * exactly two witness lines, and the pour-over will printed no notary line and
+ * no self-proving affidavit anywhere. Those blocks are assertions about a
+ * state's law, and they were made without data behind them.
+ *
+ * `state_rules` today carries formalities for the WILL only: every seeded row is
+ * `doc_type = 'will'`. There are no trust, POA or healthcare rows for any state.
+ * So this module splits documents in two:
+ *
+ *   - Rule-backed instruments (will, pour-over will) derive their block from the
+ *     ruleset, exactly as `assembleWill` always did.
+ *   - Everything else FAILS CLOSED: it prints the roles that are universal (the
+ *     signer, the date) and an explicit attorney-review line in place of the
+ *     witness and notary lines, rather than guessing them.
+ *
+ * Fail-closed is deliberate. A document that prints "Notary Public" in a state
+ * requiring no notary is making a false statement about that state's law; a
+ * document that says the requirement has not been established is making a true
+ * one. When trust/POA/healthcare rows are added to `state_rules`, move those
+ * kinds into RULE_BACKED and delete the corresponding notice.
+ *
+ * ⚠️ Nothing in this module drafts legal language. It emits blank lines to sign
+ * on and review markers — never clause text, affidavit wording or statutory
+ * text.
+ */
+
+import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
+import { needsAttorneyReview } from "./clause-provenance";
+import { selfProvingAffidavitFor } from "./clauses/self-proving-affidavit";
+import type { DocSection, DocumentKind } from "./model";
+import type { StateRuleset } from "./state-rules";
+
+/**
+ * Instruments whose execution formalities are recorded in `state_rules`.
+ * Everything absent from this set fails closed. Add a kind here ONLY once its
+ * rows exist in the seed for all 51 jurisdictions.
+ */
+const RULE_BACKED: ReadonlySet<DocumentKind> = new Set<DocumentKind>([
+  "will",
+  "pourover",
+]);
+
+export function hasRecordedExecutionRules(kind: DocumentKind): boolean {
+  return RULE_BACKED.has(kind);
+}
+
+/** Human-readable instrument names, for notices addressed to the customer. */
+export const INSTRUMENT_LABEL: Record<DocumentKind, string> = {
+  will: "will",
+  pourover: "pour-over will",
+  trust: "revocable living trust",
+  poa: "durable financial power of attorney",
+  healthcare: "advance healthcare directive",
+  hipaa: "HIPAA authorization",
+  affidavit: "affidavit",
+};
+
+/**
+ * The notice printed on any document whose execution formalities are not yet in
+ * `state_rules`. States what is missing and what the reader must not assume.
+ */
+export function unresearchedExecutionNotice(
+  kind: DocumentKind,
+  stateName: string,
+): string {
+  return (
+    `${ATTORNEY_REVIEW_REQUIRED} Execution requirements for a ${INSTRUMENT_LABEL[kind]} ` +
+    `in ${stateName} — how many witnesses are needed, who may act as one, and whether ` +
+    `notarization is required — are NOT yet recorded in this platform's state rules. ` +
+    `The signature block below is therefore not state-specific: it names only the ` +
+    `signing parties. Do not sign or rely on this document until a licensed attorney ` +
+    `in ${stateName} confirms the formalities that apply to it.`
+  );
+}
+
+/** The line that stands in for witness/notary lines we cannot justify printing. */
+export const PENDING_EXECUTION_BLOCK_LINE =
+  `${ATTORNEY_REVIEW_REQUIRED} Witness and notary lines pending attorney review`;
+
+/**
+ * Fail-closed block: the roles that are true regardless of jurisdiction, then an
+ * explicit marker where the state-specific lines belong.
+ */
+export function unresearchedSignatureLines(roleLines: string[]): string[] {
+  return [...roleLines, "Date", PENDING_EXECUTION_BLOCK_LINE];
+}
+
+/**
+ * Self-proving affidavit section for a testamentary instrument, resolved per
+ * state from the clause library. Returns the section to append and, where the
+ * clause is researched, the statute-specific execution lines it supplies.
+ *
+ * Shared by the will and the pour-over will so the two cannot drift: before
+ * this, the pour-over will emitted no affidavit at all, silently downgrading a
+ * trust customer's will relative to an identical will-package customer's in the
+ * same state.
+ */
+export function selfProvingAffidavitSection(opts: {
+  ruleset: StateRuleset;
+  signerName: string;
+  stateName: string;
+}): { section: DocSection; clauseSignatureLines: string[] | null } | null {
+  const { ruleset, signerName, stateName } = opts;
+  const sp = ruleset.selfProvingAffidavit;
+
+  if (sp.available === "uncertain") {
+    return {
+      section: {
+        heading: "Self-Proving Affidavit",
+        paragraphs: [
+          `${ATTORNEY_REVIEW_REQUIRED} Self-proving affidavit availability in ${stateName} requires attorney confirmation and is omitted from this draft.`,
+        ],
+      },
+      clauseSignatureLines: null,
+    };
+  }
+  if (sp.available !== true) return null;
+
+  const clause = selfProvingAffidavitFor(ruleset.state, {
+    testatorName: signerName,
+    stateName,
+    witnessCount: ruleset.witnessesRequired,
+    requiresNotary: sp.requiresNotary,
+  });
+
+  const paragraphs = [...clause.paragraphs];
+  if (needsAttorneyReview(clause.provenance)) {
+    paragraphs.push(
+      clause.provenance.status === "researched"
+        ? `${ATTORNEY_REVIEW_REQUIRED} This affidavit is drafted to track ${clause.provenance.citation} and has not yet been approved by an attorney.`
+        : `${ATTORNEY_REVIEW_REQUIRED} (${
+            sp.requiresNotary
+              ? `Notarization required in ${stateName}.`
+              : `${stateName} may permit an unsworn declaration in lieu of notarization.`
+          })`,
+    );
+  }
+
+  return {
+    section: { heading: "Self-Proving Affidavit", paragraphs },
+    // A researched clause supplies its own statute-specific execution block
+    // (notary wording, commission line, seal); prefer it over the generic one.
+    clauseSignatureLines:
+      clause.provenance.status === "researched" ? clause.signatureLines : null,
+  };
+}
+
+/**
+ * Execution block for a testamentary instrument, derived entirely from the
+ * ruleset: signer, date, one line per required witness, then either the
+ * statute-specific block from a researched affidavit clause or a generic notary
+ * line where the state requires notarization.
+ *
+ * A notary line is printed when EITHER the self-proving affidavit requires a
+ * notary OR the state requires the instrument itself to be notarized. The second
+ * condition was previously never consulted — `notarizationRequired` is true for
+ * Louisiana and was read only by the execution-instructions page, never by the
+ * document.
+ */
+export function testamentarySignatureLines(opts: {
+  ruleset: StateRuleset;
+  signerRole: string;
+  clauseSignatureLines?: string[] | null;
+}): string[] {
+  const { ruleset, signerRole, clauseSignatureLines } = opts;
+  const lines: string[] = [signerRole, "Date"];
+
+  for (let i = 1; i <= ruleset.witnessesRequired; i++) {
+    lines.push(`Witness ${i} — signature / printed name / address`);
+  }
+
+  if (clauseSignatureLines && clauseSignatureLines.length > 0) {
+    const seen = new Set(lines);
+    for (const line of clauseSignatureLines) {
+      if (!seen.has(line)) lines.push(line);
+    }
+    return lines;
+  }
+
+  const notaryRequired =
+    (ruleset.selfProvingAffidavit.available === true &&
+      ruleset.selfProvingAffidavit.requiresNotary) ||
+    ruleset.notarizationRequired;
+
+  if (notaryRequired) lines.push("Notary Public");
+  return lines;
+}
