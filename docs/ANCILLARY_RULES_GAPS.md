@@ -97,7 +97,11 @@ This is not a property of California. It is a property of *where the signer is l
 
 1. ~~**Extend the rule shape for disjunctions first.**~~ ✅ **Done.** `execution_alternatives`, with both branches printed and labelled.
 2. ~~**Seed Florida POA alone as the pilot.**~~ ✅ **Done**, cited to Fla. Stat. § 709.2105 and verified against the state's own publisher.
-3. **Treat the content gaps as separate work from the execution gaps.** Still open. § 709.2202 initialing and § 14-5501(D)(4) certificate text are document-body problems. The execution block being right does not touch them, and `recordedExecutionNotice` says so on every document that derives a block.
+3. **Treat the content gaps as separate work from the execution gaps.** Still open. § 709.2202 initialing and § 14-5501(D)(4) certificate text are document-body problems. The execution block being right does not touch them, and `recordedExecutionNotice` says so on the **trust, POA and healthcare directive**.
+
+   **Correction (31 Aug 2026):** an earlier draft of this line claimed the notice appears on *"every document that derives a block"*. It does not. The **will and the pour-over will** derive their blocks from state rules and carry no such notice — they always have, and this work did not change them. The gap matters on its own terms: the notice's central warning is that *who may serve as a witness* is not generated, and interested-witness disqualification is a will problem far more than a POA problem.
+
+   **Decision needed:** whether the will and pour-over will should carry an equivalent notice. It would change every will generated in all 51 jurisdictions, so it is a product call rather than a bug fix.
 4. **Do not seed AZ or NV** until 3 is settled. Unchanged.
 5. **New:** California is now *representable* but still not seeded — the shape is built, the legal choice between its two branches is not ours. See §1.
 

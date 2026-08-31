@@ -70,7 +70,9 @@ export function hasRecordedExecutionRules(ruleset: StateRuleset): boolean {
  * Constraints it cannot express — who may witness, statutory certificate wording,
  * per-power initialing — are NOT represented here and must not be assumed
  * satisfied because a block printed. `recordedExecutionNotice` says so on the
- * document itself.
+ * trust, POA and healthcare directive. NOTE: the will and pour-over will derive
+ * their blocks through `testamentarySignatureLines` and carry NO such notice —
+ * see the decision recorded in docs/ANCILLARY_RULES_GAPS.md.
  */
 export function ancillarySignatureLines(opts: {
   ruleset: StateRuleset;

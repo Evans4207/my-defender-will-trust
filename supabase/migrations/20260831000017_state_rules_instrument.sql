@@ -48,6 +48,12 @@
 -- deliberate, and it fails closed.
 -- =============================================================================
 
+-- Wrapped in a transaction, as migrations 0015 and 0016 are. Without it a
+-- failure after `drop column doc_type` leaves the schema half-migrated AND
+-- unrecoverable: the column the backfill reads from is already gone, and a
+-- re-run cannot reconstruct it.
+begin;
+
 create type public.instrument_type as enum (
   'will',
   'pourover',
@@ -67,7 +73,8 @@ alter table public.state_rules
 -- new type, so this is a straight relabel.
 update public.state_rules
    set instrument = doc_type::text::public.instrument_type
- where doc_type is not null;
+ where doc_type is not null
+   and instrument is null;
 
 -- The trap, resolved. These rows were seeded with a NULL doc_type ("applies to
 -- both") but every one of them cites will law. They are will rules and always
@@ -82,10 +89,15 @@ update public.state_rules
 -- carries a NULL row for some other key, stop and say which — silently letting
 -- it through is how the trust label got attached to will research in the first
 -- place.
+-- Every way the new schema can reject existing data is checked HERE, before the
+-- destructive step, and each names the offending rows. An earlier version of this
+-- migration checked only the first of the three and discovered the other two after
+-- `doc_type` had already been dropped.
 do $$
 declare
   offenders text;
 begin
+  -- (1) An instrument-scoped key left unscoped. The old "applies to both" reading.
   select string_agg(distinct state_code || '/' || rule_key, ', ')
     into offenders
     from public.state_rules
@@ -95,6 +107,38 @@ begin
   if offenders is not null then
     raise exception
       'state_rules has NULL-instrument rows for instrument-scoped keys: %. Assign each an instrument before re-running this migration.',
+      offenders;
+  end if;
+
+  -- (2) A state-level key that carries an instrument. Rejected by the same CHECK
+  -- from the other direction.
+  select string_agg(distinct state_code || '/' || rule_key, ', ')
+    into offenders
+    from public.state_rules
+   where instrument is not null
+     and rule_key in ('community_property');
+
+  if offenders is not null then
+    raise exception
+      'state_rules has instrument-scoped rows for state-level keys: %. Set their instrument to null before re-running this migration.',
+      offenders;
+  end if;
+
+  -- (3) Rows that the backfill has just collapsed onto one key, which would break
+  -- the new unique index. Two rows for the same state and key — one previously
+  -- NULL, one previously 'will' — are now indistinguishable.
+  select string_agg(state_code || '/' || rule_key, ', ')
+    into offenders
+    from (
+      select state_code, rule_key
+        from public.state_rules
+       group by state_code, rule_key, instrument
+      having count(*) > 1
+    ) dupes;
+
+  if offenders is not null then
+    raise exception
+      'state_rules has rows that collapse onto the same (state, rule_key, instrument) after backfill: %. Remove the duplicates before re-running this migration.',
       offenders;
   end if;
 end $$;
@@ -127,3 +171,5 @@ comment on column public.state_rules.instrument is
 
 comment on table public.state_rules is
   'The data-driven 51-jurisdiction legal engine (build plan §5). No legal rules hardcoded in templates or code. Scoped by `instrument`, NOT by the package that was sold: a pour-over will is a will and takes will rules. needs_review flags anything awaiting counsel.';
+
+commit;

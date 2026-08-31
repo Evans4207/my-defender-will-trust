@@ -21,8 +21,18 @@ export type StateRuleset = {
    * jurisdiction at a time, so "is the POA rule-backed?" has no single answer:
    * it is yes in whichever states have rows and no everywhere else, and it flips
    * per state the moment counsel-approved rows land, with no code change.
+   *
+   * True requires the keys the block CONSUMES — both `witnesses_required` and
+   * `notarization_required_for_document`, or an `execution_alternatives` row
+   * that replaces them. A partially seeded instrument fails closed.
    */
   hasRecordedRules: boolean;
+  /**
+   * Rule keys recorded for this instrument in this state, excluding state-level
+   * rows. Exposed so a caller can tell "recorded as not required" from "not
+   * researched", which the defaulted booleans above cannot express.
+   */
+  recordedRuleKeys: string[];
   /**
    * Where a state accepts EITHER of several rituals rather than requiring all
    * parts of one. Null means the ordinary conjunction of `witnessesRequired` and
@@ -147,17 +157,43 @@ export function parseExecutionAlternatives(
   if (!Array.isArray(anyOf) || anyOf.length < 2) return null;
 
   const options: ExecutionOption[] = [];
+  const seen = new Set<string>();
   for (const raw of anyOf) {
     const o = obj(raw);
-    const witnesses = typeof o.witnesses === "number" ? o.witnesses : null;
     const notary = typeof o.notary === "boolean" ? o.notary : null;
-    if (witnesses === null || notary === null) return null;
+    if (notary === null) return null;
+
+    // Must be a whole, non-negative count. `typeof === "number"` alone let 0.5
+    // through, which printed an option header — "Option 1: 0.5 witnesses" —
+    // with no witness line under it, because the render loop runs to <= 0.5 and
+    // never executes. An option with nothing to sign is worse than no option.
+    const witnesses = o.witnesses;
+    if (typeof witnesses !== "number" || !Number.isInteger(witnesses)) return null;
+    if (witnesses < 0) return null;
+
     // An option requiring nothing at all is not an alternative, it is a bug.
-    if (witnesses <= 0 && !notary) return null;
+    if (witnesses === 0 && !notary) return null;
+
+    // Two identical branches are one requirement wearing a choice's clothes, and
+    // would print "complete ONE of the following" over the same block twice.
+    const key = `${witnesses}/${notary}`;
+    if (seen.has(key)) return null;
+    seen.add(key);
+
     options.push({ witnesses, notary });
   }
   return options;
 }
+
+/**
+ * Instruments whose execution block is built by `testamentarySignatureLines`,
+ * which does not consult `executionAlternatives` — and whose attestation prose
+ * additionally asserts a witness count in drafted language.
+ */
+const TESTAMENTARY: ReadonlySet<Instrument> = new Set<Instrument>([
+  "will",
+  "pourover",
+]);
 
 function obj(v: unknown): Record<string, unknown> {
   return v && typeof v === "object" ? (v as Record<string, unknown>) : {};
@@ -179,15 +215,18 @@ export function normalizeStateRules(
     if (r.needs_review) needsReview = true;
   }
 
-  // State-level rows (instrument null — community property) come back with every
-  // query, so they say nothing about whether THIS instrument has been researched
-  // here. Only an instrument-scoped row does.
-  //
-  // Rows loaded from the database carry `instrument`; hand-built rows in tests
-  // do not, and are treated as recorded so existing fixtures keep their meaning.
-  const hasRecordedRules = rows.some(
-    (r) => r.instrument === undefined || r.instrument === instrument,
-  );
+  // Which rule keys are recorded FOR THIS INSTRUMENT. State-level rows
+  // (instrument null — community property) come back with every query and say
+  // nothing about whether this instrument has been researched here, so they are
+  // excluded. Rows loaded from the database always carry `instrument`;
+  // hand-built rows in tests may omit it and are read as belonging here.
+  const recordedRuleKeys = [
+    ...new Set(
+      rows
+        .filter((r) => r.instrument === undefined || r.instrument === instrument)
+        .map((r) => r.rule_key),
+    ),
+  ];
 
   const get = (key: string) => obj(byKey.get(key)?.rule_value);
 
@@ -202,14 +241,49 @@ export function normalizeStateRules(
   const spAvailable = selfProving.available;
   if (spAvailable === "uncertain") needsReview = true;
 
-  const executionAlternatives = parseExecutionAlternatives(
-    byKey.get("execution_alternatives")?.rule_value,
-  );
+  // `execution_alternatives` is honoured only where something reads it. The
+  // testamentary block builder does not, and the will's attestation prose states
+  // a witness count in drafted language that no disjunction can satisfy, so a
+  // will-scoped row would be silently dropped and the conjunction printed in its
+  // place. Refusing it here — loudly, via needsReview — beats half-honouring it
+  // and shipping a document whose signature block and attestation disagree.
+  const alternativesRow = byKey.get("execution_alternatives");
+  const alternativesApply = !TESTAMENTARY.has(instrument);
+  if (alternativesRow && !alternativesApply) needsReview = true;
+  const executionAlternatives = alternativesApply
+    ? parseExecutionAlternatives(alternativesRow?.rule_value)
+    : null;
+
+  // A malformed alternatives row must not quietly fall through to the
+  // conjunction path either: the row exists precisely because the conjunction is
+  // the wrong answer for this state.
+  if (alternativesRow && alternativesApply && executionAlternatives === null) {
+    needsReview = true;
+  }
+
+  /**
+   * Whether the keys the execution block ACTUALLY CONSUMES are recorded for this
+   * instrument — not merely whether some row exists.
+   *
+   * The distinction is the whole point. `witnessesRequired` falls back to a
+   * hardcoded 2 and `notarizationRequired` to false when their rows are absent,
+   * so "any row exists" let a single recorded key switch the block on and then
+   * print the fallbacks as though they were the state's law. A Nevada POA with
+   * only its notarization row seeded seeded printed two witness lines — under a
+   * notice asserting they were Nevada's recorded requirement — when Nevada
+   * requires none. That is the exact failure this module exists to prevent, so
+   * the check now names the keys.
+   */
+  const hasRecordedRules = executionAlternatives
+    ? true
+    : recordedRuleKeys.includes("witnesses_required") &&
+      recordedRuleKeys.includes("notarization_required_for_document");
 
   return {
     state,
     instrument,
     hasRecordedRules,
+    recordedRuleKeys,
     executionAlternatives,
     witnessesRequired: typeof witnesses.count === "number" ? witnesses.count : 2,
     witnessMinAge: typeof witnessAge.age === "number" ? witnessAge.age : null,

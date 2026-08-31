@@ -24,10 +24,20 @@ export type StateRulesets = Record<Instrument, StateRuleset>;
  */
 export async function getStateRulesets(state: string): Promise<StateRulesets> {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("state_rules")
     .select("rule_key, rule_value, citation, needs_review, instrument")
     .eq("state_code", state);
+
+  // A failed query used to become an empty row set, and an empty row set becomes
+  // a ruleset of code fallbacks — 2 witnesses, no notary, no affidavit. The will
+  // path does not gate on hasRecordedRules, so that silently produced a document
+  // asserting formalities no database ever supplied. Refuse instead.
+  if (error) {
+    throw new Error(
+      `Could not load state rules for ${state}: ${error.message}. Refusing to assemble documents from fallback values.`,
+    );
+  }
 
   const rows = (data as StateRuleRow[] | null) ?? [];
   const out = {} as StateRulesets;
@@ -59,11 +69,18 @@ export async function getStateRuleset(
   instrument: Instrument,
 ): Promise<StateRuleset> {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("state_rules")
     .select("rule_key, rule_value, citation, needs_review, instrument")
     .eq("state_code", state)
     .or(`instrument.is.null,instrument.eq.${instrument}`);
+
+  // See getStateRulesets: an error must not degrade into fallback values.
+  if (error) {
+    throw new Error(
+      `Could not load ${instrument} rules for ${state}: ${error.message}. Refusing to assemble documents from fallback values.`,
+    );
+  }
 
   return normalizeStateRules(
     state,
