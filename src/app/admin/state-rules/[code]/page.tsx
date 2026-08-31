@@ -13,7 +13,9 @@ export const metadata: Metadata = { title: "Admin — Edit state rules" };
 type Rule = {
   id: string;
   rule_key: string;
-  doc_type: string | null;
+  /** public.instrument_type — which instrument the rule governs. NULL = a fact
+   *  about the state itself (community property), NOT "applies to all". */
+  instrument: string | null;
   rule_value: unknown;
   citation: string | null;
   effective_date: string | null;
@@ -29,7 +31,7 @@ export default async function EditStateRulesPage({
   const supabase = await createClient();
   const { data } = await supabase
     .from("state_rules")
-    .select("id, rule_key, doc_type, rule_value, citation, effective_date, needs_review")
+    .select("id, rule_key, instrument, rule_value, citation, effective_date, needs_review")
     .eq("state_code", code)
     .order("rule_key");
   const rules = (data as Rule[] | null) ?? [];
@@ -54,7 +56,7 @@ export default async function EditStateRulesPage({
                 <div className="flex items-center justify-between">
                   <p className="font-mono text-sm font-medium">
                     {r.rule_key}
-                    {r.doc_type ? ` (${r.doc_type})` : ""}
+                    {r.instrument ? ` (${r.instrument})` : " (state-level)"}
                   </p>
                   <code className="rounded bg-muted px-2 py-1 text-xs">
                     {JSON.stringify(r.rule_value)}

@@ -16,8 +16,9 @@
  * state's law, and they were made without data behind them.
  *
  * `state_rules` today carries formalities for the WILL only: every seeded row is
- * `doc_type = 'will'`. There are no trust, POA or healthcare rows for any state.
- * So this module splits documents in two:
+ * `instrument = 'will'`, apart from the state-level community-property rows.
+ * There are no trust, POA or healthcare rows for any state. So this module
+ * splits documents in two:
  *
  *   - Rule-backed instruments (will, pour-over will) derive their block from the
  *     ruleset, exactly as `assembleWill` always did.
