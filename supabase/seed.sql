@@ -143,7 +143,7 @@ insert into public.state_rules (state_code, doc_type, rule_key, rule_value, cita
   ('ID', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('ID', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Idaho Code §15-2-504', '2026-07-12', true),
   ('ID', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
-  ('ID', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
+  ('ID', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Idaho Code §§15-2-1101 et seq. (UEWA, 2023 ch. 104)', '2026-07-12', true),
   ('ID', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
 on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 

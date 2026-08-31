@@ -41,3 +41,29 @@ describe("buildExecutionInstructions", () => {
     expect(i.steps.join(" ").toLowerCase()).toContain("requires notarization");
   });
 });
+
+describe("electronic-will note", () => {
+  // Regression guard for the one seeded rule key that had no consumer anywhere
+  // in the product: `electronic_will_permitted` was parsed into the ruleset by
+  // state-rules.ts and then read by nothing.
+  it("tells the customer the document is paper where the state permits e-wills", () => {
+    const i = buildExecutionInstructions(ruleset({ state: "ID", electronicWillPermitted: true }));
+    const text = i.steps.join(" ");
+    expect(text).toContain("permits electronic wills by statute");
+    expect(text).toContain("is not an electronic will");
+    expect(i.electronicWillPermitted).toBe(true);
+  });
+
+  it("says nothing about electronic wills where the state does not permit them", () => {
+    const i = buildExecutionInstructions(ruleset({ electronicWillPermitted: false }));
+    expect(i.steps.join(" ").toLowerCase()).not.toContain("electronic will");
+    expect(i.electronicWillPermitted).toBe(false);
+  });
+
+  it("never withdraws the print-and-sign instruction in an e-will state", () => {
+    // The note explains the wet-signature position; it must not replace it.
+    const i = buildExecutionInstructions(ruleset({ electronicWillPermitted: true }));
+    expect(i.steps[0]).toContain("Print the complete document");
+    expect(i.checklist).toContain("All pages printed and in order");
+  });
+});

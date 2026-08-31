@@ -91,7 +91,15 @@ const PER_STATE = {
   MN: { c: { witnesses: "Minn. Stat. §524.2-502", selfProving: "Minn. Stat. §524.2-504" } },
   IA: { c: { witnesses: "Iowa Code §633.279", selfProving: "Iowa Code §633.279(2)" } },
   ND: { ewill: true, c: { witnesses: "N.D. Cent. Code §30.1-08-02", selfProving: "N.D. Cent. Code §30.1-08-03", ewill: "N.D. Cent. Code ch. 30.1-37 (UEWA, 2021)" } },
-  ID: { minAge: 18, c: { witnesses: "Idaho Code §15-2-502", minAge: "Idaho Code §15-2-505 (age 18)", selfProving: "Idaho Code §15-2-504" } },
+  // Idaho enacted the Uniform Electronic Wills Act in 2023 (ch. 104 § 1, p. 308),
+  // codified at Idaho Code §§ 15-2-1101 et seq.; § 15-2-1101 is the short title.
+  // This row previously carried the default `ewill: false` with the citation "No
+  // e-will statute found — verify" — wrong in law, not merely unverified.
+  // Confirmed against the Idaho Legislature's own publisher, as
+  // docs/CLAUSE_RESEARCH_METHOD.md requires (states' own publishers only).
+  // Idaho remains needs_review=true like every other row; this corrects the
+  // fact, it does not clear it for launch.
+  ID: { minAge: 18, ewill: true, c: { witnesses: "Idaho Code §15-2-502", minAge: "Idaho Code §15-2-505 (age 18)", selfProving: "Idaho Code §15-2-504", ewill: "Idaho Code §§15-2-1101 et seq. (UEWA, 2023 ch. 104)" } },
   NM: { c: { witnesses: "N.M. Stat. §45-2-502", selfProving: "N.M. Stat. §45-2-504" } },
   OR: { c: { witnesses: "ORS 112.235", selfProving: "ORS 113.055", ewill: "ORS 112.235(3) excludes electronic records (no e-wills)" } },
   WA: { ewill: true, c: { witnesses: "RCW 11.12.020", selfProving: "RCW 11.20.020(2)", ewill: "RCW 11.12.400–491 (UEWA, eff. 2022)" } },
