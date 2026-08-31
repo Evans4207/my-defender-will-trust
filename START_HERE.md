@@ -55,10 +55,15 @@ this is the repo in testing, so they were fixed here first and then ported.
 Full narrative in `WORK_NOTES_2026-07-29.md`.
 
 Verification standard used: typecheck clean, lint clean, **140 of 140 unit tests
-passing**. Note that `npx vitest run` will NOT run on this machine — the rolldown
-native binding in `node_modules` is built for macOS arm64 and vitest fails at
-startup elsewhere. `npm test` works locally; a Linux environment needs a different
-approach.
+passing**.
+
+**Correction (30 Aug 2026): vitest DOES run on Linux.** The earlier note here said
+it could not, because the rolldown native binding in `node_modules` is built for
+macOS arm64. That is true of a `node_modules` copied from the Mac — but a clean
+`npm install` in a Linux environment fetches the Linux binding and the full suite
+runs normally. Verified on a Linux container: `npm install && npx vitest run` →
+328 passed, 3 skipped. CI does not need a different approach; it needs its own
+install.
 
 ---
 
