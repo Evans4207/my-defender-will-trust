@@ -4,6 +4,9 @@ import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
 import { s } from "./answers";
 import { perspective, isCouple, type AssembleOpts } from "./couples";
 import {
+  ancillarySignatureLines,
+  hasRecordedExecutionRules,
+  recordedExecutionNotice,
   unresearchedExecutionNotice,
   unresearchedSignatureLines,
 } from "./execution-block";
@@ -61,7 +64,9 @@ export function assemblePoa(opts: AssembleOpts): AssembledDocument {
         heading: "Notice",
         paragraphs: [
           statutoryNote("power of attorney", stateName),
-          unresearchedExecutionNotice("poa", stateName),
+          hasRecordedExecutionRules(ruleset)
+            ? recordedExecutionNotice("poa", stateName)
+            : unresearchedExecutionNotice("poa", stateName),
         ],
       },
       { heading: "Appointment", paragraphs: appointment },
@@ -78,13 +83,19 @@ export function assemblePoa(opts: AssembleOpts): AssembledDocument {
         ],
       },
     ],
-    // Fails closed. The previous block printed "Notary Public" in all 51
-    // jurisdictions. Per docs/STATE_COMPLIANCE_DOSSIER.md §4 the real
-    // requirements diverge sharply — Florida needs two witnesses AND a notary,
-    // Arizona one witness AND a notary plus a mandatory notarial certificate
-    // (§ 14-5501(D)(4)), California a notary OR two witnesses — and none of it
-    // is in state_rules.
-    signatureLines: unresearchedSignatureLines([`Principal: ${signerName}`]),
+    // Derived where this state's POA rules are recorded; fails closed where they
+    // are not — and today that is every state, because no POA rows are seeded.
+    // Per docs/STATE_COMPLIANCE_DOSSIER.md §4 the requirements diverge sharply:
+    // Florida needs two witnesses AND a notary, Arizona one witness AND a notary
+    // plus mandatory notarial certificate text (§ 14-5501(D)(4)), California a
+    // notary OR two witnesses. That last one is a disjunction the rules layer
+    // cannot express at all — see docs/ANCILLARY_RULES_GAPS.md.
+    signatureLines: hasRecordedExecutionRules(ruleset)
+      ? ancillarySignatureLines({
+          ruleset,
+          roleLines: [`Principal: ${signerName}`],
+        })
+      : unresearchedSignatureLines([`Principal: ${signerName}`]),
   };
 }
 
@@ -117,7 +128,9 @@ export function assembleHealthcare(opts: AssembleOpts): AssembledDocument {
         heading: "Notice",
         paragraphs: [
           statutoryNote("advance healthcare directive", stateName),
-          unresearchedExecutionNotice("healthcare", stateName),
+          hasRecordedExecutionRules(ruleset)
+            ? recordedExecutionNotice("healthcare", stateName)
+            : unresearchedExecutionNotice("healthcare", stateName),
         ],
       },
       { heading: "Healthcare Agent", paragraphs: agentParas },
@@ -128,13 +141,19 @@ export function assembleHealthcare(opts: AssembleOpts): AssembledDocument {
         ],
       },
     ],
-    // Fails closed. The previous block always printed exactly two witness lines
-    // and never a notary line — but Arizona requires a notary, and California
-    // Prob. Code § 4675 additionally requires a patient advocate or ombudsman to
-    // witness when the patient is in a skilled nursing facility, without which
-    // the directive is not effective. Witness counts are not recorded per state
-    // for this instrument.
-    signatureLines: unresearchedSignatureLines([`Principal: ${signerName}`]),
+    // Derived where recorded, fails closed where not — today, everywhere. The
+    // previous block always printed exactly two witness lines and never a notary
+    // line, but Arizona requires a notary, and Cal. Prob. Code § 4675 requires a
+    // patient advocate or ombudsman to witness when the patient is in a skilled
+    // nursing facility, without which the directive is not effective. That last
+    // condition depends on the signer's circumstances rather than the state, so
+    // no witness count can capture it — see docs/ANCILLARY_RULES_GAPS.md.
+    signatureLines: hasRecordedExecutionRules(ruleset)
+      ? ancillarySignatureLines({
+          ruleset,
+          roleLines: [`Principal: ${signerName}`],
+        })
+      : unresearchedSignatureLines([`Principal: ${signerName}`]),
   };
 }
 

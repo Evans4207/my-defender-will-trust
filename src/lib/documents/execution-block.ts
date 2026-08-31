@@ -44,17 +44,70 @@ import type { DocSection, DocumentKind } from "./model";
 import type { StateRuleset } from "./state-rules";
 
 /**
- * Instruments whose execution formalities are recorded in `state_rules`.
- * Everything absent from this set fails closed. Add a kind here ONLY once its
- * rows exist in the seed for all 51 jurisdictions.
+ * Whether this document's execution formalities are actually recorded for this
+ * state, and may therefore be printed.
+ *
+ * This used to be a hardcoded set of kinds — `will` and `pourover` in, everything
+ * else out — which forced an all-or-nothing choice per instrument: a POA could
+ * only stop failing closed once rows existed for all 51 jurisdictions at once.
+ * Research does not arrive that way. It arrives one state at a time, and the
+ * dossier already holds POA findings for four states with nothing for the other
+ * forty-seven.
+ *
+ * So the question is answered from the data, per state AND per instrument. A
+ * state with rows prints its rules; a state without keeps failing closed; and a
+ * state flips the moment counsel-approved rows land, with no code change and no
+ * chance of the flip being applied too widely by hand.
  */
-const RULE_BACKED: ReadonlySet<DocumentKind> = new Set<DocumentKind>([
-  "will",
-  "pourover",
-]);
+export function hasRecordedExecutionRules(ruleset: StateRuleset): boolean {
+  return ruleset.hasRecordedRules;
+}
 
-export function hasRecordedExecutionRules(kind: DocumentKind): boolean {
-  return RULE_BACKED.has(kind);
+/**
+ * Execution block for a non-testamentary instrument whose rules ARE recorded:
+ * the signing roles, then one line per required witness, then a notary line
+ * where the state requires the instrument itself to be notarized.
+ *
+ * Only `witnesses_required` and `notarization_required_for_document` are
+ * consulted, because those are the only formalities the rules layer can express.
+ * Constraints it cannot express — who may witness, statutory certificate wording,
+ * per-power initialing — are NOT represented here and must not be assumed
+ * satisfied because a block printed. `recordedExecutionNotice` says so on the
+ * document itself.
+ */
+export function ancillarySignatureLines(opts: {
+  ruleset: StateRuleset;
+  roleLines: string[];
+}): string[] {
+  const { ruleset, roleLines } = opts;
+  const lines = [...roleLines, "Date"];
+  for (let i = 1; i <= ruleset.witnessesRequired; i++) {
+    lines.push(`Witness ${i} — signature / printed name / address`);
+  }
+  if (ruleset.notarizationRequired) lines.push("Notary Public");
+  return lines;
+}
+
+/**
+ * Printed when an instrument's execution rules ARE recorded for the state. A
+ * correct signature block is not a complete document, and the difference matters
+ * most on exactly these instruments: Fla. Stat. § 709.2202 requires the principal
+ * to initial each enumerated "superpower", and A.R.S. § 14-5501(D)(4) prescribes
+ * mandatory notarial certificate wording. Neither is generated. Without this
+ * notice, a state-derived witness-and-notary block would imply otherwise.
+ */
+export function recordedExecutionNotice(
+  kind: DocumentKind,
+  stateName: string,
+): string {
+  return (
+    `${ATTORNEY_REVIEW_REQUIRED} The signature block below reflects ${stateName}'s ` +
+    `recorded witness and notarization requirements for a ${INSTRUMENT_LABEL[kind]}. ` +
+    `It does NOT mean the document is complete: who may serve as a witness, any ` +
+    `statutory certificate wording, and any requirement to initial individual powers ` +
+    `are not generated here. A licensed attorney in ${stateName} must confirm both ` +
+    `the content and the execution before this is signed or relied on.`
+  );
 }
 
 /** Human-readable instrument names, for notices addressed to the customer. */
