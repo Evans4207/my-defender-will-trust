@@ -23,17 +23,27 @@ That is a **conjunction of fixed counts**. Everything below breaks it.
 
 ---
 
-## 1. California — a disjunction the model cannot represent
+## 1. California — a disjunction the model could not represent ✅ SHAPE BUILT
 
 Dossier §4: financial POA is **notary *or* two witnesses**, with a notary required for the § 4401 safe-harbour form.
 
-There is no value of `witnesses_required` + `notarization_required_for_document` that means "either of these". The three ways to force it are all wrong:
+There was no value of `witnesses_required` + `notarization_required_for_document` that means "either of these". The three ways to force it are all wrong:
 
 - `{witnesses: 2, notary: false}` — drops the safe harbour, and the safe harbour is where § 4406's duty to accept comes from
 - `{witnesses: 0, notary: true}` — asserts a notary requirement that does not exist
 - `{witnesses: 2, notary: true}` — demands more than the law does, which is safe for validity but tells the customer something untrue about their own state
 
-**Decision needed:** extend the rule shape to carry alternatives (for example `{"any_of": [{"witnesses": 2}, {"notary": true}]}`), or leave California failing closed. Extending is the honest fix, and CA is unlikely to be the only disjunction among 51 jurisdictions.
+**Resolved as a shape.** A new rule key holds a genuine either/or:
+
+```json
+{"any_of": [{"witnesses": 2, "notary": false}, {"witnesses": 0, "notary": true}]}
+```
+
+Where present it replaces the two older keys for that instrument, and the document prints **both branches, labelled**, with an instruction to complete exactly one — rather than merging them (which would overstate the law) or silently picking one (which is a legal choice, not a formatting one). No schema migration was needed: `rule_key` is free text and `state_rules_instrument_scope_chk` already forces an instrument. Verified storable against PostgreSQL 16.
+
+**California is still NOT seeded**, because the shape is not the whole problem. The branches are not equivalent in consequence: only the notarized route carries § 4406's duty to accept, so a customer who picks the witness branch gets a valid POA with no acceptance remedy. The generated block says the choice can affect acceptance and to confirm it with an attorney, but *which branch this product should steer a California customer toward* is a legal judgment.
+
+**Decision needed from counsel:** whether California should offer both branches, or only the notarized one.
 
 ## 2. Nevada — valid, and unprotected
 
@@ -54,9 +64,20 @@ The counts fit the model. The rest does not:
 
 Seeding AZ would produce a correct `1 witness + notary` block on a document still missing text the statute requires. Dossier §4 already calls Arizona "the worst combination": no published form, the most prescriptive ritual of the four, and no statutory recourse if a bank refuses.
 
-## 4. Florida — the superpowers trap
+## 4. Florida — the superpowers trap ✅ SEEDED AS THE PILOT
 
-Dossier §4: **two witnesses AND a notary**. This one fits cleanly.
+Dossier §4: **two witnesses AND a notary**. This one fits cleanly, and is now the
+one seeded ancillary jurisdiction.
+
+Verified against Florida's own publisher rather than the dossier alone —
+Fla. Stat. § 709.2105 requires the POA to be *"signed by the principal and by two
+subscribing witnesses"* and *"acknowledged by the principal before a notary public
+or as otherwise provided in s. 695.03"*. Both rows carry that citation and stay
+`needs_review = true`.
+
+Every other state's POA continues to fail closed, which is the whole point of
+per-state scoping: this list grows one counsel-approved jurisdiction at a time and
+no code changes when it does.
 
 But Fla. Stat. § 709.2202 requires the principal to **sign or initial next to each enumerated "superpower"** — gifting, beneficiary changes, survivorship changes, trust powers — and the dossier calls this the most common Florida invalidation trap. Nothing generates those per-power initial lines.
 
@@ -72,12 +93,21 @@ This is not a property of California. It is a property of *where the signer is l
 
 ---
 
-## Recommendation
+## Recommendation — progress
 
-1. **Extend the rule shape for disjunctions first.** It unblocks California, and CA will not be the last.
-2. **Seed Florida POA alone as the pilot** (`witnesses: 2`, `notary: true`, cited to Fla. Stat. § 709.2105, `needs_review = true`), and confirm the end-to-end path works with one real state before doing forty-seven.
-3. **Treat the content gaps as separate work from the execution gaps.** § 709.2202 initialing and § 14-5501(D)(4) certificate text are document-body problems. The execution block being right does not touch them, and `recordedExecutionNotice` says so on every document that derives a block.
-4. **Do not seed AZ or NV** until 1 and 3 are settled.
+1. ~~**Extend the rule shape for disjunctions first.**~~ ✅ **Done.** `execution_alternatives`, with both branches printed and labelled.
+2. ~~**Seed Florida POA alone as the pilot.**~~ ✅ **Done**, cited to Fla. Stat. § 709.2105 and verified against the state's own publisher.
+3. **Treat the content gaps as separate work from the execution gaps.** Still open. § 709.2202 initialing and § 14-5501(D)(4) certificate text are document-body problems. The execution block being right does not touch them, and `recordedExecutionNotice` says so on every document that derives a block.
+4. **Do not seed AZ or NV** until 3 is settled. Unchanged.
+5. **New:** California is now *representable* but still not seeded — the shape is built, the legal choice between its two branches is not ours. See §1.
+
+### What unblocks the remaining forty-six states
+
+Nothing structural, for a conjunction state. Adding a jurisdiction is now a
+`ANCILLARY` entry in `scripts/gen-state-seed.mjs` plus a citation, and the state
+flips itself on. What it needs is the **research**, sourced from each state's own
+publisher per `docs/CLAUSE_RESEARCH_METHOD.md`, and counsel's sign-off — not
+engineering.
 
 ## What counsel decides, not us
 

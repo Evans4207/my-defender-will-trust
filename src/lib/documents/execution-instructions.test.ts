@@ -7,6 +7,7 @@ function ruleset(p: Partial<StateRuleset> = {}): StateRuleset {
     state: "TX",
     instrument: "will",
     hasRecordedRules: true,
+    executionAlternatives: null,
     witnessesRequired: 2,
     witnessMinAge: null,
     notarizationRequired: false,

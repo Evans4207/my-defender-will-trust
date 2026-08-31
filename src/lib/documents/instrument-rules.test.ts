@@ -79,11 +79,18 @@ describe("seed obeys the instrument-scope rule the DB constraint enforces", () =
   it("no longer seeds notarization as a state-level fact", () => {
     // It was NULL for all 51 states under the old "applies to both" reading,
     // while every citation on those rows spoke only of wills.
+    //
+    // Asserted as "none is state-level", not as a row count: the same key is
+    // legitimately recorded for other instruments as their research lands (the
+    // Florida POA pilot is the first), and a bare count would fail on every one
+    // of those without anything being wrong.
     const notarization = rows.filter(
       (r) => r.key === "notarization_required_for_document",
     );
-    expect(notarization).toHaveLength(51);
-    expect(notarization.every((r) => r.instrument === "'will'")).toBe(true);
+    expect(notarization.filter((r) => r.instrument === "null")).toEqual([]);
+
+    const wills = notarization.filter((r) => r.instrument === "'will'");
+    expect(wills).toHaveLength(51);
   });
 });
 

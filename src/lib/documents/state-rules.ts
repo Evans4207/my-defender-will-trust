@@ -23,6 +23,12 @@ export type StateRuleset = {
    * per state the moment counsel-approved rows land, with no code change.
    */
   hasRecordedRules: boolean;
+  /**
+   * Where a state accepts EITHER of several rituals rather than requiring all
+   * parts of one. Null means the ordinary conjunction of `witnessesRequired` and
+   * `notarizationRequired` applies, which is the common case.
+   */
+  executionAlternatives: ExecutionOption[] | null;
   witnessesRequired: number;
   witnessMinAge: number | null;
   notarizationRequired: boolean;
@@ -105,6 +111,54 @@ export type StateRuleRow = {
   instrument?: Instrument | null;
 };
 
+/**
+ * One way a state will accept an instrument as executed.
+ *
+ * Deliberately structural — a witness count and a notary flag, no prose. The
+ * human wording is derived in `execution-block.ts`, so the seed never carries a
+ * sentence about the law that could drift from the citation beside it.
+ */
+export type ExecutionOption = {
+  witnesses: number;
+  notary: boolean;
+};
+
+/**
+ * Parse the `execution_alternatives` rule value.
+ *
+ * Shape: `{"any_of": [{"witnesses": 2, "notary": false}, {"witnesses": 0, "notary": true}]}`
+ *
+ * Some states accept EITHER of two rituals rather than requiring both parts of
+ * one. `witnesses_required` + `notarization_required_for_document` can only
+ * express a conjunction, so before this key existed a disjunction had no
+ * representation at all: Cal. Prob. Code § 4402 accepts a POA signed before a
+ * notary OR before two witnesses, and every way of forcing that into the two
+ * older keys asserts something untrue — dropping the notary branch, inventing a
+ * notary requirement, or demanding both and overstating the law.
+ *
+ * Where this key is present it REPLACES the two older keys for that instrument.
+ * Anything malformed returns null, so a bad row falls back to the conjunction
+ * path rather than silently producing an empty choice.
+ */
+export function parseExecutionAlternatives(
+  value: unknown,
+): ExecutionOption[] | null {
+  const anyOf = obj(value).any_of;
+  if (!Array.isArray(anyOf) || anyOf.length < 2) return null;
+
+  const options: ExecutionOption[] = [];
+  for (const raw of anyOf) {
+    const o = obj(raw);
+    const witnesses = typeof o.witnesses === "number" ? o.witnesses : null;
+    const notary = typeof o.notary === "boolean" ? o.notary : null;
+    if (witnesses === null || notary === null) return null;
+    // An option requiring nothing at all is not an alternative, it is a bug.
+    if (witnesses <= 0 && !notary) return null;
+    options.push({ witnesses, notary });
+  }
+  return options;
+}
+
 function obj(v: unknown): Record<string, unknown> {
   return v && typeof v === "object" ? (v as Record<string, unknown>) : {};
 }
@@ -148,10 +202,15 @@ export function normalizeStateRules(
   const spAvailable = selfProving.available;
   if (spAvailable === "uncertain") needsReview = true;
 
+  const executionAlternatives = parseExecutionAlternatives(
+    byKey.get("execution_alternatives")?.rule_value,
+  );
+
   return {
     state,
     instrument,
     hasRecordedRules,
+    executionAlternatives,
     witnessesRequired: typeof witnesses.count === "number" ? witnesses.count : 2,
     witnessMinAge: typeof witnessAge.age === "number" ? witnessAge.age : null,
     notarizationRequired: notarization.required === true,

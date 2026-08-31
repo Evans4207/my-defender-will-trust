@@ -15,22 +15,19 @@
  * no self-proving affidavit anywhere. Those blocks are assertions about a
  * state's law, and they were made without data behind them.
  *
- * `state_rules` today carries formalities for the WILL only: every seeded row is
- * `instrument = 'will'`, apart from the state-level community-property rows.
- * There are no trust, POA or healthcare rows for any state. So this module
- * splits documents in two:
+ * So this module splits documents in two, and does it PER STATE:
  *
- *   - Rule-backed instruments (will, pour-over will) derive their block from the
- *     ruleset, exactly as `assembleWill` always did.
- *   - Everything else FAILS CLOSED: it prints the roles that are universal (the
- *     signer, the date) and an explicit attorney-review line in place of the
- *     witness and notary lines, rather than guessing them.
+ *   - Where `state_rules` holds rows for this (state, instrument), the block is
+ *     derived from them, exactly as `assembleWill` always did.
+ *   - Where it does not, the document FAILS CLOSED: it prints the roles that are
+ *     universal (the signer, the date) and an explicit attorney-review line in
+ *     place of the witness and notary lines, rather than guessing them.
  *
  * Fail-closed is deliberate. A document that prints "Notary Public" in a state
  * requiring no notary is making a false statement about that state's law; a
  * document that says the requirement has not been established is making a true
- * one. When trust/POA/healthcare rows are added to `state_rules`, move those
- * kinds into RULE_BACKED and delete the corresponding notice.
+ * one. Adding counsel-approved rows for a state flips that state on its own —
+ * there is no list in this file to remember to update.
  *
  * ⚠️ Nothing in this module drafts legal language. It emits blank lines to sign
  * on and review markers — never clause text, affidavit wording or statutory
@@ -41,7 +38,7 @@ import { ATTORNEY_REVIEW_REQUIRED } from "@/lib/legal";
 import { needsAttorneyReview } from "./clause-provenance";
 import { selfProvingAffidavitFor } from "./clauses/self-proving-affidavit";
 import type { DocSection, DocumentKind } from "./model";
-import type { StateRuleset } from "./state-rules";
+import type { ExecutionOption, StateRuleset } from "./state-rules";
 
 /**
  * Whether this document's execution formalities are actually recorded for this
@@ -81,10 +78,61 @@ export function ancillarySignatureLines(opts: {
 }): string[] {
   const { ruleset, roleLines } = opts;
   const lines = [...roleLines, "Date"];
+
+  if (ruleset.executionAlternatives) {
+    return [...lines, ...alternativeExecutionLines(ruleset.executionAlternatives)];
+  }
+
   for (let i = 1; i <= ruleset.witnessesRequired; i++) {
     lines.push(`Witness ${i} — signature / printed name / address`);
   }
   if (ruleset.notarizationRequired) lines.push("Notary Public");
+  return lines;
+}
+
+/** Plain wording for one option, derived rather than stored. */
+export function describeExecutionOption(option: ExecutionOption): string {
+  const parts: string[] = [];
+  if (option.witnesses > 0) {
+    parts.push(
+      option.witnesses === 1 ? "one witness" : `${option.witnesses} witnesses`,
+    );
+  }
+  if (option.notary) parts.push("notarization");
+  return parts.join(" and ");
+}
+
+/**
+ * Render a genuine either/or.
+ *
+ * A disjunction cannot be flattened into one block: printing both rituals as if
+ * both were required overstates the law, and printing one silently picks a
+ * branch on the signer's behalf — and the branches are not equivalent in
+ * consequence. California accepts a POA witnessed by two people OR acknowledged
+ * before a notary, but only the notarized route carries the § 4406 duty to
+ * accept. So both are printed, labelled, and the choice is left to the signer
+ * and their attorney.
+ */
+export function alternativeExecutionLines(
+  options: ExecutionOption[],
+): string[] {
+  const lines: string[] = [
+    `${ATTORNEY_REVIEW_REQUIRED} This state accepts EITHER of the following. ` +
+      `Complete ONE of them in full — not both, and not a mixture. Which one is ` +
+      `appropriate can affect how readily a bank or other third party accepts ` +
+      `this document, so confirm the choice with your attorney.`,
+  ];
+
+  options.forEach((option, index) => {
+    lines.push(
+      `— Option ${index + 1}: ${describeExecutionOption(option)} —`,
+    );
+    for (let i = 1; i <= option.witnesses; i++) {
+      lines.push(`Witness ${i} — signature / printed name / address`);
+    }
+    if (option.notary) lines.push("Notary Public");
+  });
+
   return lines;
 }
 
