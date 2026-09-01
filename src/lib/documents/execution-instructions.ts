@@ -9,6 +9,15 @@ export type ExecutionInstructions = {
   notarizationRequired: boolean;
   selfProvingAvailable: boolean | "uncertain";
   selfProvingRequiresNotary: boolean;
+  /**
+   * Whether the state permits electronic wills by statute. This is NOT a claim
+   * that the platform produces one: every seeded `electronic_will_permitted`
+   * row carries `mvp_position: "wet_signature"`, so the generated document is
+   * paper in all 51 jurisdictions. Surfaced so the instructions can say that
+   * plainly in the 15 jurisdictions where a customer might reasonably expect to
+   * be able to sign online.
+   */
+  electronicWillPermitted: boolean;
   steps: string[];
   checklist: string[];
   attorneyReviewRequired: true;
@@ -50,6 +59,19 @@ export function buildExecutionInstructions(
   if (ruleset.notarizationRequired) {
     steps.push("This state requires notarization of the will itself — sign before a notary.");
   }
+  // `electronicWillPermitted` was parsed into the ruleset and then read by
+  // nothing at all — the one seeded key with no consumer anywhere in the
+  // product. It is consumed here, and only to close a gap it would otherwise
+  // leave open: in these 15 jurisdictions the customer may well have read that
+  // their state allows an electronic will, and every instruction above tells
+  // them to print and sign in ink without ever explaining why. Saying nothing
+  // invites them to improvise. This asserts nothing about whether an electronic
+  // will would be valid for them — only what THIS document is.
+  if (ruleset.electronicWillPermitted) {
+    steps.push(
+      `${stateName} permits electronic wills by statute, but the document produced here is a paper (wet-signature) will and is not an electronic will — follow the printed steps above and do not attempt to sign it electronically.`,
+    );
+  }
   steps.push("Store the signed original in a safe place and tell your executor where it is.");
   steps.push(
     `${ATTORNEY_REVIEW_REQUIRED} We recommend a licensed attorney in ${stateName} review your documents before signing.`,
@@ -73,6 +95,7 @@ export function buildExecutionInstructions(
     notarizationRequired: ruleset.notarizationRequired,
     selfProvingAvailable: sp.available,
     selfProvingRequiresNotary: sp.requiresNotary,
+    electronicWillPermitted: ruleset.electronicWillPermitted,
     steps,
     checklist,
     attorneyReviewRequired: true,
