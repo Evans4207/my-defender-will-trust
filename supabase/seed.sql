@@ -111,7 +111,9 @@ insert into public.state_rules (state_code, instrument, rule_key, rule_value, ci
   ('FL', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Fla. Stat. §732.503', '2026-07-12', true),
   ('FL', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('FL', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Fla. Stat. §732.521+', '2026-07-12', true),
-  ('FL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
+  ('FL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true),
+  ('FL', 'poa', 'witnesses_required', '{"count":2}'::jsonb, 'Fla. Stat. §709.2105 (signed by the principal and by two subscribing witnesses)', '2026-07-12', true),
+  ('FL', 'poa', 'notarization_required_for_document', '{"required":true}'::jsonb, 'Fla. Stat. §709.2105 (acknowledged before a notary public or as otherwise provided in s. 695.03)', '2026-07-12', true)
 on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- GA
