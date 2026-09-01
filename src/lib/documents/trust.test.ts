@@ -2,11 +2,13 @@ import { describe, it, expect } from "vitest";
 import { assembleTrust, assemblePouroverWill } from "./trust";
 import { assembleDocument } from "./assemble";
 import { renderDocx, extractDocxText } from "./docx";
-import type { StateRuleset } from "./state-rules";
+import { INSTRUMENTS, type Instrument, type StateRuleset } from "./state-rules";
 
 function ruleset(p: Partial<StateRuleset> = {}): StateRuleset {
   return {
     state: "AZ",
+    instrument: "will",
+    hasRecordedRules: true,
     witnessesRequired: 2,
     witnessMinAge: null,
     notarizationRequired: false,
@@ -81,11 +83,46 @@ describe("assemblePouroverWill", () => {
 });
 
 describe("assembleDocument dispatch", () => {
+  const rulesets = Object.fromEntries(
+    INSTRUMENTS.map((i) => [i, ruleset({ instrument: i })]),
+  ) as Record<Instrument, StateRuleset>;
+
   it("routes each kind to the right assembler", () => {
     for (const kind of ["will", "trust", "pourover", "poa", "healthcare", "hipaa"] as const) {
-      const d = assembleDocument({ kind, signer: "primary" }, { answers, ruleset: ruleset() });
+      const d = assembleDocument({ kind, signer: "primary" }, { answers, rulesets });
       expect(d.kind).toBe(kind);
       expect(d.attorneyReviewRequired).toBe(true);
     }
+  });
+
+  it("hands each document the ruleset for the instrument that governs it", () => {
+    // A pour-over will is a will, so it must receive the WILL ruleset even
+    // though the customer bought a trust package. Everything else takes its own.
+    // Distinct marker per instrument, so the document's `state` reveals which
+    // ruleset it was handed. (Not derived from the name: "poa" and "pourover"
+    // share a prefix.)
+    const MARK: Record<Instrument, string> = {
+      will: "WI",
+      pourover: "PO",
+      trust: "TR",
+      poa: "PA",
+      healthcare: "HE",
+      hipaa: "HP",
+    };
+    const seen: Record<string, Instrument> = {};
+    const spy = Object.fromEntries(
+      INSTRUMENTS.map((i) => [i, ruleset({ instrument: i, state: MARK[i] })]),
+    ) as Record<Instrument, StateRuleset>;
+
+    for (const kind of ["will", "pourover", "trust", "poa", "healthcare"] as const) {
+      const d = assembleDocument({ kind, signer: "primary" }, { answers, rulesets: spy });
+      seen[kind] = INSTRUMENTS.find((i) => spy[i].state === d.state)!;
+    }
+
+    expect(seen.will).toBe("will");
+    expect(seen.pourover).toBe("will");
+    expect(seen.trust).toBe("trust");
+    expect(seen.poa).toBe("poa");
+    expect(seen.healthcare).toBe("healthcare");
   });
 });

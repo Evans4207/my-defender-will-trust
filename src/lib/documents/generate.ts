@@ -11,8 +11,7 @@ import {
 } from "@/lib/legal";
 import { COUPLES_TIER_OPEN } from "@/lib/features";
 import { getMatter, getAnswers } from "@/lib/interview/data";
-import { getStateRuleset, isStateAvailable } from "./state-rules.server";
-import { ruleSourceFor } from "./state-rules";
+import { getStateRulesets, isStateAvailable } from "./state-rules.server";
 import { documentSpecsFor } from "./package";
 import { assembleDocument } from "./assemble";
 import { renderDocx } from "./docx";
@@ -55,23 +54,21 @@ export async function generateDocumentsAction(
   }
 
   // Rules are loaded per INSTRUMENT, not per package. `matter.doc_type` is the
-  // package the customer bought; passing it here is what left trust customers
-  // with a pour-over will built from no will research at all — the query asked
-  // for doc_type='trust' rules and the seed has none for any state, so the
+  // package the customer bought; passing it to the rules layer is what left
+  // trust customers with a pour-over will built from no will research at all —
+  // the query asked for trust rules, the seed has none for any state, and the
   // affidavit, the notary line and Florida's signature-at-the-end requirement
-  // all silently vanished.
+  // silently vanished.
   //
-  // One ruleset still covers the whole set, because `will` is the only
-  // instrument with recorded rules: the testamentary documents (will, pour-over
-  // will, self-proving affidavit) consume it, and the trust, POA, healthcare
-  // directive and HIPAA authorization deliberately do not — they fail closed in
-  // execution-block.ts until their own rows exist. The community-property rows
-  // they do rely on are state-level (instrument null) and come back with every
-  // query. When trust/POA/healthcare rows land, each assembler takes its own
-  // ruleset via ruleSourceFor(kind) and this becomes a lookup per kind.
-  const [answers, ruleset] = await Promise.all([
+  // Every instrument's ruleset is fetched together in one query, and
+  // assembleDocument hands each document the one that governs it. Instruments
+  // with no rows for this state come back with hasRecordedRules false and fail
+  // closed in execution-block.ts, which is currently all of them except the
+  // will — per state, so a jurisdiction starts using its POA rules the moment
+  // they land, with no code change.
+  const [answers, rulesets] = await Promise.all([
     getAnswers(matterId),
-    getStateRuleset(matter.state, ruleSourceFor("will")),
+    getStateRulesets(matter.state),
   ]);
 
   const admin = createAdminClient();
@@ -193,7 +190,7 @@ export async function generateDocumentsAction(
       const target = targetFor(spec.signer);
       if (!target) continue;
 
-      const assembled = assembleDocument(spec, { answers, ruleset, party });
+      const assembled = assembleDocument(spec, { answers, rulesets, party });
       const docx = await renderDocx(assembled);
       const pdf = await convertDocxToPdf(docx);
 

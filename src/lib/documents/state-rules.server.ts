@@ -1,10 +1,45 @@
 import { createClient } from "@/lib/supabase/server";
 import {
+  INSTRUMENTS,
   normalizeStateRules,
   type Instrument,
   type StateRuleset,
   type StateRuleRow,
 } from "./state-rules";
+
+/** Every instrument's ruleset for one state. */
+export type StateRulesets = Record<Instrument, StateRuleset>;
+
+/**
+ * Load every instrument's rules for a state in ONE query.
+ *
+ * A document set spans several instruments — a trust package produces a trust, a
+ * pour-over will, a POA, a healthcare directive and a HIPAA authorization — and
+ * each needs its own ruleset now that rules are scoped by instrument. Fetching
+ * per instrument would mean five round-trips for one generation, so this fetches
+ * the state once and partitions client-side.
+ *
+ * Each instrument's ruleset gets that instrument's rows plus the state-level rows
+ * (instrument null), exactly as a filtered query would return.
+ */
+export async function getStateRulesets(state: string): Promise<StateRulesets> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("state_rules")
+    .select("rule_key, rule_value, citation, needs_review, instrument")
+    .eq("state_code", state);
+
+  const rows = (data as StateRuleRow[] | null) ?? [];
+  const out = {} as StateRulesets;
+  for (const instrument of INSTRUMENTS) {
+    out[instrument] = normalizeStateRules(
+      state,
+      rows.filter((r) => r.instrument == null || r.instrument === instrument),
+      instrument,
+    );
+  }
+  return out;
+}
 
 /**
  * Load and normalize the rules governing one INSTRUMENT in one state. Returns
@@ -30,7 +65,11 @@ export async function getStateRuleset(
     .eq("state_code", state)
     .or(`instrument.is.null,instrument.eq.${instrument}`);
 
-  return normalizeStateRules(state, (data as StateRuleRow[] | null) ?? []);
+  return normalizeStateRules(
+    state,
+    (data as StateRuleRow[] | null) ?? [],
+    instrument,
+  );
 }
 
 /** Whether a state is currently available to generate in. */

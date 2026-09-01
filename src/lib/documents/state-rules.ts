@@ -5,6 +5,24 @@
  */
 export type StateRuleset = {
   state: string;
+  /**
+   * The instrument these rules were loaded for. A ruleset is only ever valid for
+   * the instrument it was fetched for — handing a will ruleset to the POA
+   * assembler is how a document ends up asserting another instrument's law.
+   */
+  instrument: Instrument;
+  /**
+   * Whether `state_rules` actually holds instrument-scoped rows for this
+   * (state, instrument). False means nothing has been researched for this
+   * instrument HERE — the values below are code fallbacks, not this state's law,
+   * and the execution block must fail closed rather than print them.
+   *
+   * This is per state AND per instrument on purpose. Research arrives one
+   * jurisdiction at a time, so "is the POA rule-backed?" has no single answer:
+   * it is yes in whichever states have rows and no everywhere else, and it flips
+   * per state the moment counsel-approved rows land, with no code change.
+   */
+  hasRecordedRules: boolean;
   witnessesRequired: number;
   witnessMinAge: number | null;
   notarizationRequired: boolean;
@@ -36,6 +54,16 @@ export type Instrument =
   | "poa"
   | "healthcare"
   | "hipaa";
+
+/** Every label in `public.instrument_type`, in the enum's own order. */
+export const INSTRUMENTS: readonly Instrument[] = [
+  "will",
+  "pourover",
+  "trust",
+  "poa",
+  "healthcare",
+  "hipaa",
+] as const;
 
 /**
  * The instrument whose recorded rules govern a given document.
@@ -85,6 +113,7 @@ function obj(v: unknown): Record<string, unknown> {
 export function normalizeStateRules(
   state: string,
   rows: StateRuleRow[],
+  instrument: Instrument = "will",
 ): StateRuleset {
   const byKey = new Map<string, StateRuleRow>();
   for (const r of rows) byKey.set(r.rule_key, r);
@@ -95,6 +124,16 @@ export function normalizeStateRules(
     if (r.citation) citations[r.rule_key] = r.citation;
     if (r.needs_review) needsReview = true;
   }
+
+  // State-level rows (instrument null — community property) come back with every
+  // query, so they say nothing about whether THIS instrument has been researched
+  // here. Only an instrument-scoped row does.
+  //
+  // Rows loaded from the database carry `instrument`; hand-built rows in tests
+  // do not, and are treated as recorded so existing fixtures keep their meaning.
+  const hasRecordedRules = rows.some(
+    (r) => r.instrument === undefined || r.instrument === instrument,
+  );
 
   const get = (key: string) => obj(byKey.get(key)?.rule_value);
 
@@ -111,6 +150,8 @@ export function normalizeStateRules(
 
   return {
     state,
+    instrument,
+    hasRecordedRules,
     witnessesRequired: typeof witnesses.count === "number" ? witnesses.count : 2,
     witnessMinAge: typeof witnessAge.age === "number" ? witnessAge.age : null,
     notarizationRequired: notarization.required === true,

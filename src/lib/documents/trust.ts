@@ -10,6 +10,9 @@ import {
   type AssembleOpts,
 } from "./couples";
 import {
+  ancillarySignatureLines,
+  hasRecordedExecutionRules,
+  recordedExecutionNotice,
   selfProvingAffidavitSection,
   testamentarySignatureLines,
   unresearchedExecutionNotice,
@@ -161,23 +164,31 @@ export function assembleTrust(opts: AssembleOpts): AssembledDocument {
     ],
   });
 
+  const trustRulesRecorded = hasRecordedExecutionRules(ruleset);
+
   sections.push({
     heading: "Execution",
-    paragraphs: [unresearchedExecutionNotice("trust", stateName)],
+    paragraphs: [
+      trustRulesRecorded
+        ? recordedExecutionNotice("trust", stateName)
+        : unresearchedExecutionNotice("trust", stateName),
+    ],
   });
 
-  // Trust execution formalities are NOT in state_rules — every seeded row is
-  // doc_type = 'will'. This block therefore fails closed rather than asserting a
-  // notary requirement in all 51 jurisdictions, which is what it used to do.
+  // Derived where this state's TRUST rules are recorded, and fails closed where
+  // they are not — today, every state, since no trust rows are seeded anywhere.
   //
   // Getting this wrong is not hypothetical: Fla. Stat. § 736.0403(2)(b) requires
   // a Florida-domiciled settlor's revocable trust to be executed with WILL
-  // formalities — two witnesses and signature at the end — and the previous
-  // block printed neither. See docs/STATE_COMPLIANCE_DOSSIER.md §3.
+  // formalities — two witnesses and signature at the end — and the block that
+  // preceded this printed neither, in all 51 jurisdictions. See
+  // docs/STATE_COMPLIANCE_DOSSIER.md §3.
   const roleLines = couple
     ? [`Grantor: ${primary}`, `Grantor: ${spouse}`]
     : [`Grantor: ${signerName}`, `Trustee: ${trustee}`];
-  const signatureLines = unresearchedSignatureLines(roleLines);
+  const signatureLines = trustRulesRecorded
+    ? ancillarySignatureLines({ ruleset, roleLines })
+    : unresearchedSignatureLines(roleLines);
 
   return {
     kind: "trust",

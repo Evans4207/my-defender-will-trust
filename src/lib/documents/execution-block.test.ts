@@ -12,6 +12,8 @@ import type { StateRuleset } from "./state-rules";
 function ruleset(p: Partial<StateRuleset> = {}): StateRuleset {
   return {
     state: "TX",
+    instrument: "will",
+    hasRecordedRules: true,
     witnessesRequired: 2,
     witnessMinAge: null,
     notarizationRequired: false,
@@ -128,12 +130,12 @@ describe("pour-over will — parity with the main will", () => {
 });
 
 describe("instruments with no recorded execution rules fail closed", () => {
-  it("classifies only the testamentary instruments as rule-backed", () => {
-    expect(hasRecordedExecutionRules("will")).toBe(true);
-    expect(hasRecordedExecutionRules("pourover")).toBe(true);
-    for (const k of ["trust", "poa", "healthcare", "hipaa"] as const) {
-      expect(hasRecordedExecutionRules(k)).toBe(false);
-    }
+  it("answers from the data, per state and per instrument", () => {
+    // This used to be a hardcoded set of kinds. It is now a property of the
+    // ruleset that was loaded, so the same instrument can be rule-backed in one
+    // state and fail closed in the next — which is how research actually lands.
+    expect(hasRecordedExecutionRules(ruleset({ hasRecordedRules: true }))).toBe(true);
+    expect(hasRecordedExecutionRules(ruleset({ hasRecordedRules: false }))).toBe(false);
   });
 
   it("the trust no longer asserts a notary requirement in every state", () => {
@@ -141,27 +143,39 @@ describe("instruments with no recorded execution rules fail closed", () => {
     // settlor's revocable trust; the old block printed a notary line and no
     // witnesses in all 51 jurisdictions.
     for (const state of ["FL", "TX", "CA", "NV"]) {
-      const t = assembleTrust({ answers, ruleset: ruleset({ state }) });
+      const t = assembleTrust({
+        answers,
+        ruleset: ruleset({ state, hasRecordedRules: false }),
+      });
       expect(notaryLines(t.signatureLines)).toHaveLength(0);
       expect(t.signatureLines).toContain(PENDING_EXECUTION_BLOCK_LINE);
     }
   });
 
   it("the trust tells the reader its formalities are unestablished", () => {
-    const t = assembleTrust({ answers, ruleset: ruleset({ state: "FL" }) });
+    const t = assembleTrust({
+      answers,
+      ruleset: ruleset({ state: "FL", hasRecordedRules: false }),
+    });
     const text = t.sections.flatMap((s) => s.paragraphs).join(" ");
     expect(text).toContain("[ATTORNEY REVIEW REQUIRED]");
     expect(text.toLowerCase()).toContain("not yet recorded");
   });
 
   it("the POA no longer prints a notary line in every state", () => {
-    const poa = assemblePoa({ answers, ruleset: ruleset({ state: "CA" }) });
+    const poa = assemblePoa({
+      answers,
+      ruleset: ruleset({ state: "CA", hasRecordedRules: false }),
+    });
     expect(notaryLines(poa.signatureLines)).toHaveLength(0);
     expect(poa.signatureLines).toContain(PENDING_EXECUTION_BLOCK_LINE);
   });
 
   it("the healthcare directive no longer hardcodes two witnesses", () => {
-    const hc = assembleHealthcare({ answers, ruleset: ruleset({ state: "AZ" }) });
+    const hc = assembleHealthcare({
+      answers,
+      ruleset: ruleset({ state: "AZ", hasRecordedRules: false }),
+    });
     expect(witnessLines(hc.signatureLines)).toHaveLength(0);
     expect(hc.signatureLines).toContain(PENDING_EXECUTION_BLOCK_LINE);
   });
@@ -184,5 +198,53 @@ describe("ancillary notices describe the draft truthfully", () => {
       expect(text).not.toContain("that form is used verbatim");
       expect(text).toContain("no statutory form text has been incorporated");
     }
+  });
+});
+
+describe("instruments whose rules ARE recorded derive their block", () => {
+  // The other half of the same switch. Nothing is seeded for these instruments
+  // today, so these cases describe what happens the moment counsel-approved rows
+  // land for a state — and prove the flip is per state, not global.
+  const recorded = (p = {}) =>
+    ruleset({ hasRecordedRules: true, witnessesRequired: 2, notarizationRequired: true, ...p });
+
+  it("prints one witness line per required witness and a notary line", () => {
+    const poa = assemblePoa({ answers, ruleset: recorded({ state: "FL" }) });
+    expect(witnessLines(poa.signatureLines)).toHaveLength(2);
+    expect(notaryLines(poa.signatureLines)).toHaveLength(1);
+    expect(poa.signatureLines).not.toContain(PENDING_EXECUTION_BLOCK_LINE);
+  });
+
+  it("omits the notary line where the state does not require one", () => {
+    const poa = assemblePoa({
+      answers,
+      ruleset: recorded({ state: "NV", notarizationRequired: false }),
+    });
+    expect(notaryLines(poa.signatureLines)).toHaveLength(0);
+  });
+
+  it("follows the recorded witness count rather than a fixed two", () => {
+    const hc = assembleHealthcare({
+      answers,
+      ruleset: recorded({ state: "AZ", witnessesRequired: 1 }),
+    });
+    expect(witnessLines(hc.signatureLines)).toHaveLength(1);
+    expect(notaryLines(hc.signatureLines)).toHaveLength(1);
+  });
+
+  it("still warns that a correct signature block is not a complete document", () => {
+    // Fla. Stat. 709.2202 superpower initialing and A.R.S. 14-5501(D)(4)
+    // certificate wording are not generated. A derived block must not imply they
+    // are handled.
+    const poa = assemblePoa({ answers, ruleset: recorded({ state: "FL" }) });
+    const text = poa.sections.flatMap((s) => s.paragraphs).join(" ");
+    expect(text).toContain("[ATTORNEY REVIEW REQUIRED]");
+    expect(text).toContain("does NOT mean the document is complete");
+  });
+
+  it("the trust derives its block too, once trust rules exist", () => {
+    const t = assembleTrust({ answers, ruleset: recorded({ state: "FL" }) });
+    expect(witnessLines(t.signatureLines)).toHaveLength(2);
+    expect(t.signatureLines).not.toContain(PENDING_EXECUTION_BLOCK_LINE);
   });
 });

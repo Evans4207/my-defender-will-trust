@@ -5,6 +5,8 @@ import type { StateRuleset } from "./state-rules";
 function ruleset(p: Partial<StateRuleset> = {}): StateRuleset {
   return {
     state: "TX",
+    instrument: "will",
+    hasRecordedRules: true,
     witnessesRequired: 2,
     witnessMinAge: null,
     notarizationRequired: false,
