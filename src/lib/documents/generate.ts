@@ -12,6 +12,7 @@ import {
 import { COUPLES_TIER_OPEN } from "@/lib/features";
 import { getMatter, getAnswers } from "@/lib/interview/data";
 import { getStateRuleset, isStateAvailable } from "./state-rules.server";
+import { ruleSourceFor } from "./state-rules";
 import { documentSpecsFor } from "./package";
 import { assembleDocument } from "./assemble";
 import { renderDocx } from "./docx";
@@ -53,9 +54,24 @@ export async function generateDocumentsAction(
     return { error: "Your state isn't available yet. We'll email you when it opens." };
   }
 
+  // Rules are loaded per INSTRUMENT, not per package. `matter.doc_type` is the
+  // package the customer bought; passing it here is what left trust customers
+  // with a pour-over will built from no will research at all — the query asked
+  // for doc_type='trust' rules and the seed has none for any state, so the
+  // affidavit, the notary line and Florida's signature-at-the-end requirement
+  // all silently vanished.
+  //
+  // One ruleset still covers the whole set, because `will` is the only
+  // instrument with recorded rules: the testamentary documents (will, pour-over
+  // will, self-proving affidavit) consume it, and the trust, POA, healthcare
+  // directive and HIPAA authorization deliberately do not — they fail closed in
+  // execution-block.ts until their own rows exist. The community-property rows
+  // they do rely on are state-level (instrument null) and come back with every
+  // query. When trust/POA/healthcare rows land, each assembler takes its own
+  // ruleset via ruleSourceFor(kind) and this becomes a lookup per kind.
   const [answers, ruleset] = await Promise.all([
     getAnswers(matterId),
-    getStateRuleset(matter.state, matter.doc_type),
+    getStateRuleset(matter.state, ruleSourceFor("will")),
   ]);
 
   const admin = createAdminClient();

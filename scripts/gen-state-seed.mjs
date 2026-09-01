@@ -114,11 +114,20 @@ function ruleRows(code) {
   const c = o.c ?? {};
   const cp = COMMUNITY_PROPERTY.has(code);
   const cite = (k, fallback) => (c[k] ? c[k] : fallback);
-  // [doc_type, rule_key, value, citation]
+  // [instrument, rule_key, value, citation]
+  //
+  // `instrument` is public.instrument_type — which document the rule governs —
+  // NOT public.doc_type, which is the package that was sold (migration 0017).
+  // NULL is reserved for facts about the STATE that no instrument owns, and
+  // state_rules_instrument_scope_chk permits it for community_property alone.
+  // It does NOT mean "applies to every instrument".
+  //
+  // notarization_required_for_document was seeded NULL under that old reading
+  // while its citation spoke only of wills. It is a will rule and now says so.
   return [
     ["will", "witnesses_required", { count: o.witnesses }, cite("witnesses", "Baseline (2 witnesses) — verify statute")],
     ["will", "witness_min_age", { age: o.minAge }, cite("minAge", "Baseline — verify competency/age statute")],
-    [null, "notarization_required_for_document", { required: o.notarization }, cite("notarization", o.notarization ? "Notarization required — verify" : "Attested will valid without notarization — verify")],
+    ["will", "notarization_required_for_document", { required: o.notarization }, cite("notarization", o.notarization ? "Notarization required — verify" : "Attested will valid without notarization — verify")],
     ["will", "self_proving_affidavit", { available: o.selfProving.available, requires_notary: o.selfProving.requiresNotary }, cite("selfProving", "Baseline self-proving affidavit — verify statute")],
     ["will", "signature_at_end_required", { required: o.signatureAtEnd }, cite("signatureAtEnd", "Baseline — verify")],
     ["will", "electronic_will_permitted", { permitted: o.ewill, mvp_position: "wet_signature" }, cite("ewill", o.ewill ? "E-will permitted — verify" : "No e-will statute found — verify")],
@@ -146,14 +155,14 @@ for (const code of JURISDICTIONS) {
   // needs_review=true until counsel QA.
   const needsReview = true;
   out += `-- ${code}\n`;
-  out += `insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values\n`;
+  out += `insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values\n`;
   out += rows
     .map(([docType, key, val, citation]) => {
       const dt = docType === null ? "null" : sqlStr(docType);
       return `  (${sqlStr(code)}, ${dt}, ${sqlStr(key)}, ${sqlStr(JSON.stringify(val))}::jsonb, ${sqlStr(citation)}, ${sqlStr(CHECKED)}, ${needsReview})`;
     })
     .join(",\n");
-  out += `\non conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();\n\n`;
+  out += `\non conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();\n\n`;
 }
 
 // Availability: all available except the excluded high-risk set.

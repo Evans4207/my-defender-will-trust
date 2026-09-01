@@ -5,565 +5,565 @@
 -- statute research (citations recorded where verified). Idempotent.
 
 -- AL
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('AL', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Ala. Code §43-8-131', '2026-07-12', true),
   ('AL', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('AL', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('AL', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('AL', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Ala. Code §43-8-132', '2026-07-12', true),
   ('AL', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('AL', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('AL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- AK
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('AK', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'AS 13.12.502', '2026-07-12', true),
   ('AK', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('AK', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('AK', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('AK', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'AS 13.12.504', '2026-07-12', true),
   ('AK', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('AK', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'AS 13.12 electronic-will provisions (SB 90)', '2026-07-12', true),
   ('AK', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- AZ
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('AZ', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'ARS §14-2502', '2026-07-12', true),
   ('AZ', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('AZ', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('AZ', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('AZ', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'ARS §14-2504', '2026-07-12', true),
   ('AZ', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('AZ', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'ARS §14-2518', '2026-07-12', true),
   ('AZ', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- AR
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('AR', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Ark. Code §28-25-103', '2026-07-12', true),
   ('AR', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('AR', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('AR', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('AR', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Ark. Code §28-25-106', '2026-07-12', true),
   ('AR', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Ark. Code §28-25-103 (at the end)', '2026-07-12', true),
   ('AR', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('AR', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- CA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('CA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Cal. Prob. Code §6110', '2026-07-12', true),
   ('CA', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('CA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('CA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('CA', 'will', 'self_proving_affidavit', '{"available":"uncertain","requires_notary":false}'::jsonb, 'Cal. Prob. Code §8220', '2026-07-12', true),
   ('CA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('CA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('CA', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- CO
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('CO', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'C.R.S. 15-11-502', '2026-07-12', true),
   ('CO', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('CO', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('CO', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('CO', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'C.R.S. 15-11-504', '2026-07-12', true),
   ('CO', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('CO', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'C.R.S. 15-11-1301 to 1311 (CO UEWA)', '2026-07-12', true),
   ('CO', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- CT
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('CT', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Conn. Gen. Stat. §45a-251', '2026-07-12', true),
   ('CT', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('CT', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('CT', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('CT', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Conn. Gen. Stat. §45a-285', '2026-07-12', true),
   ('CT', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Conn. Gen. Stat. §45a-251 (subscribed)', '2026-07-12', true),
   ('CT', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('CT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- DE
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('DE', 'will', 'witnesses_required', '{"count":2}'::jsonb, '12 Del. C. §202', '2026-07-12', true),
   ('DE', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('DE', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('DE', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('DE', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, '12 Del. C. §1305', '2026-07-12', true),
   ('DE', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('DE', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('DE', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- DC
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('DC', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'D.C. Code §18-103', '2026-07-12', true),
   ('DC', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('DC', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('DC', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('DC', 'will', 'self_proving_affidavit', '{"available":false,"requires_notary":false}'::jsonb, 'No self-proving affidavit statute for paper wills; e-wills only (§18-908)', '2026-07-12', true),
   ('DC', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('DC', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'D.C. Code §§18-901 to 18-911 (2022 UEWA)', '2026-07-12', true),
   ('DC', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- FL
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('FL', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Fla. Stat. §732.502', '2026-07-12', true),
   ('FL', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('FL', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('FL', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('FL', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Fla. Stat. §732.503', '2026-07-12', true),
   ('FL', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('FL', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Fla. Stat. §732.521+', '2026-07-12', true),
   ('FL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- GA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('GA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'O.C.G.A. §53-4-20', '2026-07-12', true),
   ('GA', 'will', 'witness_min_age', '{"age":14}'::jsonb, 'O.C.G.A. §53-4-22 (age 14)', '2026-07-12', true),
-  ('GA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('GA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('GA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'O.C.G.A. §53-4-24', '2026-07-12', true),
   ('GA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('GA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('GA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- HI
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('HI', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Haw. Rev. Stat. §560:2-502', '2026-07-12', true),
   ('HI', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('HI', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('HI', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('HI', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Haw. Rev. Stat. §560:2-504', '2026-07-12', true),
   ('HI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('HI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('HI', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- ID
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('ID', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Idaho Code §15-2-502', '2026-07-12', true),
   ('ID', 'will', 'witness_min_age', '{"age":18}'::jsonb, 'Idaho Code §15-2-505 (age 18)', '2026-07-12', true),
-  ('ID', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('ID', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('ID', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Idaho Code §15-2-504', '2026-07-12', true),
   ('ID', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('ID', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Idaho Code §§15-2-1101 et seq. (UEWA, 2023 ch. 104)', '2026-07-12', true),
   ('ID', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- IL
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('IL', 'will', 'witnesses_required', '{"count":2}'::jsonb, '755 ILCS 5/4-3', '2026-07-12', true),
   ('IL', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('IL', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('IL', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('IL', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":false}'::jsonb, '755 ILCS 5/6-4 (attestation clause/affidavit, no notary)', '2026-07-12', true),
   ('IL', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('IL', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, '755 ILCS 6/ (2021)', '2026-07-12', true),
   ('IL', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- IN
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('IN', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Ind. Code §29-1-5-3', '2026-07-12', true),
   ('IN', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('IN', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('IN', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('IN', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":false}'::jsonb, 'Ind. Code §29-1-5-3.1 (unsworn, under penalties for perjury)', '2026-07-12', true),
   ('IN', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('IN', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Ind. Code ch. 29-1-21 (2018)', '2026-07-12', true),
   ('IN', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- IA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('IA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Iowa Code §633.279', '2026-07-12', true),
   ('IA', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('IA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('IA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('IA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Iowa Code §633.279(2)', '2026-07-12', true),
   ('IA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('IA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('IA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- KS
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('KS', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'K.S.A. 59-606', '2026-07-12', true),
   ('KS', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('KS', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('KS', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('KS', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'K.S.A. 59-606', '2026-07-12', true),
   ('KS', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'K.S.A. 59-606 (signed at the end)', '2026-07-12', true),
   ('KS', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('KS', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- KY
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('KY', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'KRS 394.040', '2026-07-12', true),
   ('KY', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('KY', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('KY', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('KY', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'KRS 394.225', '2026-07-12', true),
   ('KY', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'KRS 394.040 (signed at the end)', '2026-07-12', true),
   ('KY', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('KY', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- LA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('LA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'La. Civ. Code art. 1576 (notary + 2 witnesses)', '2026-07-12', true),
   ('LA', 'will', 'witness_min_age', '{"age":16}'::jsonb, 'La. Civ. Code art. 1581 (age 16)', '2026-07-12', true),
-  ('LA', null, 'notarization_required_for_document', '{"required":true}'::jsonb, 'La. Civ. Code art. 1576 (notarial testament requires a notary)', '2026-07-12', true),
+  ('LA', 'will', 'notarization_required_for_document', '{"required":true}'::jsonb, 'La. Civ. Code art. 1576 (notarial testament requires a notary)', '2026-07-12', true),
   ('LA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'La. Civ. Code art. 1576 (self-authenticating notarial testament)', '2026-07-12', true),
   ('LA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Acts 2025 No. 30 (SB 49): signature may appear anywhere', '2026-07-12', true),
   ('LA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('LA', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- ME
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('ME', 'will', 'witnesses_required', '{"count":2}'::jsonb, '18-C M.R.S. §2-502', '2026-07-12', true),
   ('ME', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('ME', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('ME', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('ME', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, '18-C M.R.S. §2-503', '2026-07-12', true),
   ('ME', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('ME', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('ME', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MD
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MD', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Md. Est. & Trusts §4-102', '2026-07-12', true),
   ('MD', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MD', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MD', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MD', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":false}'::jsonb, 'Md. Est. & Trusts §5-303 (attestation recital; no notary required)', '2026-07-12', true),
   ('MD', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MD', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Md. Est. & Trusts §4-102 (2022 SB 36)', '2026-07-12', true),
   ('MD', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Mass. G.L. c.190B §2-502', '2026-07-12', true),
   ('MA', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Mass. G.L. c.190B §2-504', '2026-07-12', true),
   ('MA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MI
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MI', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Mich. Comp. Laws §700.2502', '2026-07-12', true),
   ('MI', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MI', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MI', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MI', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Mich. Comp. Laws §700.2504', '2026-07-12', true),
   ('MI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MI', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MN
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MN', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Minn. Stat. §524.2-502', '2026-07-12', true),
   ('MN', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MN', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MN', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MN', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Minn. Stat. §524.2-504', '2026-07-12', true),
   ('MN', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MN', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MN', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MS
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MS', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Miss. Code §91-5-1', '2026-07-12', true),
   ('MS', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MS', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MS', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MS', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Miss. Code §91-7-7/§91-7-9', '2026-07-12', true),
   ('MS', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MS', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MS', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MO
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MO', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'RSMo §474.320', '2026-07-12', true),
   ('MO', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MO', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MO', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MO', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'RSMo §474.337', '2026-07-12', true),
   ('MO', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MO', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'MO UEWA (eff. 8/28/2025)', '2026-07-12', true),
   ('MO', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- MT
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('MT', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Mont. Code Ann. §72-2-522', '2026-07-12', true),
   ('MT', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('MT', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('MT', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('MT', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Mont. Code Ann. §72-2-524', '2026-07-12', true),
   ('MT', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('MT', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('MT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NE
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NE', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Neb. Rev. Stat. §30-2327', '2026-07-12', true),
   ('NE', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NE', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NE', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NE', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Neb. Rev. Stat. §30-2329', '2026-07-12', true),
   ('NE', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NE', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NE', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NV
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NV', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'NRS §133.040', '2026-07-12', true),
   ('NV', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NV', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NV', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NV', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":false}'::jsonb, 'NRS §133.050', '2026-07-12', true),
   ('NV', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NV', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'NRS §133.085', '2026-07-12', true),
   ('NV', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NH
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NH', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'N.H. RSA 551:2', '2026-07-12', true),
   ('NH', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NH', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NH', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NH', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'N.H. RSA 551:2-a', '2026-07-12', true),
   ('NH', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NH', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NH', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NJ
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NJ', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'N.J.S.A. 3B:3-2', '2026-07-12', true),
   ('NJ', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NJ', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NJ', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NJ', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'N.J.S.A. 3B:3-4', '2026-07-12', true),
   ('NJ', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NJ', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NJ', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NM
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NM', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'N.M. Stat. §45-2-502', '2026-07-12', true),
   ('NM', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NM', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NM', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NM', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'N.M. Stat. §45-2-504', '2026-07-12', true),
   ('NM', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NM', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NM', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NY
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NY', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'N.Y. EPTL §3-2.1', '2026-07-12', true),
   ('NY', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NY', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NY', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NY', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'N.Y. SCPA §1406', '2026-07-12', true),
   ('NY', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'N.Y. EPTL §3-2.1 (at the end thereof)', '2026-07-12', true),
   ('NY', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('NY', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- NC
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('NC', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'N.C. Gen. Stat. §31-3.3', '2026-07-12', true),
   ('NC', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('NC', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('NC', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('NC', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'N.C. Gen. Stat. §31-11.6', '2026-07-12', true),
   ('NC', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('NC', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'N.C. Gen. Stat. Ch.31 Art.11 (UEWA, eff. 2025)', '2026-07-12', true),
   ('NC', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- ND
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('ND', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'N.D. Cent. Code §30.1-08-02', '2026-07-12', true),
   ('ND', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('ND', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('ND', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('ND', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'N.D. Cent. Code §30.1-08-03', '2026-07-12', true),
   ('ND', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('ND', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'N.D. Cent. Code ch. 30.1-37 (UEWA, 2021)', '2026-07-12', true),
   ('ND', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- OH
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('OH', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Ohio Rev. Code §2107.03', '2026-07-12', true),
   ('OH', 'will', 'witness_min_age', '{"age":18}'::jsonb, 'Ohio Rev. Code §2107.06 (age 18)', '2026-07-12', true),
-  ('OH', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('OH', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('OH', 'will', 'self_proving_affidavit', '{"available":false,"requires_notary":false}'::jsonb, 'No self-proving affidavit statute in Ohio', '2026-07-12', true),
   ('OH', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, 'Ohio Rev. Code §2107.03 (at the end)', '2026-07-12', true),
   ('OH', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('OH', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- OK
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('OK', 'will', 'witnesses_required', '{"count":2}'::jsonb, '84 O.S. §55', '2026-07-12', true),
   ('OK', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('OK', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('OK', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('OK', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, '84 O.S. §55', '2026-07-12', true),
   ('OK', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, '84 O.S. §55 (at the end)', '2026-07-12', true),
   ('OK', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'OK UEWA (eff. 11/1/2024)', '2026-07-12', true),
   ('OK', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- OR
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('OR', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'ORS 112.235', '2026-07-12', true),
   ('OR', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('OR', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('OR', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('OR', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'ORS 113.055', '2026-07-12', true),
   ('OR', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('OR', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'ORS 112.235(3) excludes electronic records (no e-wills)', '2026-07-12', true),
   ('OR', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- PA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('PA', 'will', 'witnesses_required', '{"count":2}'::jsonb, '20 Pa.C.S. §2502', '2026-07-12', true),
   ('PA', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('PA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('PA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('PA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, '20 Pa.C.S. §3132.1', '2026-07-12', true),
   ('PA', 'will', 'signature_at_end_required', '{"required":true}'::jsonb, '20 Pa.C.S. §2502 (at the end)', '2026-07-12', true),
   ('PA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('PA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- RI
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('RI', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'R.I. Gen. Laws §33-5-5', '2026-07-12', true),
   ('RI', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('RI', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('RI', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('RI', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'R.I. Gen. Laws §33-7-26', '2026-07-12', true),
   ('RI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('RI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('RI', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- SC
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('SC', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'S.C. Code §62-2-502', '2026-07-12', true),
   ('SC', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('SC', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('SC', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('SC', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'S.C. Code §62-2-503', '2026-07-12', true),
   ('SC', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('SC', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('SC', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- SD
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('SD', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'SDCL 29A-2-502', '2026-07-12', true),
   ('SD', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('SD', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('SD', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('SD', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'SDCL 29A-2-504', '2026-07-12', true),
   ('SD', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('SD', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('SD', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- TN
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('TN', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Tenn. Code §32-1-104', '2026-07-12', true),
   ('TN', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('TN', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('TN', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('TN', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Tenn. Code §32-2-110', '2026-07-12', true),
   ('TN', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('TN', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('TN', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- TX
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('TX', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Tex. Est. Code §251.051', '2026-07-12', true),
   ('TX', 'will', 'witness_min_age', '{"age":14}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('TX', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('TX', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('TX', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Tex. Est. Code §251.101–.104', '2026-07-12', true),
   ('TX', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('TX', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('TX', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- UT
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('UT', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Utah Code §75-2-502', '2026-07-12', true),
   ('UT', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('UT', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('UT', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('UT', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Utah Code §75-2-504', '2026-07-12', true),
   ('UT', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('UT', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'Utah Code §§75-2-1401 to 1411 (UEWA)', '2026-07-12', true),
   ('UT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- VT
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('VT', 'will', 'witnesses_required', '{"count":2}'::jsonb, '14 V.S.A. §5 (2 witnesses since 2017)', '2026-07-12', true),
   ('VT', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('VT', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('VT', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('VT', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, '14 V.S.A. §108', '2026-07-12', true),
   ('VT', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('VT', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('VT', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- VA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('VA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Va. Code §64.2-403', '2026-07-12', true),
   ('VA', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('VA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('VA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('VA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Va. Code §64.2-452', '2026-07-12', true),
   ('VA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('VA', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('VA', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WA
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('WA', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'RCW 11.12.020', '2026-07-12', true),
   ('WA', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('WA', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('WA', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('WA', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'RCW 11.20.020(2)', '2026-07-12', true),
   ('WA', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WA', 'will', 'electronic_will_permitted', '{"permitted":true,"mvp_position":"wet_signature"}'::jsonb, 'RCW 11.12.400–491 (UEWA, eff. 2022)', '2026-07-12', true),
   ('WA', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WV
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('WV', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'W. Va. Code §41-1-3', '2026-07-12', true),
   ('WV', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('WV', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('WV', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('WV', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'W. Va. Code §41-5-15', '2026-07-12', true),
   ('WV', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WV', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('WV', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WI
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('WI', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Wis. Stat. §853.03', '2026-07-12', true),
   ('WI', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('WI', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('WI', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('WI', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Wis. Stat. §853.04', '2026-07-12', true),
   ('WI', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WI', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('WI', null, 'community_property', '{"community_property":true}'::jsonb, 'Community property state (fixed law)', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- WY
-insert into public.state_rules (state_code, doc_type, rule_key, rule_value, citation, checked_at, needs_review) values
+insert into public.state_rules (state_code, instrument, rule_key, rule_value, citation, checked_at, needs_review) values
   ('WY', 'will', 'witnesses_required', '{"count":2}'::jsonb, 'Wyo. Stat. §2-6-112', '2026-07-12', true),
   ('WY', 'will', 'witness_min_age', '{"age":null}'::jsonb, 'Baseline — verify competency/age statute', '2026-07-12', true),
-  ('WY', null, 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
+  ('WY', 'will', 'notarization_required_for_document', '{"required":false}'::jsonb, 'Attested will valid without notarization — verify', '2026-07-12', true),
   ('WY', 'will', 'self_proving_affidavit', '{"available":true,"requires_notary":true}'::jsonb, 'Wyo. Stat. §2-6-114', '2026-07-12', true),
   ('WY', 'will', 'signature_at_end_required', '{"required":false}'::jsonb, 'Baseline — verify', '2026-07-12', true),
   ('WY', 'will', 'electronic_will_permitted', '{"permitted":false,"mvp_position":"wet_signature"}'::jsonb, 'No e-will statute found — verify', '2026-07-12', true),
   ('WY', null, 'community_property', '{"community_property":false}'::jsonb, 'Common-law (separate property) state', '2026-07-12', true)
-on conflict (state_code, rule_key, doc_type) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
+on conflict (state_code, rule_key, instrument) do update set rule_value = excluded.rule_value, citation = excluded.citation, checked_at = excluded.checked_at, needs_review = excluded.needs_review, updated_at = now();
 
 -- State availability (all available except high-risk excluded set)
 insert into public.state_availability (state_code, available, reason) values
